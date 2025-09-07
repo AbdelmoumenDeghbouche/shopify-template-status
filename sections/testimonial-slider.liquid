@@ -1,0 +1,734 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .section-{{ section.id }}-margin {
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-margin {
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<style>
+.flickity-enabled{position:relative}.flickity-enabled:focus{outline:0;box-shadow: none;}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}
+  .flickity-button{position:absolute;background:hsla(0,0%,100%,.75);border:none;color:#333}.flickity-button:hover{background:#fff;cursor:pointer}.flickity-button:focus{outline:0;box-shadow:0 0 0 5px #19f}.flickity-button:active{opacity:.6}.flickity-button:disabled{opacity:.3;cursor:auto;pointer-events:none}.flickity-button-icon{fill:currentColor}.flickity-prev-next-button{top:50%;width:30px;height:30px;border-radius:50%;transform:translateY(-50%)}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button .flickity-button-icon{position:absolute;left: 27%;top: 28%;width: 45%;height: 45%;}
+  .flickity-page-dots{position:absolute;width:100%;bottom:-30px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}
+  .flickity-page-dots .dot{display:inline-block;width:0.7rem;height:0.7rem;margin:0 8px;border-radius:10px;cursor: pointer;
+  background: rgba(var(--color-background));box-shadow: 0px 0px 0px 1px rgba(var(--color-foreground) );}.flickity-page-dots .dot.is-selected{width:30px;background: rgb(var(--color-foreground));}.carousel-cell {height: auto;}.flickity-resize .carousel-cell {min-height: 100%;}
+
+  .lumin-slide--{{ section.id }} {
+  overflow-x: hidden;
+}
+    .lumin-slide--{{ section.id }} .lumin-slide__flex-item {
+  margin-right: calc( ({{ section.settings.per_row }} * {{ section.settings.gap }}px) / ({{ section.settings.per_row }} - 1));
+  width: calc(100% / {{ section.settings.per_row }} - {{ section.settings.gap }}px);
+  display: inline-flex;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__sizer {
+  width: {{ section.settings.base_width }}%;
+  max-width: var(--page-width);
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__small-heading {
+  color: {{ section.settings.heading_color }};
+  line-height: calc(3px + 2ex + 3px);
+  font-size: calc(var(--LM-g-small-heading-size, var(--LM-small-heading-size, 24px)) * {{ section.settings.text_size | times: 0.01 }});
+  margin-top: 0px;
+ margin-bottom: 5px;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__small-heading + .lumin-slide__text {
+  margin-top: 10px;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__text p {
+  line-height: calc(3px + 2ex + 3px);
+  color: {{ section.settings.text_color }};
+  font-size: calc(var(--LM-g-body-size, var(--LM-body-size, 18px)) * {{ section.settings.text_size | times: 0.01 }});
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__icons {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__flex-item {
+  margin-right: calc( ({{ section.settings.per_row }} * {{ section.settings.gap }}px) / ({{ section.settings.per_row }} - 1));
+  width: calc(100% / {{ section.settings.per_row }} - {{ section.settings.gap }}px);
+  display: inline-flex;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__stretch-height .lumin-slide__flex-item {
+  height: 100%;
+}
+
+/*.lumin-slide--{{ section.id }} .lumin-slide__flex-item > a {
+  text-decoration: none;
+}*/
+
+.lumin-slide--{{ section.id }} .lumin-slide__image__wrapper {
+  display: block;
+  align-self: center;
+  margin: auto;
+  flex: 1 0 {{ section.settings.icon_size }}%;
+  max-width: {{ section.settings.icon_size }}%;
+  position: relative;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__image__wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__item img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__inner-content {
+  display: flex;
+  gap: 30px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  {% if section.settings.show_border %}border: 1px solid {{ section.settings.content_border_color }};{% endif %}
+  border-radius: {{ section.settings.content_buttons_radius }}px;
+  width: 100%;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-left {
+  align-items: center;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-left .lumin-slide__inner-content {
+  gap: 20px;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-left .lumin-slide__text-wrapper {
+  text-align: left;
+  flex: 1 1 auto;
+}
+
+ /* .lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-left .lumin-slide__text-wrapper a{
+  text-decoration: none;
+}*/
+
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-center {
+   flex-direction: column;
+}
+  
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-center .lumin-slide__text-wrapper {
+  text-align: center;
+  flex: 1 1 100%;
+}
+
+/*.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-center .lumin-slide__text-wrapper a {
+  text-decoration: none;
+}*/
+  
+.lumin-slide--{{ section.id }} .lumin-slide__icon-alignment-center .lumin-slide__image__wrapper {
+  width: {{ section.settings.icon_size }}%;
+  flex: none;
+  position: relative;
+}
+
+  
+.lumin-slide--{{ section.id }} .lumin-slide__icons:not(.flickity-enabled) {
+  display: flex;
+  gap: 10px;
+  overflow: scroll;
+}
+
+.lumin-slide--{{ section.id }} .lumin-slide__flex-item:not(.flickity-enabled){
+  margin-right: calc( ({{ section.settings.per_row }} * {{ section.settings.gap }}px) / ({{ section.settings.per_row }} - 1));
+  width: calc(100% / {{ section.settings.per_row }} - {{ section.settings.gap }}px);
+  display: inline-flex;
+  flex: 0 0 calc(100% / {{ section.settings.per_row }} - {{ section.settings.gap }}px);
+}
+
+.lumin-slide--{{ section.id }} .flickity-button {
+  background: #fff;
+  color: {{ section.settings.text_color }};
+  transition: all 0.3s ease-in-out;
+  border: 1px solid;
+  {%- if enable_slider == false -%}
+    visibility: hidden;
+  {%- endif -%}
+}
+
+.lumin-slide--{{ section.id }} button svg.flickity-button-icon path {
+  fill: currentColor;
+}
+
+.lumin-slide--{{ section.id }} .flickity-prev-next-button.next {
+  right: -20px;
+}
+
+.lumin-slide--{{ section.id }} .flickity-prev-next-button.previous {
+  left: -20px;
+}
+
+
+
+  @media (max-width: 600px) {
+     {%- assign mobile_per_row = section.settings.mobile_per_row | plus: 0 -%}
+  .lumin-slide--{{ section.id }} .lumin-slide__flex-item {
+  margin-right: calc( ({{ section.settings.mobile_per_row }} * {{ section.settings.gap }}px) / ({{ section.settings.mobile_per_row }} - 1));
+  width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px);
+  display: inline-flex;
+}
+     .lumin-slide--{{ section.id }} .lumin-slide__item {
+    width: 100%;
+    {% if section.settings.mobile_per_row == "2" %}
+      width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px);
+      margin-left: 0;
+      margin-right: 0;
+    {% endif %}
+  }
+   .lumin-slide--{{ section.id }} .lumin-slide__flex-item {
+    width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px);
+    {% if section.settings.mobile_per_row == "2" %}
+      margin-left:{{ section.settings.gap }}px;
+      margin-right: 0;
+    {% endif %}
+  }
+  .lumin-slide--{{ section.id }} .lumin-slide__item:not(.flickity-enabled) {
+     width: 100%;
+    {% if section.settings.mobile_per_row == "2" %}
+      width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px / 2);
+      margin-left:{{ section.settings.gap }}px;
+      margin-right: 0;
+    {% endif %}
+    flex: 0 0 100%;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__mobile-icon-alignment-left {
+    align-items: center;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__mobile-icon-alignment-left .lumin-slide__text-wrapper {
+    text-align: left;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__mobile-icon-alignment-center {
+    flex-direction: column;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__mobile-icon-alignment-center .lumin-slide__text-wrapper {
+    text-align: center;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__mobile-icon-alignment-center .lumin-slide__image__wrapper {
+    width: {{ section.settings.mobile_icon_size }}%;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__image__wrapper {
+    display: block;
+    align-self: center;
+    margin: auto;
+    flex: 1 0 {{ section.settings.mobile_icon_size }}%;
+    max-width: {{ section.settings.mobile_icon_size }}%;
+  }
+
+ .lumin-slide--{{ section.id }} .lumin-slide__icons {
+    max-width: 100%;
+  }
+
+  .lumin-slide--{{ section.id }} .lumin-slide__item {
+    width: 100%;
+    {% if section.settings.mobile_per_row == "2" %}
+      width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px);
+      margin-left: 0;
+      margin-right: 0;
+    {% endif %}
+  }
+ .lumin-slide--{{ section.id }} .lumin-slide__flex-item {
+    width: calc(100% / {{ section.settings.mobile_per_row }} - {{ section.settings.gap }}px);
+    {% if section.settings.mobile_per_row == "2" %}
+      margin-left:{{ section.settings.gap }}px;
+      margin-right: 0;
+    {% endif %}
+  }
+
+
+  .lumin-slide--{{ section.id }} .lumin-slide__inner-content {
+    padding: 2rem 2rem;
+    {% if section.settings.mobile_per_row == "2" %}
+      padding: 2rem 1rem;
+    {% endif %}
+  }
+
+  .lumin-slide--{{ section.id }} .flickity-button {
+    visibility: visible;
+  }
+
+  .lumin-slide--{{ section.id }} .flickity-prev-next-button.next {
+    right: -10px;
+  }
+
+  .lumin-slide--{{ section.id }} .flickity-prev-next-button.previous {
+    left: -10px;
+  }
+    
+}
+  
+    .lumin-slide__image__wrapper svg{
+  display: block;
+}
+  
+.lumin-slide__image__wrapper img{
+  object-fit: cover;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+   
+</style>
+
+
+{%- assign widths = '180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1950, 2100, 2260, 2450, 2700, 3000, 3350, 3750, 4100' -%}
+
+<script src="{{ 'flickity.pkgd.min.js' | asset_url }}" defer="defer"></script>
+
+<section id="lumin-slide--{{ section.id }}" class="color-{{ section.settings.color_scheme_main }} gradient lumin-slide--{{ section.id }} lumin-slide__value-prop-horizontal lumin-slide__section  section-{{ section.id }}-margin" {%- if section.settings.animation != 'none' -%}data-animated-section{%- endif -%}>
+  <div class="lumin-slide__sizer
+              lumin-slide__sizer--value-prop-horizontal page-width section-{{ section.id }}-padding" >
+    <div id="slider-{{ section.id }}" class="lumin-slide__icons lumin-slide__flex--{{ section.settings.per_row }}-per-row main-carousel" 
+      data-flickity='{ "cellAlign": "left", "contain": true, "pageDots": true, "wrapAround": true,{% if section.settings.auto_rotate %} "autoPlay": {{ section.settings.change_slides_speed }}000,{% endif %}
+      "adaptiveHeight": false,{%- if mobile_per_row >= section.blocks.size -%}
+       "draggable": false,
+    {%- else -%}
+      "draggable": true,
+    {%- endif -%}{% if section.settings.per_row >= section.blocks.size %} "prevNextButtons": false 
+  {% else %} "prevNextButtons": {{ section.settings.show_arrows }}
+  {% endif %}
+      }'>
+      {%- for block in section.blocks -%}
+        {%- capture placeholder_image -%}
+         <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" fill="none"/><path d="M7 13.4545L8.97619 15.3409C9.36262 15.7098 9.97072 15.7098 10.3571 15.3409L17 9" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {%- endcapture -%}
+        <div class="carousel-cell lumin-slide__flex-item lumin-slide__item lumin-slide__block-{{ block.id }}" {{ block.shopify_attributes }} style="--lumin-slide-animate: {{ forloop.index }};">
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}">
+          {%- endif -%}
+          <div class="gradient color-{{ section.settings.color_scheme }} lumin-slide__inner-content lumin-slide__icon-alignment-{{ section.settings.icon_alignment }} lumin-slide__mobile-icon-alignment-{{ section.settings.mobile_icon_alignment }}">
+            {%- comment -%} Icon {%- endcomment -%}
+            {%- if block.settings.show_icon != blank -%}
+              {%- if block.settings.image != blank -%}
+                <div class="lumin-slide__image__wrapper">
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}">
+                  {%- endif -%}
+                  <svg viewBox="0 0 {{ block.settings.image.width }} {{ block.settings.image.height }}"></svg>
+                      {%- capture style -%}
+                     border-radius:{{ block.settings.slide_radius }}%;
+                  {%- endcapture -%}
+                  {%- capture sizes -%}
+                    (max-width: 480px) {{ section.settings.base_width | divided_by: section.settings.mobile_per_row | divided_by: 2 | append: 'vw' | default: '33vw' }}, {{ section.settings.base_width | divided_by: section.settings.per_row | divided_by: 2 | append: 'vw' | default: '33vw' }}
+                  {%- endcapture -%}
+                  {{ block.settings.image | image_url: width: 1000 | image_tag:  widths: widths, sizes: sizes, style: style }}
+                  {%- if block.settings.link != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- else -%}
+                <div class="lumin-slide__image__wrapper lumin-slide__flex lumin-slide__justify-center">
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}">
+                  {%- endif -%}
+                    {{ placeholder_image }}
+                  {%- if block.settings.link != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+            {%- comment -%} End Icon {%- endcomment -%}
+            <div class="lumin-slide__text-wrapper">
+              {%- if block.settings.title != blank -%}
+                <h3 class="lumin-slide__small-heading">
+                  {{ block.settings.title | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                </h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="lumin-slide__text lumin-slide__rte rte">
+                  {{ block.settings.text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Testimonial Slider",
+    "disabled_on": {
+    "groups": ["header", "custom.popup"]
+   },
+    "settings": [
+       {
+      "type": "select",
+      "id": "icon_alignment",
+      "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "default": 30,
+      "min": 10,
+      "max": 100,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "per_row",
+      "label": "Icons per slide",
+      "default": 3,
+      "min": 2,
+      "max": 8
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 40,
+      "label": "Spacing gap",
+      "unit": "px",
+      "default": 20
+    },
+      {
+      "type": "select",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": "true",
+      "options": [
+        {
+          "value": "false",
+          "label": "No"
+        },
+        {
+          "value": "true",
+          "label": "Yes"
+        }
+      ]
+    },
+       {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "t:sections.slideshow.settings.auto_rotate.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 1,
+      "max": 9,
+      "step": 1,
+      "unit": "s",
+      "label": "t:sections.slideshow.settings.change_slides_speed.label",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Text appearance"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 60,
+      "max": 150,
+      "step": 5,
+      "default": 100,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Design"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Headings",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#666666"
+    },
+      {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+      {
+      "type": "color_scheme",
+      "id": "color_scheme_main",
+      "label": "t:sections.collapsible_content.settings.container_color_scheme.label",
+      "default": "background-1"
+    },
+        {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show Border",
+      "default": false
+    },
+       {
+      "type": "color",
+      "id": "content_border_color",
+      "label": "Content Border",
+      "default": "transparent"
+    },
+      {
+        "type": "range",
+        "id": "content_buttons_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "t:settings_schema.global.settings.corner_radius.label",
+        "default": 0
+      },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+      {
+      "type": "select",
+      "id": "mobile_icon_alignment",
+      "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.main-product.blocks.icon_with_text.settings.layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "mobile_icon_size",
+      "label": "Mobile icon size",
+      "default": 30,
+      "min": 10,
+      "max": 100,
+      "unit": "%"
+    },
+    {
+      "type": "select",
+      "id": "mobile_per_row",
+      "label": "Mobile icons per slide",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "base_width",
+      "label": "Size",
+      "min": 80,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "%"
+    },
+           {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+     {
+    "type": "range",
+    "id": "margin_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Top",
+    "default": 0
+  },
+  {
+    "type": "range",
+    "id": "margin_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Bottom",
+    "default": 0
+  },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    }
+    ],
+      "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "slide_radius",
+          "label": "Corner radius",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Icon link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show icon",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Unique value"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+     "presets": [
+    {
+      "name": "Testimonial Slider",
+        "blocks": [
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Easy.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><b>- Buyer Name</b></p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Breezy.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><a>Learn more</a></p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Beautiful.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><a>Learn more</a></p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Effortless.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><a>Learn more</a></p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Simple.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><a>Learn more</a></p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "title": "Refined.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh enim, ornare at consequat sed, placerat quis libero.</p><p><a>Learn more</a></p>"
+          }
+        }
+      ]
+    }
+  ]
+  }
+{% endschema %}

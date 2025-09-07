@@ -1,0 +1,449 @@
+.lumin-qty-breaks {
+  max-width: 44rem;
+  transition: all 0.2s;
+}
+
+.lumin-qty-breaks-title {
+  margin: 0;
+}
+.lumin-qty-breaks-line {
+    display: flex;
+    align-items: center;
+    margin: 0 0 10px;
+    gap: 12px;
+}
+.lumin-qty-breaks-line span:nth-of-type(1), .lumin-qty-breaks-line span:nth-of-type(2) {
+    display: block;
+    height: 2px;
+    flex-grow: 1;
+    background: rgb(var(--color-foreground));
+}
+
+.lumin-qty-breaks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lumin-qty-breaks ul li {
+  position: relative;
+}
+
+.lumin-qty-breaks ul li input {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+.lumin-qty-breaks ul li input + label {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  background-color: var(--bg-qb);
+  border: var(--qb-border-width) solid var(--border-qb);
+  border-radius: var(--qb-radius);
+  padding: 12px 12px 12px 40px;
+  margin: 14px 0;
+  transition: all 0.2s ease-out;
+}
+
+.lumin-qty-breaks ul li input + label:hover,
+.lumin-qty-breaks ul li input + label:focus {
+  background-color: var(--hover-bg-qb);
+  border-color: var(--hover-border-qb);
+}
+
+.lumin-qty-breaks ul li input:checked + label {
+  background-color: var(--check-bg-qb);
+  color: var(--check-text-qb);
+  border-color: var(--check-border-qb);
+}
+
+.lumin-qty-breaks ul li input + label span {
+}
+/*.lumin-qty-breaks ul li input:before {
+    content:"";
+    border: solid .2rem red;
+    background: red;
+    box-shadow: 0 0 0 .1rem red;
+}*/
+.lumin-qty-breaks ul li input[type='radio'] {
+  display: none;
+}
+.lumin-qty-breaks ul li input + label:before {
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  top: calc(50% - 8px);
+  left: 10px;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 11px;
+  border: 2px solid;
+  border-color: var(--border-qb);
+  background-color: transparent;
+}
+.lumin-qty-breaks ul li input[type=radio]:checked + label:before {
+  border-color: var(--check-dot);
+}
+
+.lumin-qty-breaks ul li input[type=radio]:checked + label:after {
+  border-radius: 11px;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: calc(50% - 5px);
+  left: 13px;
+  content: " ";
+  display: block;
+  background: var(--check-dot);
+}
+
+.lumin-qty-breaks-label-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: normal;
+  gap: 5px;
+}
+
+.lumin-qty-breaks-label-title {
+  font-size: var(--qb-title-text);
+  font-weight: bold;
+}
+
+.lumin-qty-breaks-label-subtitle {
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: .4rem;
+}
+
+.lumin-qty-breaks-label-badge {
+  background-color: rgba(var(--color-foreground), 1);
+  color: rgba(var(--color-background), 1);
+  line-height: normal;
+  padding: 1px 5px 2px;
+  margin: 0 0 0 10px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.lumin-qty-price {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  flex-wrap: wrap;
+  font-weight: 600;
+}
+.lumin-qty-price-compare {
+  text-decoration-line: line-through;
+  color: var(--compare-price);
+}
+
+.animate__animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.animate__shakeX {
+  -webkit-animation-name: shakeX;
+  animation-name: shakeX;
+}
+
+@keyframes shakeX {
+  0%,
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.animate__flash {
+  -webkit-animation-name: flash;
+  animation-name: flash;
+}
+
+@keyframes flash {
+  0%,
+  50%,
+  to {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+.animate__heartBeat {
+  -webkit-animation-name: heartBeat;
+  animation-name: heartBeat;
+  -webkit-animation-duration: 1.3s;
+  animation-duration: 1.3s;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  14% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+  28% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  42% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+  70% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.animate__tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+@keyframes tada {
+  0% {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+  10%,
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
+  }
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+  }
+  40%,
+  60%,
+  80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+  }
+  to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+/* bades */
+
+/*.badge-qb {
+  font-weight: normal;
+  background: var(--badge-qb-1);
+  padding: 2px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  line-height: 100%;
+}*/
+
+.badge-alt {
+  background: var(--badge-qb);
+  position: absolute;
+  color: var(--badge-qb-text);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  top: -1rem;
+  right: -1rem;
+  transform: rotate(3deg);
+  margin: 0;
+  padding: 0 0.5em;
+  border-radius: 0.2em;
+}
+
+.card-badge-container {
+  display: flex;
+  justify-content: flex-end;
+
+  .card-badge {
+    flex: 1;
+    text-align: center;
+    max-width: 100%;
+
+    .title {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 16px;
+      width: auto;
+      max-width: 100%;
+      margin: auto;
+      box-sizing: border-box;
+      background-color: #000;
+      background-image: linear-gradient(180deg, #00f, #0000b0);
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 3px;
+      color: #fff;
+      position: absolute;
+      top: -8px;
+      z-index: 1;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+
+      &:before,
+      &:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        border: 6px solid transparent;
+        border-top-color: #0000b0;
+        top: 2.5px;
+      }
+
+      &:before {
+        transform: rotate(-45deg);
+        left: -6px;
+      }
+
+      &:after {
+        transform: rotate(45deg);
+        right: -6px;
+      }
+    }
+
+    .content {
+      margin-top: -75px;
+      padding: 75px 20px 1px 20px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+    }
+
+    .icon {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    flex-wrap: wrap;
+
+    .card-badge {
+      flex: 0 0 100%;
+    }
+  }
+}
+
+/* HTML: <div class="ribbon">Your text content</div> */
+.ribbon {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--badge-qb-text);
+}
+.ribbon {
+  --r: 0.4em; /* control the ribbon shape (the radius) */
+  --c:var(--badge-qb);
+
+  position: absolute;
+  line-height: 1.8;
+}
+
+.ribbon-top-right {
+  top: -11px;
+  right: calc(-1 * var(--r));
+  padding: 0 1em calc(2 * var(--r));
+  border-radius: 0 var(--r) var(--r) 0;
+  background: radial-gradient(100% 50% at right, var(--c) 98%, #0000 101%) 0 0/0.5lh
+      calc(100% - 2 * var(--r)),
+    radial-gradient(100% 50% at left, #0005 98%, #0000 101%) 100% 100% /
+      var(--r) calc(2 * var(--r)),
+    conic-gradient(
+        from 180deg at calc(100% - var(--r)) calc(100% - 2 * var(--r)),
+        #0000 25%,
+        var(--c) 0
+      )
+      100% 0 / calc(101% - 0.5lh) 100%;
+  background-repeat: no-repeat;
+}
+.ribbon-bottom-left {
+  bottom: -9px;
+  left: calc(-1 * var(--r));
+  padding: calc(2 * var(--r)) 1em 0;
+  border-radius: var(--r) 0 0 var(--r);
+  background: radial-gradient(100% 50% at left, var(--c) 98%, #0000 101%) 100%
+      100%/0.5lh calc(100% - 2 * var(--r)),
+    radial-gradient(100% 50% at right, #0005 98%, #0000 101%) 0 0 / var(--r)
+      calc(2 * var(--r)),
+    conic-gradient(at var(--r) calc(2 * var(--r)), #0000 25%, var(--c) 0) 0 0 /
+      calc(101% - 0.5lh) 100%;
+  background-repeat: no-repeat;
+}
+.ribbon-long {
+  --d: .8em; /* the depth */
+  
+  text-align: center;
+  position: absolute;
+  top: -10px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  inset-inline: calc(-1*var(--d));
+  border-bottom: var(--d) solid #0008;
+  line-height: 1.8;
+  clip-path: polygon(0 0,100% 0,100% calc(100% - var(--d)),calc(100% - var(--d)) 100%,calc(100% - var(--d)) calc(100% - var(--d)),var(--d) calc(100% - var(--d)),var(--d) 100%,0 calc(100% - var(--d)));
+  background-color: var(--c); /* the main color */
+}
+
+.badge-qb {
+    background-color: var(--badge-qb-1);
+    color: #3b3b3b;
+    width: auto;
+    border-radius: 2px 3px 3px 2px;
+    text-transform: uppercase;
+    font-size: .5em;
+    letter-spacing: 1px;
+    padding: .4em .5em;
+    margin-left: 1em;
+    position: relative;
+    display: inline-block;
+    transform: rotate(0deg) translateY(-2px);
+    font-weight: 700;
+}
+
+.badge-qb::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 2em;
+    left: calc(-2em + 1px);
+    background: linear-gradient(to bottom right, transparent 49.4%, var(--badge-qb-1) 50%) top, linear-gradient(to top right, transparent 49.4%, var(--badge-qb-1) 50%) bottom;
+    background: conic-gradient(transparent 45deg, var(--badge-qb-1) 45deg 135deg, transparent 125deg 360deg);
+    background: linear-gradient(to bottom right, transparent 50%, var(--badge-qb-1) 50%) top, linear-gradient(to top right, transparent 50%, var(--badge-qb-1) 50%) bottom;
+    background: conic-gradient(transparent 45deg, var(--badge-qb-1) 45deg 135deg, transparent 125deg 360deg);
+    background-size: 100% 51%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}

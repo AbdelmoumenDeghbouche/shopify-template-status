@@ -1,0 +1,269 @@
+{% comment %}
+  Renders product variant options
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+
+
+  Usage:
+  {% render 'product-variant-options',
+    product: product,
+    option: option,
+    block: block
+  %}
+{% endcomment %}
+<style>
+        .color-swatch {
+      border: 2px solid var(--swatch-color) !important;
+      box-shadow: 0px 0px 0px 1px #f1f1f1, inset 0 0 0 1px #ffffff;
+      border-radius: 30px !important;
+      background-color: var(--swatch-color) !important;
+    }
+
+      .icon-check {
+      visibility: hidden;
+      opacity: 0;
+      display: block;
+      width: 16px;
+      margin-right: 2px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility 0s linear .2s;
+      fill: #fff;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+        .product-form__input .color-swatch{
+          width: {{ settings.swatch_size}}px;
+          height: {{ settings.swatch_size}}px;
+          padding: 0 !important;
+        }
+             .product-form__input input[type=radio]:hover+ .color-swatch {
+      border: 1px solid var(--swatch-color) !important;
+      background-color: var(--swatch-color)!important; box-shadow: 0px 0px 0px 0.7px #f1f1f1, inset 0 0 0 6px #fff;
+  }
+        .product-form__input input[type=radio]:checked+ .color-swatch {
+      border: 1px solid var(--swatch-color) !important;
+      background-color: var(--swatch-color) !important;
+  }
+            .product-form__input input[type=radio]:checked+ .color-swatch .icon-check {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+  }
+     {% if settings.card_text_alignment == "center" %}
+        .product-form__controls-group {
+      justify-content: center;
+      }
+         {% elsif settings.card_text_alignment == "right" %}
+         .product-form__controls-group {
+      justify-content: flex-end;
+      }
+        {% endif %}}
+</style>
+{%- liquid
+  assign variants_available_arr = product.variants | map: 'available'
+  assign variants_option1_arr = product.variants | map: 'option1'
+  assign variants_option2_arr = product.variants | map: 'option2'
+  assign variants_option3_arr = product.variants | map: 'option3'
+
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+{%- for value in option.values -%}
+  {%- liquid
+    assign option_disabled = true
+
+    for option1_name in variants_option1_arr
+      case option.position
+        when 1
+          if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+        when 2
+          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+        when 3
+          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+      endcase
+    endfor
+  -%}
+  {% liquid
+    assign color_trigger = settings.trigger_swatch | handle | strip
+    assign name_option = option.name | handle | strip
+  %}
+
+  {% if settings.show_color_swatch and color_trigger == name_option %}
+    {% liquid
+      assign color_value = value | handle | strip
+      assign color_value_custom = color_value
+
+      if value == white
+        assign color_value = '#f2f2f2'
+      endif
+
+      if settings.custom_colors != blank
+        assign custom_colors_string = settings.custom_colors | strip
+        assign custom_colors_obj = custom_colors_string | newline_to_br | split: '<br />'
+
+        for obj in custom_colors_obj
+          assign obj_strip = obj | strip
+          assign obj_key = obj_strip | split: ':' | first
+          assign obj_value = obj_strip | split: ':' | last
+          assign obj_color_name = obj_key | handle | strip
+
+          if color_value == obj_color_name
+            assign obj_color_value = obj_value
+            assign color_value_custom = obj_color_value | strip
+            break
+          endif
+        endfor
+      endif
+    %}
+
+    {% liquid
+      assign variant_link = product.url
+
+      for variant in product.variants
+        assign flag = false
+        if variant.available
+          for option_variant in variant.options
+            if option_variant == value
+              assign flag = true
+              break
+            endif
+          endfor
+        endif
+
+        if flag == true
+          assign variant_link = variant.url
+          break
+        endif
+      endfor
+    %}
+
+    <input
+      type="radio"
+      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}-{{ product.id }}"
+      name="{{ option.name }}-{{ section.id }}-{{ product.id }}"
+      value="{{ value | escape }}"
+      {% if variant_link %}
+        data-variant-link="{{ variant_link }}"
+      {% endif %}
+      {% if no_form_id != true %}
+        form="{{ product_form_id }}"
+      {% endif %}
+      {% if option.selected_value == value %}
+        checked
+      {% endif %}
+      {% if option_disabled and no_form_id != true %}
+        class="disabled"
+      {% endif %}
+    >
+
+    <label
+      for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}-{{ product.id }}"
+      class="color-swatch lumin-color-swatches"
+      style="--swatch-color:{{ color_value_custom | remove: '-' }};"
+    >
+      <span class="visually-hidden">{{ value -}}</span>
+      <span class="icon-check">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="15px"
+          height="12px"
+          viewBox="0 0 15 12"
+          version="1.1"
+        >
+          <script xmlns=""/>
+          <defs>
+            <path d="M11.653883,1.55459621 L13.2081749,2.81323699 L7.54429138,9.80755065 L7.53243418,9.79759621 L7.15730995,10.2633551 L2.49443418,6.4874328 L3.75307496,4.93314087 L6.87243418,7.45859621 L11.653883,1.55459621 Z" id="path-aw_1eup6-q-1"/>
+            <filter x="-28.0%" y="-34.4%" width="156.0%" height="168.9%" filterUnits="objectBoundingBox" id="filter-aw_1eup6-q-2">
+              <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"/>
+              <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+              <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"/>
+            </filter>
+          </defs>
+          <g fill-rule="nonzero">
+            <use fill="#ffffff" fill-opacity="1" filter="url(#filter-aw_1eup6-q-2)" xlink:href="#path-aw_1eup6-q-1"/>
+            <use fill="#ffffff" xlink:href="#path-aw_1eup6-q-1"/>
+          </g>
+        </svg>
+      </span>
+    </label>
+
+  {%- elsif block.settings.picker_type == 'button' -%}
+    {% liquid
+      assign image_trigger = settings.trigger_image_swatch | handle | strip
+      assign image_option = option.name | handle | strip
+    %}
+    {% if settings.show_image_swatch
+      and image_trigger == image_option
+      and product.variants[forloop.index0].image != blank
+    %}
+      <input
+        type="radio"
+        id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+        name="{{ option.name }}"
+        value="{{ value | escape }}"
+        form="{{ product_form_id }}"
+        {% if option.selected_value == value %}
+          checked
+        {% endif %}
+        {% if option_disabled %}
+          class="disabled"
+        {% endif %}
+      >
+
+      <label
+        for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+        class="color-swatch"
+        style="
+          background-image: url({{ product.variants[forloop.index0].image | img_url: '100px' }});background-size: cover;
+          border-radius: {{ settings.image_swatch_border_radius }}px !important; width: {{ settings.swatch_size_w}}px; height: {{ settings.swatch_size_h}}px;
+        "
+      >
+        <span class="visually-hidden">{{ value -}}</span>
+      </label>
+    {% else %}
+      <input
+        type="radio"
+        id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+        name="{{ option.name }}"
+        value="{{ value | escape }}"
+        form="{{ product_form_id }}"
+        {% if option.selected_value == value %}
+          checked
+        {% endif %}
+        {% if option_disabled %}
+          class="disabled"
+        {% endif %}
+      >
+      <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+        {{ value -}}
+        <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+      </label>
+    {% endif %}
+  {%- elsif block.settings.picker_type == 'dropdown' -%}
+    <option
+      value="{{ value | escape }}"
+      {% if option.selected_value == value %}
+        selected="selected"
+      {% endif %}
+    >
+      {% if option_disabled -%}
+        {{- 'products.product.value_unavailable' | t: option_value: value -}}
+      {%- else -%}
+        {{- value -}}
+      {%- endif %}
+    </option>
+  {%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,206 @@
+<style>
+  .scroll-to-top-button-{{ section.id }} {
+    position: fixed;
+    bottom: var(--vertical-distance);
+    background-color: var(--background-color, #fff);
+    border-radius: 50%;
+    border: 1px solid var(--border-color, #000);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    z-index: 999;
+    display: none;
+    opacity: 0;
+  }
+
+  .scroll-to-top-button-{{ section.id }}:hover {
+    transform: scale(1.1);
+  }
+
+  @media screen and (max-width: 749.9px) {
+    .scroll-to-top-button-{{ section.id }}-hide-mobile {
+      display: none !important;
+    }
+  }
+</style>
+
+<button
+  class="
+    scroll-to-top-button-{{ section.id }}
+    {% if section.settings.hide_on_mobile %}
+      scroll-to-top-button-{{ section.id }}-hide-mobile
+    {% endif %}
+  "
+  id="scroll-to-top-button-{{ section.id }}"
+  style="
+    --horizontal-distance: {{ section.settings.horizontal_padding }}px;
+    {% case section.settings.button_position %}
+      {% when 'left' %}
+        left: var(--horizontal-distance);
+      {% when 'center' %}
+        left: 50%;
+        transform: translateX(-50%);
+      {% when 'right' %}
+        right: var(--horizontal-distance);
+    {% endcase %}
+    --vertical-distance: {{ section.settings.vertical_padding }}px;
+    --border-color: {{ section.settings.button_border_color }};
+    --background-color: {{ section.settings.button_bg_color }};
+    width: {{ section.settings.button_diameter }}px;
+    height: {{ section.settings.button_diameter }}px;
+  "
+  aria-label="Scroll to top"
+  type="button"
+>
+  <svg
+    style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: {{ section.settings.icon_color }};
+      width: {{ section.settings.icon_size }}px;
+      height: {{ section.settings.icon_size }}px;
+    "
+    stroke="currentColor"
+    fill="currentColor"
+    stroke-width="0"
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M256 217.9L383 345c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.3-24.6 0-34L273 167c-9.1-9.1-23.7-9.3-33.1-.7L95 310.9c-4.7 4.7-7 10.9-7 17s2.3 12.3 7 17c9.4 9.4 24.6 9.4 33.9 0l127.1-127z"></path>
+  </svg>
+</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var scrollToTopButton = document.getElementById('scroll-to-top-button-{{ section.id }}');
+
+    scrollToTopButton.addEventListener('click', function () {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    });
+
+    const scrollThreshold = 1 - {{ section.settings.show_when_precent_of_page }} / 100;
+
+    function toggleScrollToTopButton() {
+      if (window.scrollY > scrollThreshold * (document.body.scrollHeight - window.innerHeight)) {
+        scrollToTopButton.style.display = 'block';
+        setTimeout(() => (scrollToTopButton.style.opacity = '1'), 10);
+      } else {
+        scrollToTopButton.style.opacity = '0';
+        setTimeout(() => (scrollToTopButton.style.display = 'none'), 300);
+      }
+    }
+
+    if (scrollThreshold === 1) {
+      scrollToTopButton.style.display = 'block';
+      scrollToTopButton.style.opacity = '1';
+    } else {
+      window.addEventListener('scroll', toggleScrollToTopButton);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Scroll to Top Button",
+   "disabled_on": {
+  "groups": ["header", "custom.popup"]
+   },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide button on mobile?",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "show_when_precent_of_page",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Show button when scrolling past (%) of page",
+      "default": 25,
+      "info": "Set the scroll threshold as a percentage of the page height."
+    },
+    {
+      "type": "select",
+      "id": "button_position",
+      "label": "Button Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button Border Color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Arrow Icon Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_diameter",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Diameter",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrow Icon Size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal Distance from Edge",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "min": 10,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical Distance from Bottom",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll to Top"
+    }
+  ]
+}
+{% endschema %}

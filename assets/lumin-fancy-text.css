@@ -1,0 +1,33 @@
+.lumin-text__fancy1 { 
+      position: relative;                
+      background-clip: text;
+      -webkit-background-clip: text;
+      background-image: var(--fancy-gradient);
+      color: transparent;
+    }
+.lumin-text__fancy2 {      
+      padding-left: var(--fancy-padding-left);
+      padding-right: var(--fancy-padding-left);
+      padding-top: var(--fancy-padding-top);
+      padding-bottom: var(--fancy-padding-bottom);
+      border-radius: var(--fancy-border-radius);
+      position: relative;                
+      background-clip: text;
+      -webkit-background-clip: text;
+      background: var(--fancy-background);
+      color: var(--fancy-text);
+      font-size: var(--fancy-text-size);
+    }
+.lumin-text__fancy3 {      
+      padding-left: {{ block.settings.padding-left-fancy }}px;
+      padding-right: {{ block.settings.padding-left-fancy }}px;
+      padding-top: {{ block.settings.padding-fancy }}px;
+      padding-bottom: {{ block.settings.padding-fancy }}px;
+      border-radius: {{ block.settings.border-fancy }}px;
+      position: relative;                
+      background-clip: text;
+      background-image: {%- if highlight_background_text_color_alpha != 0 -%}
+        {{ block.settings.highlight_background_color }}
+      {%- endif -%};
+      color: transparent;
+    }

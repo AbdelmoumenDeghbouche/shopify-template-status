@@ -1,0 +1,46 @@
+{%- capture icon_with_text -%}
+{%- if block.settings.custom_icon == null -%}
+  <span style="width: {{ block.settings.icon_width }}px;min-width: {{ block.settings.icon_width }}px;height: {{ block.settings.icon_width }}px;">
+   {%- render 'icon-accordion', icon: block.settings.icon -%}
+  </span>
+{%- else -%}
+      <img
+          src="{{ block.settings.custom_icon | image_url }}"
+          role="presentation"
+          height="{{ block.settings.icon_width }}px"
+          width="{{ block.settings.icon_width }}px"
+          loading="lazy"
+        >
+{%- endif -%}
+  <span style="font-size: {{ block.settings.font_size }}%; line-height:120%;">
+     {{- block.settings.content -}}
+  </span>
+{%- endcapture -%}
+
+{%- if icon_with_text != blank -%}
+  <div class="text-with-icon" {{ block.shopify_attributes }}>
+    {{- icon_with_text -}}
+  </div>
+{%- endif -%}
+
+
+<style>
+.product-info__promo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .925rem 1.75rem;
+    }
+.text-with-icon {
+    display:flex;
+    gap: 5px;
+    align-items: center;
+  }
+.text-with-icon svg {
+    width: 100%;
+    height: auto;
+    fill: currentColor;
+ }
+.text-with-icon p {
+    margin:0;
+ }
+</style>

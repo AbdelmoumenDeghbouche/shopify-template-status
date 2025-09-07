@@ -1,0 +1,59 @@
+<style>
+  {%- if block.settings.highlight_enable_custom_font != blank -%}
+    {{ block.settings.highlight_custom_font | font_face: font_display: 'swap' }}
+    {{ block.settings.highlight_custom_font | font_modify: 'weight', 'bolder' | font_face: font_display: 'swap' }}
+    {{ block.settings.highlight_custom_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+    {{ block.settings.highlight_custom_font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face: font_display: 'swap' }}
+    .lumin-section__block-id-{{ block.id }} {
+      --highlight-custom-font: {{ block.settings.highlight_custom_font.family }}, {{ block.settings.highlight_custom_font.fallback_families }};
+      --highlight-custom-font-weight: {{ block.settings.highlight_custom_font.weight }};
+      --highlight-custom-font-style: {{ block.settings.highlight_custom_font.style }};
+    }
+  {% endif %}
+  {%- assign highlight_background_text_color_alpha = block.settings.highlight_background_color | color_extract: 'alpha' -%}
+  {%- assign highlight_text_color_alpha = block.settings.highlight_text_color | color_extract: 'alpha' -%}
+  {%- assign block_heading_alpha = block.settings.block_heading_color | color_extract: 'alpha' -%}
+  .lumin-section__block-id-{{ block.id }} .lumin-section__heading {
+    margin: 0;
+    line-height: normal;
+    {%- if block_heading_alpha != 0 -%}
+      color: {{ block.settings.block_heading_color }};
+    {%- endif -%}
+    {%- if block.settings.block_heading_size != blank -%}
+      font-size: {{ block.settings.block_heading_size }}px;
+    {%- endif -%}
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__fancy {
+    position: relative;
+    Padding: 0 7px;
+    {%- if block.settings.highlight_heading_size != blank -%}
+      font-size: {{ block.settings.highlight_heading_size }}px;
+    {%- endif -%}
+    background-color: {%- if highlight_background_text_color_alpha != 0 -%}
+      {{ block.settings.highlight_background_color }}
+    {%- endif -%};
+    color: {%- if highlight_text_color_alpha != 0 -%}
+      {{ block.settings.highlight_text_color }}
+    {%- endif -%};
+     {%- if block.settings.highlight_enable_custom_font -%}
+      font-family: var(--highlight-custom-font);
+      font-weight: var(--highlight-custom-font-weight);
+      font-style: var(--highlight-custom-font-style);
+      {%- endif -%}
+  }
+
+
+  @media (max-width: 480px) {
+    .lumin-section__block-id-{{ block.id }} .lumin-section__heading {
+      {%- if block.settings.block_heading_size != blank -%}
+        font-size: min({{ block.settings.block_heading_size }}, 50px);
+      {%- endif -%}
+    }
+  }
+</style>
+{%- if block.settings.title != blank -%}
+  <{{ block.settings.heading_level }} class="lumin-section__heading">
+    {{ block.settings.title | replace: '[', '<span class="lumin-section__fancy">' | replace: ']', '</span>' }}
+  </{{ block.settings.heading_level }}>
+{%- endif -%}

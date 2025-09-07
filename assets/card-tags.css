@@ -1,0 +1,80 @@
+ #scroll-container {
+     font-size: var(--tag-fonts);
+     text-transform: var(--text-transform);
+     letter-spacing: var(--tag-spacing);
+     font-weight:  var(--tag-weight);
+     border: 0px solid black;
+     overflow: hidden;
+     display: flex;
+     flex-wrap: nowrap;
+     white-space: nowrap;
+     justify-content: center;
+     padding-bottom: var(--border-radius);
+     margin-bottom: calc(-20px - var(--tag-fonts) - var(--product-card-corner-radius));
+     height: calc( 20px + var(--tag-fonts) + var(--border-radius));
+     z-index: -1;
+     position: absolute;
+     border-radius: var(--border-radius);
+     border-bottom-left-radius: 0;
+     border-bottom-right-radius: 0;
+     border: var(--border-width) solid rgba(var(--color-foreground), var(--border-opacity));
+     width: calc(100% - var(--product-card-border-width));
+     left: 0;
+     top:0;
+}
+ #scroll-container ul {
+     list-style: none;
+     display: flex;
+     column-gap: 30px;
+     margin: 0;
+}
+ #scroll-container li {
+     display: flex;
+     column-gap: 30px;
+     align-items: center;
+}
+ #scroll-container li:after {
+     background: currentColor;
+     content: "";
+     display: inline-flex;
+     height: .25rem;
+     width: .25rem;
+}
+ #scroll-text {
+    /* animation properties */
+     -moz-transform: translateX(100%);
+     -webkit-transform: translateX(100%);
+     transform: translateX(100%);
+     -moz-animation: tag-animation var(--tag-speed) linear infinite;
+     -webkit-animation: tag-animation var(--tag-speed) linear infinite;
+     animation: tag-animation var(--tag-speed) linear infinite;
+}
+/* for Firefox */
+ @-moz-keyframes tag-animation {
+     from {
+         -moz-transform: translateX(100%);
+    }
+     to {
+         -moz-transform: translateX(-100%);
+    }
+}
+/* for Chrome */
+ @-webkit-keyframes tag-animation {
+     from {
+         -webkit-transform: translateX(100%);
+    }
+     to {
+         -webkit-transform: translateX(-100%);
+    }
+}
+ @keyframes tag-animation {
+     from {
+         -moz-transform: translateX(100%);
+         -webkit-transform: translateX(100%);
+         transform: translateX(100%);
+    }
+     to {
+         -moz-transform: translateX(-100%);
+         -webkit-transform: translateX(-100%);
+         transform: translateX(-100%);
+    }

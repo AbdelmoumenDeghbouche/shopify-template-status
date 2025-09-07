@@ -1,0 +1,620 @@
+{% liquid 
+  # Lumin Slider
+  # © 2025 Lumintheme
+  # https://www.lumintheme.com
+%}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .section-{{ section.id }}-margin {
+    padding-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-margin {
+      padding-top: {{ section.settings.margin_top }}px;
+      padding-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% liquid
+  assign scroll_speed = section.settings.scroll_speed | append: '000'
+  assign head_size = section.settings.head_size | append: 'px'
+  assign head_size_mb = section.settings.head_size_mb | append: 'px'
+  assign subhead_size = section.settings.subhead_size | append: 'px'
+  assign subhead_size_mb = section.settings.subhead_size | append: 'px'
+  assign review_size = section.settings.review_size | append: 'px'
+%}
+
+<div class="gradient color-{{ section.settings.color_scheme }}">
+  <div class="lumin-new-section page-width section-{{ section.id }}-padding">
+    <div class="swiper reviewSwiper review-swiper-{{section.id}}">
+      <div class="swiper-wrapper" style="width: 6000px; transition-timing-function: linear;">
+        {% for block in section.blocks %}
+          {% if block.type == 'review_image' %}
+            <div
+              class="swiper-slide-new swiper-slide"
+              style="--image-height: 300px; --image-height-mb: 200px;"
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.video != blank %}
+                {{
+                  block.settings.video
+                  | video_tag:
+                    image_size: '1100x',
+                    autoplay: false,
+                    loop: true,
+                    controls: false,
+                    muted: true,
+                    playsinline: true,
+                    class: 'review-image'
+                }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  focusable="false"
+                  class="icon icon-play"
+                  fill="none"
+                  viewBox="0 0 10 14"
+                  style="
+                        position: absolute;
+                        top: 50%;
+                        width: 130px;
+                        height: 85px;
+                        padding: 3rem 0.5rem;
+                        background: rgb(255 255 255 / 75%);
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 100px;
+                        zoom: 0.5;
+                        z-index: 2;
+                        cursor: pointer;
+                    }
+                  "
+                >
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M1.48177 0.814643C0.81532 0.448245 0 0.930414 0 1.69094V12.2081C0 12.991 0.858787 13.4702 1.52503 13.0592L10.5398 7.49813C11.1918 7.09588 11.1679 6.13985 10.4965 5.77075L1.48177 0.814643Z" fill={{ section.settings.button_color }}></path>
+                </svg>
+              {% elsif block.settings.review_image != blank %}
+                {% assign aspect_ratio = block.settings.review_image.aspect_ratio %}
+                {% assign height = 600 | divided_by: aspect_ratio %}
+                
+                <img
+                  src="{{ block.settings.review_image | image_url: width: 600 }}"
+                  alt="{{ block.settings.review_image.alt | escape }}"
+                  class="review-image"
+                  width="600"
+                  height="{{ height | round }}"
+                >
+              {% else %}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg, review-image' }}
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if section.settings.show_navigation %}
+        {% unless section.settings.auto_play %}
+          <div class="swiper-button-next slider-button--next lumin-slider-button-{{section.id}} ">
+            {% render 'icon-arro' %}
+          </div>
+          <div class="swiper-button-prev slider-button--prev lumin-slider-button-{{section.id}} ">
+            {% render 'icon-arro' %}
+          </div>
+          <div class="swiper-pagination"></div>
+        {% endunless %}
+      {% endif %}
+    </div>
+
+    <div class="content-wrapper content-wrapper-{{section.id}}">
+
+      {% if section.settings.heading != blank %}
+      <h2 class="main-title">
+        {{ section.settings.heading }}
+      </h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+      <p class="subtitle">
+        {{ section.settings.subheading }}
+      </p>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank %}
+      <a href="{{ section.settings.button_link }}" class="button">
+        {{ section.settings.button_text }}
+      </a>
+      {% endif %}
+
+      {% if section.settings.rating_text != blank %}
+      <div
+        class="rating-section"
+        style="display: flex; align-items: center; justify-content: {{section.settings.content_alignment}}; gap: 4px; white-space: nowrap; margin-top:10px;"
+      >
+        <div style="color: {{ section.settings.star_color }}; font-size: {{ review_size }};">★★★★★</div>
+        <div style="color: var(--color-foreground); font-size: {{ review_size }}; letter-spacing: -0.1px; white-space: nowrap;">
+          {{ section.settings.rating_text }}
+        </div>
+      </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+      function initializeVideoControls() {
+          document.querySelectorAll(".swiper-slide-new video").forEach(video => {
+              let slide = video.closest(".swiper-slide-new");
+              let playButton = slide ? slide.querySelector(".icon-play") : null;
+
+              if (!playButton) return;
+
+              // Play video, unmute, and hide play button on click
+              playButton.addEventListener("click", function () {
+                  if (video.paused) {
+                      video.muted = false; // Unmute the video
+                      video.play();
+                      playButton.style.display = "none"; // Hide play button
+                  }
+              });
+
+              // Pause video on click and show play button again
+              video.addEventListener("click", function () {
+                  if (!video.paused) {
+                      video.pause();
+                      playButton.style.display = "block"; // Show play button
+                  }
+              });
+
+              // Show play button when video ends
+              video.addEventListener("ended", function () {
+                  playButton.style.display = "block";
+              });
+          });
+      }
+
+      // Run the function on page load
+      initializeVideoControls();
+
+      // Reload script when a section is edited in Shopify Theme Editor
+      document.addEventListener("shopify:section:load", initializeVideoControls);
+      document.addEventListener("shopify:section:unload", initializeVideoControls);
+  });
+</script>
+
+<style>
+     .lumin-slider-button-{{section.id}} {
+      color: {{section.settings.navigation_color}} !important;
+  }
+
+    .reviewSwiper {
+      width: 100%;
+      margin-bottom: 25px;
+      margin-top: 0;
+      padding: 0 20px;
+      overflow: hidden;
+    }
+  
+
+    .review-image {
+      width: 160px;
+      height: var(--image-height-mb);
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f6f6f6;
+    }
+
+    .content-wrapper {
+      margin: 0 auto;
+      padding: 0 10px;
+    }
+  .content-wrapper-{{section.id}} {
+      text-align: {{section.settings.content_alignment}};
+    }
+
+    .main-title {
+      font-size: {{ head_size_mb }};
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      margin-top: 0;
+      color: var(--color-foreground);
+    }
+
+    .subtitle {
+      font-size: {{ subhead_size_mb }};
+      margin-bottom: 20px;
+      color: var(--color-foreground);
+      letter-spacing: -0.3px;
+    }
+
+    .swiper-slide-new {
+      width: auto !important;
+      padding: 0 10px;
+    }
+
+    .reviewSwiper .swiper-wrapper {
+      transition-timing-function: linear !important;
+      will-change: transform;
+    }
+
+    @media screen and (min-width: 768px) {
+      .lumin-new-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+    .review-swiper-{{section.id}} {
+        order: {{section.settings.layout}};
+    }
+
+      .reviewSwiper {
+        margin-bottom: 0;
+        padding: 0;
+      }
+      .content-wrapper {
+        padding: 0;
+      }
+      .content-wrapper-{{section.id}} {
+        text-align:  {{section.settings.content_alignment}};
+      }
+
+      .main-title {
+        font-size: {{ head_size }};
+        margin-bottom: 16px;
+      }
+
+      .subtitle {
+        font-size: {{ subhead_size }};
+        margin-bottom: 24px;
+      }
+
+      .claim-button {
+        width: auto;
+        font-size: 16px;
+        padding: 16px 40px;
+      }
+
+      .review-image {
+        width: 240px;
+        height: var(--image-height);
+      }
+    }
+</style>
+
+{% schema %}
+{
+  "name": "Lumin Slider #2",
+  "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+     {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.image-with-text.settings.layout.options__1.label"
+        },
+        {
+          "value": "0",
+          "label": "t:sections.image-with-text.settings.layout.options__2.label"
+        }
+      ],
+      "default": "1",
+      "label": "t:sections.image-with-text.settings.layout.label",
+      "info": "t:sections.image-with-text.settings.layout.info"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Look At How Others Are Loving Their Product!"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Real Reviews From Real People"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "CLAIM OFFER"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "rating_text",
+      "label": "Rating Text",
+      "default": "Rated 4.8/5 by 1,319+ Happy Customers"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+    "type": "color_scheme",
+    "id": "color_scheme",
+    "label": "t:sections.all.colors.label",
+    "default": "background-1"
+  },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Play Button Color",
+      "default": "#212121"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#FFD700"
+    },
+    {
+      "type": "color",
+      "id": "navigation_color",
+      "label": "Navgation Arrows",
+      "default": "#212121"
+    },
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_play",
+      "default": true,
+      "label": "Auto scroll"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Navigation",
+      "info": "Not shown on auto scroll"
+    },
+     {
+    "type": "range",
+    "id": "scroll_speed",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "label": "Scrolling Speed",
+    "default": 4
+  },
+      {
+    "type": "range",
+    "id": "head_size",
+    "min": 10,
+    "max": 100,
+    "step": 2,
+    "unit": "px",
+    "label": "Heading Size",
+    "default": 42
+  },
+     {
+    "type": "range",
+    "id": "head_size_mb",
+    "min": 10,
+    "max": 100,
+    "step": 2,
+    "unit": "px",
+    "label": "Heading Size Mobile",
+    "default": 32
+  },
+        {
+    "type": "range",
+    "id": "subhead_size",
+    "min": 8,
+    "max": 30,
+    "step": 2,
+    "unit": "px",
+    "label": "Sub Heading Size",
+    "default": 18
+  },
+        {
+    "type": "range",
+    "id": "subhead_size_mb",
+    "min": 8,
+    "max": 30,
+    "step": 2,
+    "unit": "px",
+    "label": "Sub Heading Size Mobile",
+    "default": 16
+  },
+        {
+    "type": "range",
+    "id": "review_size",
+    "min": 8,
+    "max": 30,
+    "step": 2,
+    "unit": "px",
+    "label": "Review Size",
+    "default": 10
+  },
+    {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_bottom",
+    "default": 36
+  },
+    {
+    "type": "range",
+    "id": "margin_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "margin_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Bottom",
+    "default": 36
+  },
+    {
+      "type": "header",
+      "content": "Get Support",
+      "info": "Please see our [Documentation](https://help.lumintheme.com/lumin-theme-documentation) or get [help](https://lumintheme.com/pages/contact) from our support team."
+    },
+    {
+      "type": "header",
+      "content": "Shopify Themes",
+      "info": "Want to WOW your customers?! Check out our [Shopify Themes](https://lumintheme.com/)."
+    },
+    {
+      "type": "paragraph",
+      "content": "© 2025 lumintheme.com"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review_image",
+      "name": "Review Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "review_image",
+          "label": "Review Screenshot"
+        },
+         {
+          "type": "video",
+          "id": "video",
+          "label": "Video from Shopify"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lumin Slider #2",
+      "blocks": [
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function initSwiper() {
+      var reviewSlides = document.querySelectorAll('.swiper-slide-new');
+      var swiperWrapper = document.querySelector('.swiper-wrapper');
+
+      if (reviewSlides.length < 6 && swiperWrapper) {
+        reviewSlides.forEach(function(slide) {
+          swiperWrapper.appendChild(slide.cloneNode(true));
+          swiperWrapper.appendChild(slide.cloneNode(true));
+        });
+      }
+
+      if (window.reviewSwiper) {
+        window.reviewSwiper.destroy(true, true); // Destroy previous instance before reinitializing
+      }
+
+      window.reviewSwiper = new Swiper(".reviewSwiper", {
+        {% if section.settings.auto_play %}
+        speed: {{scroll_speed}},
+        autoplay: {delay: 0},
+        {% endif %}
+        direction: 'horizontal',
+        loop: true,
+        freeMode: true,
+        slidesPerView: "auto",
+        spaceBetween: 5,
+        allowTouchMove: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    }
+
+    initSwiper(); // Initialize on page load
+
+    // Reinitialize when the section is updated in Shopify theme editor
+    document.addEventListener('shopify:section:load', initSwiper);
+    document.addEventListener('shopify:section:unload', function() {
+      if (window.reviewSwiper) {
+        window.reviewSwiper.destroy(true, true);
+      }
+    });
+  });
+</script>

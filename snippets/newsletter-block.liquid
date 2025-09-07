@@ -1,0 +1,133 @@
+<style>
+  {%- assign button_alpha = block.settings.button_background_color | color_extract: 'alpha' -%}
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__form {
+    --form-gap: 5px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--form-gap) * 2);
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__form-text {
+    color: inherit;
+    font-size: 1.5rem;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__form input {
+    margin: unset;
+    padding: 0.8em;
+    font-size: 1.5rem;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__form input[type="text"],
+  .lumin-section__block-id-{{ block.id }} .lumin-section__form input[type="email"] {
+    padding: 0.8em;
+    background: transparent;
+    border: thin solid rgba(var(--color-foreground));
+    color: rgba(var(--color-foreground));
+  }
+
+  .lumin-section__form--{{ block.id }} input {
+    width: 100%;
+  }
+
+  {%- if block.settings.show_first_name and block.settings.show_last_name -%}
+    .lumin-section__form--{{ block.id }}-compact .lumin-section__newsletter_first-name,
+    .lumin-section__form--{{ block.id }}-compact .lumin-section__newsletter_last-name {
+      width: calc(50% - var(--form-gap));
+    }
+  {%- endif -%}
+
+  .lumin-section__form--{{ block.id }}-compact .lumin-section__newsletter_email {
+    width: calc(70% - var(--form-gap));
+  }
+
+  .lumin-section__form--{{ block.id }}-compact .lumin-section__button {
+    width: calc(30% - var(--form-gap));
+  }
+
+  .lumin-section__block-id-{{ block.id }} input::placeholder {
+    opacity: 0.6;
+    color: rgba(var(--color-foreground));
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__button {
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    border: thin solid;
+    border-radius: {{ block.settings.button_radius }}px;
+    color: {{ block.settings.button_label_color }};
+    font-size: 16px;
+    border-color: {%- if button_alpha != 0 -%}{{ block.settings.button_background_color }}{%- else -%}{{ block.settings.button_label_color }}{%- endif -%};
+    background-color: {{ block.settings.button_background_color }};
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__button:hover {
+    opacity: 1;
+    {%- if button_alpha != 0 -%}
+    background-color: {{ block.settings.button_background_color | color_darken: 10 }};
+    border-color: transparent;
+    {%- else -%}
+    background-color: {{ block.settings.button_label_color | color_modify: 'alpha', 0.1 }}
+    {%- endif -%};
+  }
+</style>
+{%- capture form_id -%}lumin-section__form-{{ section_id }}{%- endcapture -%}
+{%- form 'customer',id: form_id -%}
+  {%- comment -%} Error and success messages for submitted form {%- endcomment -%}
+  <div class="lumin-section__form-response lumin-section__text">
+    {%- if form.posted_successfully? -%}
+      <p class="lumin-section__form-reply--success">
+        {% render 'icon-success' -%}
+        {{- 'newsletter.success' | t }}
+      </p>
+    {%- elsif form.errors -%}
+      {%- for field in form.errors -%}
+        <p class="lumin-section__form-reply--error">{{ field }} - {{ form.errors.messages[field] }}</p>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Hidden newsletter fields {%- endcomment -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+  <input type="hidden" name="challenge" value="false">
+
+  <div class="lumin-section__block-id-{{ block.id }} lumin-section__form lumin-section__form--{{ block.id }} lumin-section__form--{{ block.id }}-{{ block.settings.layout }}">
+    {%- if block.settings.show_first_name -%}
+      <label class="lumin-section__visually-hidden visually-hidden" for="first-name-{{ block.id }}">
+        {{- block.settings.first_name_label -}}
+      </label>
+      <input
+        class="lumin-section__newsletter_first-name"
+        type="text"
+        name="contact[first_name]"
+        id="first-name-{{ block.id }}"
+        placeholder="{{ block.settings.first_name_label }}"
+      >
+    {%- endif -%}
+    {%- if block.settings.show_last_name -%}
+      <label class="lumin-section__visually-hidden visually-hidden" for="last-name-{{ block.id }}">
+        {{- block.settings.last_name_label -}}
+      </label>
+      <input
+        class="lumin-section__newsletter_last-name"
+        type="text"
+        name="contact[last_name]"
+        id="last-name-{{ block.id }}"
+        placeholder="{{ block.settings.last_name_label }}"
+      >
+    {%- endif -%}
+    <label class="lumin-section__visually-hidden visually-hidden" for="email-{{ block.id }}">{{ block.settings.email_label }}</label>
+    <input
+      class="lumin-section__newsletter_email"
+      type="email"
+      name="contact[email]"
+      required
+      id="email-{{ block.id }}"
+      placeholder="{{ block.settings.email_label }}"
+    >
+    <input class="lumin-section__button" type="submit" value="{{ block.settings.submit_label }}">
+  </div>
+{%- endform -%}

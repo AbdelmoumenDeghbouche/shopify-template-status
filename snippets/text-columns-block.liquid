@@ -1,0 +1,21 @@
+<style>
+  .lumin-section__block-id-{{ block.id }} .lumin-section__columns {
+    gap: {{ block.settings.gap }}px;
+  }
+</style>
+<div class="lumin-section__flex lumin-section__columns lumin-section__flex--2-per-row lumin-section__justify-{{ block.settings.text_alignment }}">
+  {%- for index in (1..2) -%}
+    {%- capture heading -%}heading_{{ forloop.index }}{%- endcapture -%}
+    {%- capture column -%}column_{{ forloop.index }}{%- endcapture -%}
+    <div class="lumin-section__flex-item">
+      {%- if block.settings[heading] != blank -%}
+        <h3 class="lumin-section__small-heading lumin-section__column-heading">{{ block.settings[heading] }}</h3>
+      {%- endif -%}
+      {%- if block.settings[column] != blank -%}
+        <div class="lumin-section__text lumin-section__rte">
+          {{ block.settings[column] }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>

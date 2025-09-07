@@ -1,0 +1,15 @@
+{% capture header_content %}{{content_for_header}}{% endcapture %}
+{% if header_content contains 'cjpodflag' %}
+<script>
+    window.cjpod = window.cjpod || {};
+</script>
+  {% if template contains 'product' %}
+<script>
+      window.cjpod.product = window.cjpod.product || {{ product | json }};
+      window.cjpod.collections = window.cjpod.collections || {{ product.collections | json }};
+      window.cjpod.cjProductUrl = "{{ product.metafields.productMetaField.sourceURL }}";
+      window.cjpod.designBtn = JSON.parse('{"frameSize":"1","frameColor":"#000000","width":"80","height":"50","fillet":"50","textSize":"16","backColor":"#ff7700","textColor":"#ffffff","language":"English","filletUnit":"px","margin":"10px auto"}'); 
+</script>
+<script src="https://frontend.cjdropshipping.com/egg/pod3.js"></script>
+  {% endif %}
+{% endif %}

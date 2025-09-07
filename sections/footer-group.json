@@ -1,0 +1,310 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "back_to_top_Ca7nbV": {
+      "type": "back-to-top",
+      "settings": {
+        "hide_on_mobile": false,
+        "show_when_precent_of_page": 60,
+        "button_position": "center",
+        "button_bg_color": "#ffffff",
+        "button_border_color": "#dddddd",
+        "icon_color": "#000000",
+        "button_diameter": 48,
+        "icon_size": 24,
+        "horizontal_padding": 20,
+        "vertical_padding": 100
+      }
+    },
+    "trust_badges_LN3iJX": {
+      "type": "trust-badges",
+      "blocks": {
+        "image_xMgRGk": {
+          "type": "image",
+          "settings": {
+            "feature_title": "<strong>Fast Shipping<\/strong>",
+            "feature_text": "<p>Doorstep delivery to most of the US.<\/p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        },
+        "image_RgRA8N": {
+          "type": "image",
+          "settings": {
+            "feature_title": "<strong>Price-match guarantee<\/strong>",
+            "feature_text": "<p>Safe money when ordering with us<\/p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        },
+        "image_kh6e7A": {
+          "type": "image",
+          "settings": {
+            "feature_title": "<strong>Hassle-free exchange<\/strong>",
+            "feature_text": "<p>No questions ask<\/p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        },
+        "image_Jpgbqc": {
+          "type": "image",
+          "settings": {
+            "feature_title": "<strong>5 Star Reviews<\/strong>",
+            "feature_text": "<p>Customer satisfaction No.1 priority<\/p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        }
+      },
+      "block_order": [
+        "image_xMgRGk",
+        "image_RgRA8N",
+        "image_kh6e7A",
+        "image_Jpgbqc"
+      ],
+      "settings": {
+        "feature_row": 4,
+        "feature_row_mobile": 2,
+        "feature_gap": 20,
+        "feature_gap_mobile": 20,
+        "feature_padding_horizontal": 0,
+        "feature_padding_vertical": 0,
+        "feature_radius": 16,
+        "feature_border_thickness": 0,
+        "feature_shadow": false,
+        "feature_heading_size": 14,
+        "feature_heading_size_mobile": 12,
+        "feature_heading_height": 130,
+        "feature_heading_mt": 8,
+        "feature_text_size": 12,
+        "feature_text_size_mobile": 12,
+        "feature_text_height": 130,
+        "feature_text_mt": 4,
+        "feature_icon_size": 42,
+        "feature_icon_size_mobile": 42,
+        "feature_bg": "#ffffff",
+        "feature_border_color": "#000000",
+        "feature_shadow_color": "#000000",
+        "feature_heading_color": "#000000",
+        "feature_text_color": "#000000",
+        "feature_icon_color": "#000000",
+        "background_color": "#ffffff",
+        "background_gradient": "",
+        "border_color": "#000000",
+        "margin_top": 24,
+        "margin_bottom": 24,
+        "padding_top": 16,
+        "padding_bottom": 16,
+        "padding_horizontal": 5,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": false,
+        "content_width": 120,
+        "border_thickness": 0,
+        "lazy": true
+      }
+    },
+    "scroll_text_wbC33X": {
+      "type": "scroll-text",
+      "blocks": {
+        "text_KAXFmg": {
+          "type": "text",
+          "settings": {
+            "text": "<strong>Free Shipping<\/strong>",
+            "url": "",
+            "icon": "none",
+            "outline_all": false,
+            "outline_text": "Shipping",
+            "text_color": "#212121",
+            "text_size": 50,
+            "text_size_mobile": 32,
+            "text_height": 130,
+            "text_mr": 50,
+            "text_mr_mobile": 40
+          }
+        },
+        "text_FEgxPc": {
+          "type": "text",
+          "settings": {
+            "text": "<strong>Best Price<\/strong>",
+            "url": "",
+            "icon": "none",
+            "outline_all": false,
+            "outline_text": "Price",
+            "text_color": "#212121",
+            "text_size": 50,
+            "text_size_mobile": 32,
+            "text_height": 130,
+            "text_mr": 50,
+            "text_mr_mobile": 40
+          }
+        },
+        "text_Fmk9gC": {
+          "type": "text",
+          "settings": {
+            "text": "<strong>24\/7 Customer Support<\/strong>",
+            "url": "",
+            "icon": "none",
+            "outline_all": false,
+            "outline_text": "Customer",
+            "text_color": "#212121",
+            "text_size": 50,
+            "text_size_mobile": 32,
+            "text_height": 130,
+            "text_mr": 50,
+            "text_mr_mobile": 40
+          }
+        }
+      },
+      "block_order": [
+        "text_KAXFmg",
+        "text_FEgxPc",
+        "text_Fmk9gC"
+      ],
+      "settings": {
+        "reverse_direction": false,
+        "pause_hover": true,
+        "lazy": true,
+        "scrolling_velocity": 112,
+        "scrolling_velocity_mobile": 88,
+        "background_color": "#eeeeee",
+        "background_gradient": "",
+        "border_color": "#000000",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "margin_horizontal": 0,
+        "margin_horizontal_mobile": 0,
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "padding_horizontal": 0,
+        "padding_horizontal_mobile": 0,
+        "full_width": true,
+        "content_width": 120,
+        "border_thickness": 0,
+        "section_radius": 0
+      }
+    },
+    "420dbb1b-f872-4861-99ec-c6ce83df4831": {
+      "type": "newsletter",
+      "blocks": {
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Want the chance to trial our new products?",
+            "heading_size": "h2"
+          }
+        },
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-paragraph-1": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Be the first to know about new collections and exclusive offers.<\/p>"
+          }
+        },
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-email_form-1": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-heading-1",
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-paragraph-1",
+        "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-email_form-1"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5aee6710-aeab-46cc-be20-59dde28f17a7",
+        "full_width": true,
+        "text_align": "center",
+        "news_alignment": "horizontal",
+        "show_small_text": true,
+        "small_text": "* We Promise not to use your email for Spam! You can unsubscribe at any time.",
+        "padding_top": 40,
+        "padding_bottom": 76,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "waves_H7qRgj": {
+      "type": "waves",
+      "settings": {
+        "wave_color": "#000000",
+        "wave_height": 40,
+        "wave_speed": 10,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "adb529f5-d357-4437-b802-e295826b2117": {
+          "type": "brand_information",
+          "settings": {
+            "show_social": true
+          }
+        },
+        "link_list_YkcPW4": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Information",
+            "menu": "footer"
+          }
+        },
+        "0dfe9e9f-d96e-442f-be6e-881afaba1771": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "text_y3qDPH": {
+          "type": "text",
+          "settings": {
+            "heading": "Need to Get in Touch?",
+            "subtext": "<p><strong>hello@yourdomain.com<\/strong><\/p><p>Call: <strong>+1 (917) 642-8765<\/strong><\/p><p>Live chat available - Monday - Friday 9am - 5pm CET<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "adb529f5-d357-4437-b802-e295826b2117",
+        "link_list_YkcPW4",
+        "0dfe9e9f-d96e-442f-be6e-881afaba1771",
+        "text_y3qDPH"
+      ],
+      "settings": {
+        "color_scheme": "scheme-58ff9a05-7092-43ee-84e7-6f05d1cc9431",
+        "show_collapse": true,
+        "show_border": false,
+        "show_body_font": "body",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "original": "custom",
+        "payment_icon": "visa,master,paypal,apple_pay,shopify-pay,google-pay",
+        "custom_icon_1_width": 34,
+        "custom_icon_2_width": 34,
+        "custom_icon_3_width": 34,
+        "hide_shopify": false,
+        "copyright": "- Theme by <a href=\"https:\/\/lumintheme.com\/\" target=\"_blank\" title=\"https:\/\/lumintheme.com\/\">Lumin<em>Theme<\/em><\/a> © 2024",
+        "show_bottom_text": true,
+        "bottom_text": "",
+        "color_bottom_text": "#868686",
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 60,
+        "padding_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "back_to_top_Ca7nbV",
+    "trust_badges_LN3iJX",
+    "scroll_text_wbC33X",
+    "420dbb1b-f872-4861-99ec-c6ce83df4831",
+    "waves_H7qRgj",
+    "footer"
+  ]
+}

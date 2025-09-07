@@ -1,0 +1,80 @@
+{{ 'image-bar.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="lm-tot-bar"
+  style="
+    --bar-font-size:{{block.settings.text_size}}px;
+    --bar-zoom:{{block.settings.image_size}};
+    --bar-image-space:{{block.settings.image_space}}px;
+  "
+>
+  <div class="lm-img-bar" {{ block.shopify_attributes }}>
+    {%- if block.settings.image != blank -%}
+      {%
+        render 'responsive-image-low' with
+        image: block.settings.image,
+        image_class: "image",
+        wrapper_class: "image-wrapper"
+      %}
+    {%- else -%}
+      <img src="{{ '2.jpg' | asset_url }}" alt="review image" width="100" height="100">
+    {%- endif -%}
+    {%- unless block.settings.hide_img_2 -%}
+      {%- if block.settings.image_2 != blank -%}
+        {%
+          render 'responsive-image-low' with
+          image: block.settings.image_2,
+          image_class: "image",
+          wrapper_class: "image-wrapper"
+        %}
+      {%- else -%}
+        <img src="{{ '1.jpg' | asset_url }}" alt="review image" width="100" height="100">
+      {%- endif -%}
+    {% endunless %}
+    {%- unless block.settings.hide_img_3 -%}
+      {%- if block.settings.image_3 != blank -%}
+        {%
+          render 'responsive-image-low' with
+          image: block.settings.image_3,
+          image_class: "image",
+          wrapper_class: "image-wrapper"
+        %}
+      {%- else -%}
+        <img src="{{ '3.jpg' | asset_url }}" alt="review image" width="100" height="100">
+      {%- endif -%}
+    {% endunless %}
+    {%- unless block.settings.hide_img_4 -%}
+      {%- if block.settings.image_4 != blank -%}
+        {%
+          render 'responsive-image-low' with
+          image: block.settings.image_4,
+          image_class: "image",
+          wrapper_class: "image-wrapper"
+        %}
+      {%- else -%}
+        <img src="{{ '4.jpg' | asset_url }}" alt="review image" width="100" height="100">
+      {%- endif -%}
+    {% endunless %}
+    {%- unless block.settings.hide_img_5 -%}
+      {%- if block.settings.image_5 != blank -%}
+        {%
+          render 'responsive-image-low' with
+          image: block.settings.image_5 | image_url: width: 100,
+          image_class: "image",
+          wrapper_class: "image-wrapper"
+        %}
+      {%- else -%}
+        <img src="{{ '5.jpg' | asset_url }}" alt="review image" width="100" height="100">
+      {%- endif -%}
+    {% endunless %}
+  </div>
+  <span class="{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}">
+    {{
+      block.settings.text_block
+      | replace: '[', '<span class="lumin-text__fancy1">'
+      | replace: ']', '</span>'
+      | replace: '((', '<span class="lumin-text__fancy2">'
+      | replace: '))', '</span>'
+    -}}
+  </span>
+</div>

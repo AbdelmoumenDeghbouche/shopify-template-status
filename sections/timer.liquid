@@ -1,0 +1,374 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .section-{{ section.id }}-margin {
+    padding-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-margin {
+      padding-top: {{ section.settings.margin_top }}px;
+      padding-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+{% assign scheme1 = settings.color_schemes | first %}
+{% if section.settings.timer %}
+  <div class="section-{{ section.id }}-margin{% if section.settings.layout == 'grid' %} page-width{% endif %}">
+    <div class="countdown-timer--wrapper section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+      <a href="{{ section.settings.url }}" class="countdown-timer--url">
+        <div class="countdown-timer--container">
+          <div class="countdown-timer--left">
+            <span>{{ section.settings.first_text }}</span>
+            <strong>{{ section.settings.second_text }}</strong>
+          </div>
+          <div class="countdown-timer--right">
+            <span>{{ section.settings.third_text }}</span>
+            <div class="countdown-timer">-D --:--:--</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    (function initCountdownTimer(){
+        // gets the timer value
+        var countdown_timer = '{{ section.settings.timer }}';
+        if(!countdown_timer) return null;
+
+        // splits the time value to create the date variable
+        var finalDate_timer = countdown_timer.split(' ')[0].split('/');
+        var finalTime_timer = countdown_timer.split(' ')[1].split(':');
+        var finalDate_js = new Date(finalDate_timer[2], finalDate_timer[0]-1, finalDate_timer[1], finalTime_timer[0], finalTime_timer[1]);
+        if(!finalDate_js) return null;
+
+        // calculate the remaining time for the timer (if its zero, it hides the whole component)
+        var remaining_time = (finalDate_js.getTime() - new Date().getTime()) / 1000;
+        if(remaining_time <= 0){
+            document.querySelector('.countdown-timer--wrapper').style.display = "none";
+            return null;
+        }
+
+        // start the interval that runs every 1 sec
+        setInterval(function(){
+
+            // check the remaining time for the timer (if its zero, it hides the whole component)
+            if(remaining_time < 0){
+                document.querySelector('.countdown-timer--wrapper').style.display = "none";
+                return null;
+            }
+
+            // create the time object with each remaining value
+            var objTime = {
+                days: Math.floor(((remaining_time % 31536000) % 2628000) / 86400),
+                hours: Math.floor((remaining_time % (3600 * 24)) / 3600),
+                minutes: Math.floor((remaining_time % 3600) / 60),
+                seconds: Math.floor(remaining_time % 60)
+            };
+
+            // update the html in the countdown component
+            document.querySelector('.countdown-timer').innerHTML = objTime.days+'{{ section.settings.timer_days }} '+
+                (objTime.hours>9?objTime.hours:'0'+objTime.hours)+':'+
+                (objTime.minutes>9?objTime.minutes:'0'+objTime.minutes)+':'+
+                (objTime.seconds>9?objTime.seconds:'0'+objTime.seconds);
+
+            // subtracts 1 sec from the remaining time before the loop ends
+            remaining_time -= 1;
+
+        }, 1000);
+    })();
+  </script>
+{% endif %}
+
+<style>
+  .countdown-timer--wrapper {
+    {% if section.settings.layout == 'grid' %}
+      border-radius:{{ section.settings.video_border }}px;
+    {% endif %}
+    {% if section.settings.show_border and section.settings.layout == 'grid' %}
+      border:1px solid #eaeaea;
+    {% endif %}
+    {% if section.settings.color_scheme != scheme1 %}
+      padding-left:30px;
+      padding-right:30px;
+    {% endif %}
+    {% if section.settings.show_border == true %}
+      padding-left:30px;
+      padding-right:30px;
+    {% endif %}
+  }
+ @media screen and (max-width: 600px) {
+         .countdown-timer--wrapper {
+    {% if section.settings.color_scheme != scheme1 %}
+      padding-left:16px;
+      padding-right:16px;
+    {% endif %}
+    {% if section.settings.show_border == true %}
+      padding-left:16px;
+      padding-right:16px;
+    {% endif %}
+  }
+  }
+  
+  a.countdown-timer--url {
+      text-decoration: none;
+  }
+  .countdown-timer--container {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      display: flex;
+      color: rgba(var(--color-foreground), 1) !important;
+  }
+  .countdown-timer--container>div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+  .countdown-timer--right {
+      text-align: right;
+  }
+  .countdown-timer--container>div span {
+      font-size: {{section.settings.small_text}}px;
+      line-height: 120%;
+  }
+  .countdown-timer--container>div strong {
+      font-size: {{section.settings.big_text}}px;
+      line-height: 110%;
+  }
+  .countdown-timer {
+      font-size: {{section.settings.timer_text}}px;
+      text-transform: uppercase;
+      line-height: 120%;
+      font-weight: 800;
+  }
+  @media screen and (max-width: 767px){
+      .countdown-timer--container {
+          padding: 0;
+      }
+      .countdown-timer--container>div span {
+          font-size: {{section.settings.small_text_mb}}px;
+          line-height: 120%;
+      }
+      .countdown-timer--container>div strong {
+          font-size: {{section.settings.big_text_mb}}px;
+          line-height: 110%;
+      }
+      .countdown-timer {
+      font-size: {{section.settings.timer_text_mb}}px;
+  }
+  }
+</style>
+
+{% schema %}
+{
+    "name": "Countdown Timer Banner",
+   "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+    "limit": 1,
+    "tag": "section",
+    "settings": [
+      {
+      "type": "header",
+      "content": "Grid Settings"
+    },
+       {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "background-1"
+        },
+       {
+    "type": "select",
+    "id": "layout",
+    "options": [
+      {
+        "value": "full_bleed",
+        "label": "Full Width"
+      },
+      {
+        "value": "grid",
+        "label": "Grid"
+      }
+    ],
+    "default": "full_bleed",
+    "label": "Layout"
+  },
+      {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show Border",
+      "default": false,
+      "info": "Work on grid layout only"
+    },
+    {
+    "type": "range",
+    "id": "video_border",
+    "min": 0,
+    "max": 100,
+    "step": 2,
+    "unit": "px",
+    "label": "Corner Radius",
+    "default": 0,
+    "info": "Work on grid layout only"
+  },
+
+        {
+            "type": "text",
+            "id": "first_text",
+            "label": "First Text (Top left)",
+            "default": "Shop our best deals for"
+        },
+        {
+            "type": "text",
+            "id": "third_text",
+            "label": "Third Text (Top Right)",
+            "default": "Offers ends in"
+        },
+        {"type": "range",
+        "id": "small_text",
+        "min": 8,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Small Text",
+        "default": 16,
+        "info": "Small Text"
+        },
+        {"type": "range",
+        "id": "small_text_mb",
+        "min": 8,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Small Text Mobile",
+        "default": 16,
+        "info": "Small Text Mobile"
+        },
+        {
+            "type": "text",
+            "id": "second_text",
+            "label": "Second Text (Bottom left)",
+            "default": "BLACK FRIDAY"
+        },
+        {"type": "range",
+        "id": "big_text",
+        "min": 8,
+        "max": 70,
+        "step": 1,
+        "unit": "px",
+        "label": "Big Text",
+        "default": 28,
+        "info": "Big Text"
+        },
+        {"type": "range",
+        "id": "big_text_mb",
+        "min": 8,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Big Text Mobile",
+        "default": 16,
+        "info": "Big Text Mobile"
+        },
+        {
+            "type": "text",
+            "id": "url",
+            "label": "URL",
+            "default": "#"
+        },
+        {
+            "type": "text",
+            "id": "timer",
+            "label": "Date and time to countdown",
+            "placeholder": "MM/DD/YYYY HH:mm",
+            "info": "Timer Format: MM/DD/YYYY HH:mm"
+        },
+       {
+          "type": "text",
+          "id": "timer_days",
+          "default": "D",
+          "label": "Days text",
+          "info": "Save after editing to see effect"
+        },
+        {"type": "range",
+        "id": "timer_text",
+        "min": 8,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Timer Text",
+        "default": 16,
+        "info": "Timer Text"
+        },
+        {"type": "range",
+        "id": "timer_text_mb",
+        "min": 8,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Timer Text Mobile",
+        "default": 16,
+        "info": "Timer Text Mobile"
+        },
+        {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Bottom",
+    "default": 36
+  },
+    {
+    "type": "range",
+    "id": "margin_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "margin_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Bottom",
+    "default": 36
+  }
+    ],
+    "presets": [
+        {
+            "name": "Countdown Timer Banner",
+            "category": "Banners"
+        }
+    ]
+}
+{% endschema %}

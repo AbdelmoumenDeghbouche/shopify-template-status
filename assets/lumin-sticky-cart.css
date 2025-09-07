@@ -1,0 +1,112 @@
+#lumin-sticky-atc {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.15s ease-out;
+}
+#lumin-sticky-atc.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+#lumin-sticky-atc .page-width-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (min-width: 990px) {
+  #lumin-sticky-atc .page-width-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+@media (max-width: 600px) {
+  #lumin-sticky-atc .page-width-inner {
+    flex-wrap: wrap;
+  }
+}
+#lumin-sticky-atc .product-content {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+@media (min-width: 990px) {
+  #lumin-sticky-atc .product-content {
+    padding-bottom: 0;
+    padding-right: 2rem;
+  }
+}
+#lumin-sticky-atc .product-content .product__title {
+  margin: 0;
+}
+#lumin-sticky-atc .product-content .price {
+  display: flex;
+  align-items: center;
+}
+#lumin-sticky-atc .product-content .price .badge {
+  display: none;
+}
+#lumin-sticky-atc .product-content img {
+  margin-right: 1.5rem;
+}
+#lumin-sticky-atc .product-form {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  #lumin-sticky-atc .product-form {
+    flex: 100%;
+  }
+  #lumin-sticky-atc .product-form .select {
+   /* max-width: calc(50% - 0.75rem);*/
+  }
+}
+#lumin-sticky-atc .product-form .select {
+  flex-shrink: 0;
+  width: auto;
+  margin-right: 0.75rem;
+  flex-grow: 1;
+  /*max-width: calc(50% - 0.75rem);*/
+}
+@media (min-width: 990px) {
+  #lumin-sticky-atc .product-form .select {
+    flex-grow: 0;
+  }
+}
+#lumin-sticky-atc .product-form .select__select {
+  padding-right: 4rem;
+}
+#lumin-sticky-atc .product-form .quantity-input-wrapper {
+ /* display: flex;
+  align-items: center;
+  justify-content: space-between;*/
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  justify-content: end;
+  max-width: 470px;
+}
+#lumin-sticky-atc .product-form .quantity {
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+  width: 95%;
+}
+@media (min-width: 990px) {
+  #lumin-sticky-atc .product-form .quantity {
+    display: flex;
+  }
+}
+#lumin-sticky-atc .product-form button[name="add"] {
+  flex-shrink: 0;
+  flex-grow: 1;
+  margin: 0;
+}
+@media (min-width: 990px) {
+  #lumin-sticky-atc .product-form button[name="add"] {
+    flex-grow: 0;
+  }
+}

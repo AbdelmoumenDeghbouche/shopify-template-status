@@ -1,0 +1,114 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .buybutton {
+    padding: 1rem 3rem;
+  }
+{%- endstyle -%}
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div
+    class="page-width section-{{ section.id }}-padding"
+    style="display: flex;justify-content:center;">
+    <button class="buybutton buybutton-{{ section.id }} button {% if section.settings.button_style_secondary %} button--secondary{% endif %}" style="display: flex;flex-direction: column;gap: 3px;">
+      <span>{{ section.settings.custom_text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</span>
+      <span style="font-size: 74%;">{{ section.settings.custom_text_small | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</span>
+    </button>
+  </div>
+</div>
+<script>
+
+document.querySelector('.buybutton-{{ section.id }}').onclick = clickBuyButton;
+
+function clickBuyButton(e) {
+    // Get the current quantity from the input field
+    const quantityInput = document.querySelector('.product-form__quantity');
+    let quantity = 1; // Default quantity value
+    if (quantityInput) {
+        quantity = quantityInput.value;
+    } else {
+        // If the quantity input doesn't exist, create a hidden input with a default quantity value
+        document.querySelector('.product-form__buttons').insertAdjacentHTML('beforebegin', `
+            <input class="product-form__quantity" type="hidden" name="quantity" value="${quantity}">
+        `);
+    }
+
+    // Click the submit button
+    document.querySelector('.product-form__submit').click();
+}
+
+</script>
+
+{% schema %}
+{
+  "name": "Extra Button",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "custom.popup", "footer"]
+    },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "custom_text",
+      "label": "Button Text",
+      "default": "Get Yours"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "custom_text_small",
+      "label": "Small Button Text",
+      "default": "Offer End Soon"
+    },
+    {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "default": false,
+          "label": "t:sections.rich-text.blocks.buttons.settings.button_style_secondary_1.label"
+        },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "presets": [
+    {
+      "name": "Extra Button"
+    }
+  ]
+}
+{% endschema %}

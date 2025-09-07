@@ -1,0 +1,240 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "featured_blog_4iTjHx": {
+      "type": "featured-blog",
+      "settings": {
+        "heading": "Blog posts",
+        "heading_size": "h1",
+        "collection_text_alignment": "left",
+        "blog": "",
+        "post_limit": 3,
+        "columns_desktop": 3,
+        "navigation_show": false,
+        "color_scheme": "",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "lumin_gallery_ecr6xx": {
+      "type": "lumin-gallery",
+      "blocks": {
+        "text_AaVEpX": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "padding_size": 50,
+            "padding_size_mobile": 50,
+            "padding_left_mobile": 30,
+            "bg_color": "#ffffff",
+            "icon_size": 25,
+            "icon_corner": 0,
+            "head": "Some Heading",
+            "use_head_font": true,
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Share contact information, store details, and brand content with your customers.<\/p>",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "left",
+            "grid-url": ""
+          }
+        },
+        "image_GrqGiN": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Heading",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "Image",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_rtJM8j": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Heading",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "Image",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_nhQJ3U": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Heading",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "Image",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "text_4g9CdG": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "padding_size": 50,
+            "padding_size_mobile": 50,
+            "padding_left_mobile": 30,
+            "bg_color": "#ffffff",
+            "icon_size": 25,
+            "icon_corner": 0,
+            "head": "Some Heading",
+            "use_head_font": true,
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Share contact information, store details, and brand content with your customers.<\/p>",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "left",
+            "grid-url": ""
+          }
+        },
+        "image_cVG4rP": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Heading",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "Image",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_AaVEpX",
+        "image_GrqGiN",
+        "image_rtJM8j",
+        "image_nhQJ3U",
+        "text_4g9CdG",
+        "image_cVG4rP"
+      ],
+      "settings": {
+        "layout": "grid",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "margin_top": 36,
+        "margin_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "featured_blog_4iTjHx",
+    "lumin_gallery_ecr6xx"
+  ]
+}

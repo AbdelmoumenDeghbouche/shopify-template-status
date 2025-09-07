@@ -1,0 +1,765 @@
+<style>
+  .section-{{ section.id }}-wrapper {
+    padding-top: var(--pt);
+    padding-bottom: var(--pb);
+    direction: ltr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-wrapper {
+      padding-top: var(--pt-desktop);
+      padding-bottom: var(--pb-desktop);
+    }
+  }
+</style>
+<div
+  class="section-{{ section.id }}-wrapper"
+  style="
+    --pt: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    --pt-desktop: {{ section.settings.padding_top }}px;
+    --pb: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    --pb-desktop: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.background_color }};
+    background: {{ section.settings.background }};
+  "
+>
+  <div
+    class="section-{{ section.id }} page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    {% if settings.animations_reveal_on_scroll %}
+      data-cascade
+    {% endif %}
+    >
+    <div
+      style="border-radius: {{ section.settings.border_radius }}px;"
+    >
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'text' %}
+            <style>
+              .text-{{ block.id }} * {
+                color: var(--color);
+                text-align: var(--text-align);
+              }
+            </style>
+            <div
+              class="text-{{ block.id }}"
+              style="
+                --text-align: {{ block.settings.text_position }};
+                --color: {{ block.settings.color }};
+              "
+            >
+              {% if block.settings.subheading != blank %}
+                <p
+                  style="font-weight: bold;"
+                >
+                  {{ block.settings.subheading }}
+                </p>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2
+                  style="font-weight: 700;"
+                >
+                  {{ block.settings.heading }}
+                </h2>
+              {% endif %}
+              {% if block.settings.content != blank %}
+                <div style="margin-bottom:10px;">
+                  {{ block.settings.content }}
+                </div>
+              {% endif %}
+            </div>
+          {% when 'images' %}
+            <style>
+              .section-{{ section.id }}  .before-after-image-wrapper {
+                position: relative;
+                --text-primary: 26 26 26;
+                --shadow: 0 5px 15px rgb(var(--text-primary) / 0.1);
+                filter: drop-shadow(var(--shadow));
+                user-select: none;
+                overflow: hidden;
+              }
+              .section-{{ section.id }} .filter-invert {
+                filter: invert(1);
+              }
+              .section-{{ section.id }} .placeholder {
+                --text-primary: 26 26 26;
+                background: rgb(var(--text-primary) / .3);
+                fill: rgb(var(--text-primary) / .7);
+                color: rgb(var(--text-primary) / .7);
+                display: block;
+              }
+              .section-{{ section.id }} .before-after-image-text {
+                position: absolute;
+                font-weight: 700;
+              }
+              .section-{{ section.id }} .bg-text {
+                background: white;
+              }
+              .section-{{ section.id }} .before-after-image {
+                width: 100%;
+                display: block;
+              }
+              .section-{{ section.id }} .before-after-image--cover {
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+              }
+              .section-{{ section.id }} .before-after-image--cover svg {
+                height: auto;
+              }
+              .section-{{ section.id }} .before-after-image-relative {
+                height: var(--mobile-height);
+              }
+              @media screen and (min-width: 750px) {
+                .section-{{ section.id }} .before-after-image-relative {
+                  height: var(--desktop-height);
+                }
+                .section-{{ section.id }} .before-after-image-svg {
+                width:100%;
+              }
+              }
+            </style>
+            <div
+              class="before-after-image-wrapper"
+              style="
+                --before-after-initial-drag-position: {{ block.settings.drag_initial_position }}%;
+                --clip-path-offset: 0px;
+                border-radius: {{ block.settings.border_radius }}px;
+              "
+            >
+              {% assign before_image = block.settings.before_image %}
+              {% assign after_image = block.settings.after_image %}
+              <div
+                class="before-after-image-relative"
+                style="
+                  position: relative;
+                  color: {{ block.settings.before_text_color }};
+                  --mobile-height: {{ block.settings.mobile_height }}px;
+                  --desktop-height: {{ block.settings.desktop_height }}px;
+                "
+              >
+                {% if before_image != blank %}
+                  <img
+                    src="{{ before_image | img_url: 'master' }}"
+                    alt="{{ before_image.alt }}"
+                    srcset="
+                      {{ before_image | img_url: '300x' }} 300w,
+                      {{ before_image | img_url: '400x' }} 400w,
+                      {{ before_image | img_url: '500x' }} 500w,
+                      {{ before_image | img_url: '600x' }} 600w,
+                      {{ before_image | img_url: '800x' }} 800w,
+                      {{ before_image | img_url: '1000x' }} 1000w,
+                      {{ before_image | img_url: '1200x' }} 1200w,
+                      {{ before_image | img_url: '1400x' }} 1400w
+                    "
+                    {% comment %} width="1512" {% endcomment %}
+                    {% comment %} height="900" {% endcomment %}
+                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
+                    loading="lazy"
+                    draggable="false"
+                    class="
+                      before-after-image
+                      {% if block.settings.cover %} before-after-image--cover {% endif %}
+                    "
+                  >
+                {% else %}
+                  {{
+                    'lifestyle-1'
+                    | placeholder_svg_tag: 'placeholder before-after-image--cover before-after-image-svg '
+                  }}
+                {% endif %}
+                {% if block.settings.before_text != blank %}
+                  <div
+                    class="before-after-image-text before-after-image-text--before"
+                    style="
+                      color: {{ block.settings.before_text_color }};
+                      left: 2rem;
+                      {% if block.settings.before_after_text_position == 'bottom' %}
+                        bottom: 1rem;
+                      {% else %}
+                        top: 1rem;
+                      {% endif %}
+                    "
+                  >
+                    {{ block.settings.before_text }}
+                  </div>
+                {% endif %}
+              </div>
+              <div
+                style="
+                  clip-path: inset(0 0 0 calc(var(--before-after-initial-drag-position, 50%) + var(--clip-path-offset, 0px)));
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  color: {{ block.settings.after_text_color }};
+                "
+              >
+                {% if after_image != blank %}
+                  <img
+                    src="{{ after_image | img_url: 'master' }}"
+                    alt="{{ after_image.alt }}"
+                    srcset="
+                      {{ after_image | img_url: '300x' }} 300w,
+                      {{ after_image | img_url: '400x' }} 400w,
+                      {{ after_image | img_url: '500x' }} 500w,
+                      {{ after_image | img_url: '600x' }} 600w,
+                      {{ after_image | img_url: '800x' }} 800w,
+                      {{ after_image | img_url: '1000x' }} 1000w,
+                      {{ after_image | img_url: '1200x' }} 1200w,
+                      {{ after_image | img_url: '1400x' }} 1400w
+                    "
+                    {% comment %} width="1512" {% endcomment %}
+                    {% comment %} height="900" {% endcomment %}
+                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
+                    loading="lazy"
+                    draggable="false"
+                    class="
+                      before-after-image
+                      {% if block.settings.cover %} before-after-image--cover {% endif %}
+                    "
+                  >
+                {% else %}
+                  {{
+                    'lifestyle-2'
+                    | placeholder_svg_tag: 'filter-invert bg-text before-after-image--cover before-after-image-svg '
+                  }}
+                {% endif %}
+                {% if block.settings.after_text != blank %}
+                  <div
+                    class="before-after-image-text before-after-image-text--after"
+                    style="
+                      color: {{ block.settings.after_text_color }};
+                      right: 2rem;
+                      {% if block.settings.before_after_text_position == 'bottom' %}
+                        bottom: 1rem;
+                      {% else %}
+                        top: 1rem;
+                      {% endif %}
+                    "
+                  >
+                    {{ block.settings.after_text }}
+                  </div>
+                {% endif %}
+              </div>
+              {% comment %} Cursor: {% endcomment %}
+              <style>
+                .section-{{ section.id }} .before-after__cursor {
+                  height: 100%;
+                  width: max-content;
+                  touch-action: none;
+                  --transform-logical-flip: 1;
+                  transform: translate(calc(var(--transform-logical-flip) * -50% + var(--clip-path-offset, 0px)),-50%);
+                  cursor: grab;
+                  filter: drop-shadow(0 1px 2px #0000001a) drop-shadow(0 1px 1px #0000000f);
+                  will-change: transform;
+                  place-items: center;
+                  display: grid;
+                  position: relative;
+                  top: 50%;
+                  left: var(--before-after-initial-drag-position, 0px);
+                }
+                .section-{{ section.id }} .before-after__cursor:before {
+                  content: '';
+                  height: 100%;
+                  width: 2px;
+                  background: var(--background);
+                  z-index: -1;
+                  position: absolute;
+                }
+              </style>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                "
+              >
+                <split-cursor
+                  class="before-after__cursor"
+                  style="--background: {{ block.settings.drag_cursor_bg }}; "
+                >
+                  <svg
+                    role="presentation"
+                    focusable="false"
+                    width="28"
+                    height="35"
+                    viewBox="0 0 32 40"
+                    style="width: 40px; height: 40px;"
+                  >
+                    <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16V24C32 32.8366 24.8366 40 16 40C7.16344 40 0 32.8366 0 24V16Z"
+                      fill="{{ block.settings.drag_cursor_bg }}"></path>
+                    <path fill="{{ block.settings.drag_cursor_color }}" d="M11 14H13V26H11zM15 14H17V26H15zM19 14H21V26H19z"></path>
+                  </svg>
+                </split-cursor>
+              </div>
+              <script>
+                (function () {
+                  function setup() {
+                    const cursor = document.querySelector(
+                      '.section-{{ section.id }} .before-after__cursor'
+                    );
+                    const imageWrapper = document.querySelector(
+                      '.section-{{ section.id }} .before-after-image-wrapper'
+                    );
+
+                    // drag the cursor to update the imageWrapper's --clip-path-offset value (px)
+                    let xStart, xEnd, xDiff, originalOffset;
+                    function dragStart(event) {
+                      xStart = event.clientX;
+                      originalOffset = imageWrapper.style
+                        .getPropertyValue('--clip-path-offset')
+                        .slice(0, -2);
+                      //xStart = imageWrapper.style
+                      //  .getPropertyValue('--clip-path-offset')
+                      //  .slice(0, -2);
+                      document.addEventListener('pointermove', dragMove);
+                      document.addEventListener('pointerup', dragEnd);
+                    }
+
+                    function dragMove(event) {
+                      xEnd = event.clientX;
+                      xDiff = xEnd - xStart;
+
+                      // clamp the value to the imageWrapper's 1/2 width
+                      let result = xDiff + parseInt(originalOffset);
+                      let cursorOffsetPercent = parseFloat(getComputedStyle(imageWrapper).getPropertyValue('--before-after-initial-drag-position'));
+                      let containerWidth = imageWrapper.offsetWidth;
+                      let pixelsOffset = (cursorOffsetPercent / 100) * containerWidth;
+                      
+                      const negativeMax = -1 * (pixelsOffset);
+                      const positiveMax = imageWrapper.offsetWidth - pixelsOffset;
+                      if (result < negativeMax) {
+                        result = negativeMax;
+                      } else if (result > positiveMax) {
+                        result = positiveMax;
+                      }
+                      imageWrapper.style.setProperty(
+                        '--clip-path-offset',
+                        result + 'px'
+                      );
+                    }
+
+                    function dragEnd(event) {
+                      document.removeEventListener('pointermove', dragMove);
+                      document.removeEventListener('pointerup', dragEnd);
+                    }
+
+                    cursor.addEventListener('pointerdown', dragStart);
+                  }
+                  setup();
+                  if (Shopify.designMode) {
+                    document.addEventListener('shopify:section:load', setup);
+                  }
+                })();
+              </script>
+            </div>
+          {% when 'button' %}
+            {% if block.settings.link_text != blank %}
+              <style>
+                .before-after-atc-button-{{ section.id }} {
+                  display: block;
+                  text-decoration: none;
+                  text-align: center;
+                  color: var(--color);
+                  background-color: var(--background-color);
+                  border-style: solid;
+                  transition: all 0.3s ease-in-out;
+                  margin-top: 30px;
+                }
+                @media screen and (min-width: 750px) {
+                  .before-after-atc-button-{{ section.id }} {
+                    margin-top: 40px;
+                  }
+                }
+                .before-after-atc-button-{{ section.id }}:hover {
+                  color: var(--hover-color);
+                  background-color: var(--hover-background-color);
+                }
+              </style>
+              <a
+                href="{{ block.settings.link }}"
+                class="before-after-atc-button-{{ section.id }}"
+                style="
+                  width: {{ block.settings.width }}px;
+                  --color: {{ block.settings.color }};
+                  --background-color: {{ block.settings.background_color }};
+                  --hover-color: {{ block.settings.hover_color }};
+                  --hover-background-color: {{ block.settings.hover_background_color }};
+                  font-size: {{ block.settings.font_size }}px;
+                  border-radius: {{ block.settings.border_radius }}px;
+                  border-color: {{ block.settings.border_color }};
+                  border-width: {{ block.settings.border_width }}px;
+                  padding: 6px 0;
+                  {% case block.settings.button_position %}
+                    {% when 'left' %}
+                      float: left;
+                      margin-right: 20px;
+                    {% when 'right' %}
+                      float: right;
+                      margin-left: 20px;
+                    {% else %}
+                      margin-left: auto;
+                      margin-right: auto;
+                  {% endcase %}
+                "
+              >
+                {{ block.settings.link_text }}
+              </a>
+            {% endif %}
+          {% else %}
+
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image comparison",
+  "disabled_on": {
+    "groups": ["custom.popup", "header"]
+   },
+  "presets": [
+    {
+      "name": "Image comparison",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "images"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors",
+      "info": "Gradient replaces solid colors when set."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "color_background",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Image comparison"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>See the stunning transformations our products deliver — real results from real customers.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Text Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "default": "#000000"
+        }
+      ]
+    },
+    {
+      "type": "images",
+      "name": "Images",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After Image"
+        },
+        {
+          "type": "range",
+          "id": "desktop_height",
+          "label": "Desktop Height",
+          "min": 100,
+          "max": 1000,
+          "unit": "px",
+          "step": 20,
+          "default": 500
+        },
+        {
+          "type": "range",
+          "id": "mobile_height",
+          "label": "Mobile Height",
+          "min": 100,
+          "max": 1000,
+          "unit": "px",
+          "step": 20,
+          "default": 500
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border Radius",
+          "min": 0,
+          "max": 100,
+          "unit": "px",
+          "step": 1,
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "drag_initial_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Drag Initial Position",
+          "default": 50
+        },
+        {
+          "type": "checkbox",
+          "id": "cover",
+          "label": "Image fit into container",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "before_text",
+          "label": "Before text",
+          "default": "Before"
+        },
+        {
+          "type": "text",
+          "id": "after_text",
+          "label": "After text",
+          "default": "After"
+        },
+        {
+          "type": "select",
+          "id": "before_after_text_position",
+          "label": "Before/after text Position",
+          "options": [
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            }
+          ],
+          "default": "bottom"
+        },
+        {
+          "type": "color",
+          "id": "before_text_color",
+          "label": "Before text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "after_text_color",
+          "label": "After text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "drag_cursor_bg",
+          "label": "Drag Cursor Background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "drag_cursor_color",
+          "label": "Drag Cursor Color",
+          "default": "#000000"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+         {
+          "type": "select",
+          "id": "button_position",
+          "label": "Button Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Width",
+          "min": 50,
+          "max": 500,
+          "step": 5,
+          "default": 160,
+          "unit": "px"
+        },
+         {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font Size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "default": 16,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border Radius",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "border_width",
+          "label": "Border Width",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type":"header",
+          "content":"Colors"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "hover_color",
+          "label": "Hover Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "hover_background_color",
+          "label": "Hover Background Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border Color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

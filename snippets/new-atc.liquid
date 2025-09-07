@@ -1,0 +1,687 @@
+{% comment %}
+  Renders sticky product add to cart button.
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+
+  Usage:
+  {% render 'sticky-atc-custom', block: block, product: product, product_form_id: product_form_id, section_id: section.id %}
+{% endcomment %}
+
+{% assign has_variants = true %}
+{% if product.options.size == 1 and product.options.first == 'Title' %}
+  {% assign has_variants = false %}
+{% endif %}
+
+<div
+  class="product-form sticky-atc{% unless settings.enable_atc_slide_out %} always-visible{% endunless %} quick-add-hidden"
+  data-hide-errors="{{ gift_card_recipient_feature_active }}"
+  data-section-id="{{ section.id }}"
+  data-desktop-position="{{ settings.desktop_sticky_position }}"
+  data-mobile-position="{{ settings.mobile_sticky_position }}"
+>
+  <div class="product-form__error-message-wrapper" role="alert" hidden>
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      class="icon icon-error"
+      viewBox="0 0 13 13"
+    >
+      <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+      <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+      <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+      <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+    </svg>
+    <span class="product-form__error-message"></span>
+  </div>
+
+  <div class="content-container">
+    <div class="sticky-atc-mobile">
+      <div class="sticky-atc-mobile-flex">
+        {% if settings.show_atc_btn %}
+          <div class="atc-button-container">
+            <button
+              type="submit"
+              name="add"
+              form="{{ product_form_id }}"
+              class="product-form__submit button button--full-width button--primary sticky-atc-button"
+              {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+                disabled
+              {% endif %}
+            >
+              <span>
+                {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  {% if settings.atc_button_text != blank %}
+                {{ settings.atc_button_text }}
+                {% else %}
+              {{ 'products.product.add_to_cart' | t }}
+                {% endif %}
+                {%- endif -%}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+          </div>
+        {% else %}
+          <div class="sticky-atc-image">
+            {% assign image = product.selected_or_first_available_variant.image | default: product.featured_image %}
+
+            {% if image %}
+              <img
+                src="{{ image.src | image_url }}"
+                alt="Selected Variant Image"
+                id="selectedVariantImage-mobile"
+                width="{{ image.width }}"
+                height="{{ image.width | divided_by: image.aspect_ratio | round }}"
+                loading="lazy"
+              >
+            {% endif %}
+          </div>
+          <div class="sticky-atc-mobile-content">
+            {% if settings.show_vendor_atc_mb %}
+              <div class="link-faded">{{ product.vendor }}</div>
+            {% endif %}
+             {% if settings.show_title_atc_mb %}
+            <div class="sticky-atc-title-mobile">
+              {{ product.title | truncatewords: settings.sticky_atc_title_font_length_mb }}
+            </div>
+             {% endif %}
+            <div class="sticky-atc-variants">
+              <div class="sticky-atc-active-variant">
+                {% unless product.has_only_default_variant %}
+                  {% for option in product.options_with_values %}
+                    <div class="sticky-atc-active-variant__option">
+                      <!-- <span class="sticky-atc-active-variant__option-name">{{ option.name }}:</span> -->
+                      <span class="sticky-atc-active-variant__option-value">
+                        {{- product.selected_or_first_available_variant.options[forloop.index0] -}}
+                        {% unless forloop.last %}
+                          /
+                        {% endunless %}
+                      </span>
+                    </div>
+                  {% endfor %}
+                {% endunless %}
+              </div>
+            </div>
+            <div class="sticky-atc-price">
+              <div id="price-mobile-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                {%- render 'price', product: product, use_variant: true, show_badges: false -%}
+              </div>
+            </div>
+          </div>
+          <div class="atc-button-container">
+              <button
+          type="submit"
+          name="add"
+          form="{{ product_form_id }}"
+          class="product-form__submit button button--full-width button--primary sticky-atc-button"
+          {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+            disabled
+          {% endif %}
+        >
+          <span>
+            {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- else -%}
+              {% if settings.atc_button_text != blank %}
+                {{ settings.atc_button_text }}
+                {% else %}
+              {{ 'products.product.add_to_cart' | t }}
+                {% endif %}
+            {%- endif -%}
+          </span>
+          {%- render 'loading-spinner' -%}
+        </button>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="sticky-atc-desktop">
+      <div class="sticky-atc-image">
+        {% assign image = product.selected_or_first_available_variant.image | default: product.featured_image %}
+
+        {% if image %}
+          <img
+            src="{{ image.src | image_url }}"
+            alt="Selected Variant Image"
+            id="selectedVariantImage-desktop"
+            width="{{ image.width }}"
+            height="{{ image.width | divided_by: image.aspect_ratio | round }}"
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+
+      <div class="sticky-atc-contents">
+        <div>
+          {% if settings.show_vendor_atc %}
+            <div class="link-faded">{{ product.vendor }}</div>
+          {% endif %}
+          <div class="sticky-atc-title">
+            <div class="selected-variant-title sticky-atc-title-desktop">
+              {{ product.title | truncatewords: settings.sticky_atc_title_font_length }}
+            </div>
+          </div>
+        </div>
+        <div style="flex: none;">
+          <div class="sticky-atc-variants">
+            <div class="sticky-atc-active-variant">
+              {% unless product.has_only_default_variant %}
+                {% for option in product.options_with_values %}
+                  <div class="sticky-atc-active-variant__option">
+                    <!-- <span class="sticky-atc-active-variant__option-name">{{ option.name }}:</span> -->
+                    <span class="sticky-atc-active-variant__option-value">
+                      {{- product.selected_or_first_available_variant.options[forloop.index0] -}}
+                      {% unless forloop.last %}
+                        /
+                      {% endunless %}
+                    </span>
+                  </div>
+                {% endfor %}
+              {% endunless %}
+            </div>
+          </div>
+          <div class="sticky-atc-price">
+            <div id="price-desktop-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+              {%- render 'price', product: product, use_variant: true, show_badges: false -%}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="atc-button-container">
+        <button
+          type="submit"
+          name="add"
+          form="{{ product_form_id }}"
+          class="product-form__submit button button--full-width button--primary sticky-atc-button"
+          {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+            disabled
+          {% endif %}
+        >
+          <span>
+            {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- else -%}
+              {% if settings.atc_button_text != blank %}
+                {{ settings.atc_button_text }}
+                {% else %}
+              {{ 'products.product.add_to_cart' | t }}
+                {% endif %}
+            {%- endif -%}
+          </span>
+          {%- render 'loading-spinner' -%}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+    var atcElement = document.querySelector(".sticky-atc");
+    var targetElement = document.querySelector('[id^="ProductSubmitButton-"]');
+    var footerElement = document.querySelector(".footer__content-bottom");
+    var enableSlideOut = {{ settings.enable_atc_slide_out | json }};
+    var desktopPosition = atcElement.dataset.desktopPosition;
+    var mobilePosition = atcElement.dataset.mobilePosition;
+
+    function updateStickyPosition() {
+        var isMobile = window.innerWidth < 750;
+        var position = isMobile ? mobilePosition : desktopPosition;
+        atcElement.style.top = position === 'top' ? '-200px' : 'auto';
+        atcElement.style.bottom = position === 'bottom' ? '-200px' : 'auto';
+    }
+
+    updateStickyPosition();
+    window.addEventListener('resize', updateStickyPosition);
+
+    function isElementInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= window.innerHeight;
+    }
+
+    if (enableSlideOut) {
+        window.addEventListener("scroll", function() {
+            var isTargetElementOutOfView = targetElement.getBoundingClientRect().top < 0;
+            var isFooterInView = isElementInViewport(footerElement);
+
+            if (isTargetElementOutOfView && !isFooterInView) {
+                atcElement.classList.add('show');
+            } else {
+                atcElement.classList.remove('show');
+            }
+        });
+    } else {
+        atcElement.classList.add('show');
+    }
+});
+
+</script>
+
+<style>
+  .sticky-atc-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sticky-atc-mobile,
+  .sticky-atc-desktop {
+    width: 100%;
+  }
+  .link-faded {
+  font-size: 12px;
+  color: {{settings.sticky_atc_box_text}};
+  opacity: .7;
+  transition: opacity .2s ease-in-out;
+  }
+  .truncate-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+  }
+  .sticky-atc-price .price--on-sale .price-item--regular {
+    color: {{settings.sticky_atc_price_sale_color}};
+  }
+
+  #selectedVariantImage-mobile,
+  #selectedVariantImage-desktop {
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sticky-atc {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    padding: 10px;
+    transition: top 0.3s ease-out, bottom 0.3s ease-out;
+  }
+
+  .sticky-atc.show {
+    top: auto;
+    bottom: auto;
+  }
+
+  .sticky-atc.always-visible {
+    top: auto !important;
+    bottom: auto !important;
+  }
+
+  .sticky-atc .sticky-atc-variant-selects {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .sticky-atc-active-variant {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .sticky-atc-active-variant__option {
+    font-size: 13px;
+    color: {{settings.sticky_atc_box_text}};
+    margin-bottom:5px;
+    line-height: 100%;
+  }
+
+  .sticky-atc-active-variant__option-name {
+    font-weight: normal;
+    margin-right: 5px;
+  }
+
+  .sticky-atc-active-variant__option-value {
+    color: {{settings.sticky_atc_box_text}};
+    opacity: 0.6;
+  }
+
+  .sticky-atc-variants select {
+    height: 3.2rem;
+  }
+
+  .sticky-atc-variants .product-form__input {
+    margin: 0;
+  }
+
+  .sticky-atc-price {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .atc-button-container .form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-form__buttons.sticky-product-form__buttons {
+    width: 100%;
+  }
+
+  .atc-button-container .product-form__submit {
+    margin: 0;
+  }
+
+  .atc-button-container .button {
+    font-size: {{ settings.atc_button_text_size }}px;
+    color: {{ settings.atc_button_text_color }};
+    background-color: {{ settings.atc_button_background_color }};
+    border: 2px solid {{ settings.atc_button_border_color }};
+    border-radius:{{ settings.sticky_atc_btn_radius }}px;
+    --focused-base-box-shadow: none;
+    --focused-base-outline-offset: 0;
+    --focused-base-outline: 0;
+  }
+  .atc-button-container .button:after {
+    box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
+        rgba(var(--color-button-text), var(--border-opacity)),
+      0 0 0 var(--buttons-border-width) rgb(255 204 4 / 0%);
+     border-radius:{{ settings.sticky_atc_btn_radius }}px;
+  }
+   .sticky-atc-image img {
+     width: {{settings.sticky_atc_desktop_img_width }}px;
+     border-radius:{{ settings.sticky_atc_image_radius }}px;
+   }
+
+  @media (max-width: 749px) {
+    .sticky-atc-desktop {
+      display: none;
+    }
+     .sticky-atc {
+       {% unless settings.show_atc_btn %}
+      background-color: {{settings.sticky_atc_box_bg}};
+      background-image: {{ settings.atc_background_gradient }};
+       border: 1px solid {{settings.sticky_atc_box_border}};
+      {% endunless %}
+      {% if settings.show_atc_btn %}
+       padding:0;
+      {% endif %}
+       border-radius: {{ settings.sticky_atc_box_radius_mb }}px;
+    }
+    .atc-button-container-round .button:before {
+      box-shadow: none;
+      border-radius: 100px;
+    }
+    .atc-button-container-round .button:after {
+      box-shadow: none;
+      border-radius: 100px;
+    }
+    .atc-button-container-round .button:hover {
+      border-radius: 100px;
+    }
+    .sticky-atc.show,
+    .sticky-atc.always-visible {
+      {% if settings.mobile_sticky_position == "top" %}
+        top: {{ settings.mobile_sticky_top_offset }}px !important;
+        bottom: auto !important;
+      {% else %}
+        bottom: 8px !important;
+        top: auto !important;
+      {% endif %}
+       width: calc(100% - 3rem);
+    }
+
+    .sticky-atc-mobile-content {
+      flex: 1;
+    }
+
+    .sticky-atc-mobile-flex {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 0;
+      justify-content: space-between;
+    }
+
+    .sticky-atc-image {
+      flex: 0 0 {{ settings.sticky_atc_mobile_img_width }}px;
+      max-width: 80px;
+      line-height: 0;
+    }
+    .sticky-atc-image img {
+     width: {{settings.sticky_atc_mobile_img_width }}px;
+     border-radius:{{ settings.sticky_atc_mb_image_radius }}px;
+   }
+
+    .sticky-atc-title-mobile {
+      font-weight: {% if settings.sticky_atc_title_font_style == 'bold' or settings.sticky_atc_title_font_style == 'bold_italic' %}bold{% else %}normal{% endif %};
+      font-style: {% if settings.sticky_atc_title_font_style == 'italic' or settings.sticky_atc_title_font_style == 'bold_italic' %}italic{% else %}normal{% endif %};
+      font-size: {{ settings.sticky_atc_title_font_size }}rem;
+      margin-bottom: 5px;
+      color: {{settings.sticky_atc_box_text}};
+      line-height:normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;  
+      overflow: hidden;
+    }
+
+    .sticky-atc .product-form__input--dropdown {
+      width: 100%;
+      max-width: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .sticky-atc .product-form__input--dropdown .form__label {
+      flex: 0 0 auto;
+      width: 20%;
+      margin-right: 10px;
+      margin-bottom: 0;
+      font-size: 1.2rem;
+    }
+
+    .sticky-atc .product-form__input--dropdown .select {
+      flex: 1 1 auto;
+    }
+
+    .sticky-atc .product-form__input--dropdown select {
+      width: 100%;
+      height: 2.8rem;
+    }
+
+    .sticky-atc-variants {
+      margin-bottom: 0;
+      max-width: 40rem;
+    }
+
+
+
+    .sticky-atc-active-variant__option {
+      display: block;
+      line-height: normal;
+    }
+
+    .sticky-atc-active-variant__option-name,
+    .sticky-atc-active-variant__option-value {
+      display: inline-block;
+    }
+
+    .sticky-atc-price {
+      justify-content: normal;
+      {% if settings.enable_sticky_atc_variant_picker %}
+        margin: 2px 0;
+      {% endif %}
+    }
+
+    .sticky-atc-mobile .sticky-atc-price .price__container {
+      color: {{ settings.sticky_atc_price_font_color }};
+      font-size: {{ settings.sticky_atc_price_font_size }}rem;
+      font-weight: {% if settings.sticky_atc_price_font_style == 'bold' or settings.sticky_atc_price_font_style == 'bold_italic' %}bold{% else %}normal{% endif %};
+      font-style: {% if settings.sticky_atc_price_font_style == 'italic' or settings.sticky_atc_price_font_style == 'bold_italic' %}italic{% else %}normal{% endif %};
+     /* margin-top: 3px;*/
+    }
+
+    .atc-button-container {
+      margin: 0;
+      {% if settings.show_atc_btn %}
+      width: 100%;
+      padding: 0;
+      {% endif %}
+    }
+
+    .atc-button-container .product-form__submit {
+      margin: 0;
+      border-radius: {{settings.sticky_atc_btn_radius_mb}}px;
+      {% unless settings.show_atc_btn %}
+     /* width: {{settings.sticky_atc_mobile_img_width }}px;
+      height: {{settings.sticky_atc_mobile_img_width }}px;*/
+      max-height: {{settings.sticky_atc_mobile_img_width }}px;
+      padding: 2px 15px;
+      min-width: 40px;
+      min-height: 40px;
+      {% endunless %}
+    }
+    .atc-button-container .product-form__submit svg {
+      width: calc({{settings.sticky_atc_mobile_img_width}}px/2);
+      height: calc({{settings.sticky_atc_mobile_img_width}}px/2);
+    }
+
+  }
+
+  @media (min-width: 750px) {
+
+    .sticky-atc {
+      padding: 10px;
+      width: 70%;
+      max-width: 680px;
+      border-radius: {{ settings.sticky_atc_box_radius }}px;
+      background-color: {{ settings.sticky_atc_box_bg }};
+      background-image: {{ settings.atc_background_gradient }};
+      border: 1px solid {{settings.sticky_atc_box_border}};
+      left: 50% !important;
+      translate: -50%;
+    }
+
+    .sticky-atc-mobile {
+      display: none;
+    }
+
+    .sticky-atc.show,
+    .sticky-atc.always-visible {
+      {% if settings.desktop_sticky_position == "top" %}
+        top: {{ settings.desktop_sticky_top_offset }}px !important;
+        bottom: auto !important;
+      {% else %}
+        bottom: 20px !important;
+        top: auto !important;
+      /*  right: 20px !important;*/
+        left: 50% !important;
+        translate: -50%;
+      {% endif %}
+    }
+
+    .sticky-atc .content-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+    }
+
+        .sticky-atc-desktop {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      grid-template-columns: 80px minmax(0, 1fr) auto;
+      justify-content: space-between;
+  }
+
+    .sticky-atc-image {
+      flex: 0 0 {{ settings.sticky_atc_desktop_img_width }}px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #selectedVariantImage-desktop {
+      height: 100%;
+      object-fit: contain;
+      max-width: 100%;
+      max-height: 100%;
+      width:100%;
+    }
+
+    .sticky-atc-title {
+      /* flex: 0 0 25%; */
+    }
+
+    .sticky-atc-contents {
+      flex: 0 0  calc(100% - {{ settings.sticky_atc_desktop_img_width }}px - 190px);
+      overflow: hidden;
+      display: flex;
+      column-gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+   /* .sticky-atc-price {
+     flex: none;
+    }*/
+
+    /*.atc-button-container {
+      flex: 0 0 30%;
+      max-width: 200px;
+    }*/
+
+    .sticky-atc-title-desktop {
+      font-size: {{ settings.sticky_atc_title_font_size }}rem;
+      font-weight: {% if settings.sticky_atc_title_font_style == 'bold' or settings.sticky_atc_title_font_style == 'bold_italic' %}bold{% else %}normal{% endif %};
+      font-style: {% if settings.sticky_atc_title_font_style == 'italic' or settings.sticky_atc_title_font_style == 'bold_italic' %}italic{% else %}normal{% endif %};
+      color: {{settings.sticky_atc_box_text}};
+      line-height: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;  
+      overflow: hidden;
+    }
+
+    .sticky-atc-desktop .sticky-atc-price .price__container {
+      color: {{ settings.sticky_atc_price_font_color }};
+      font-size: {{ settings.sticky_atc_price_font_size }}rem;
+      font-weight: {% if settings.sticky_atc_price_font_style == 'bold' or settings.sticky_atc_price_font_style == 'bold_italic' %}bold{% else %}normal{% endif %};
+      font-style: {% if settings.sticky_atc_price_font_style == 'italic' or settings.sticky_atc_price_font_style == 'bold_italic' %}italic{% else %}normal{% endif %};
+    }
+
+    .sticky-atc .sticky-atc-variant-selects {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sticky-atc .product-form__input--dropdown {
+      flex: 1 1 auto;
+      min-width: 50px;
+      max-width: 250px;
+    }
+
+  }
+
+  @media (min-width: 990px) {
+    {% if settings.desktop_sticky_position == "top" %}
+    .sticky-atc.show {
+      top: {{ settings.desktop_sticky_top_offset }}px;
+    }
+    {% endif %}
+
+    .sticky-atc-active-variant {
+      gap: 0;
+    }
+  }
+
+  @media (min-width: 750px) and (max-width: 1099px) {
+      .sticky-atc-variants {
+        flex: 0 0 40%;
+      }
+  }
+</style>

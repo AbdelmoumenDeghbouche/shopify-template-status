@@ -1,0 +1,60 @@
+{
+  "sections": {
+    "e45dab48-de03-420e-a878-43e5493d092f": {
+      "type": "random-number",
+      "settings": {
+        "layout": "full_bleed",
+        "color_scheme": "inverse",
+        "pill_color": "#c92127",
+        "fomo_border": 6,
+        "fomo_border_color": "rgba(0,0,0,0)",
+        "fomo_min": 2,
+        "fomo_max": 7,
+        "fomo_speed": 3,
+        "fomo_text_before": "",
+        "number_bold": true,
+        "fomo_text_after": "<strong>People<\/strong> are checking out now",
+        "text_alignment": "center",
+        "padding_top": 4,
+        "padding_bottom": 12,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "color_scheme": "background-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "padding_top": 20,
+        "padding_bottom": 48
+      }
+    }
+  },
+  "order": [
+    "e45dab48-de03-420e-a878-43e5493d092f",
+    "cart-items",
+    "cart-footer"
+  ]
+}

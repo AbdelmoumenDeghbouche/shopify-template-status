@@ -1,0 +1,134 @@
+ <div
+    class="direction-left"
+    style="--marquee-speed: 20s"
+  >
+      <div style="display: flex;">
+          {% for tag in product.tags %}
+              <div
+                class=" lumin-card-tag lumin-text-{{ block.id }}"
+                role="region"
+                aria-label="Announcement"
+                {{ block.shopify_attributes }}
+              >
+                <span class="scroll rte">
+                 <li><a href="/collections/all/{{ tag | handleize }}">{{ tag }}</a></li>
+                </span>
+              </div>
+      
+        {% endfor %}
+      </div>
+  </div>
+<style data-shopify>
+  .scroll {
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+         .announcement-bar--inner-{{ section.id }}{
+    max-width:1440px;
+    margin-left:auto;
+    margin-right:auto;
+    z-index: -1;
+    position: relative;
+}
+  @media only screen and (min-width: 768px){
+    .announcement-bar--inner-{{ section.id }}{
+      padding: {{section.settings.padding_desktop}}px 20px;
+    }
+  }
+            @media only screen and (max-width: 767px){
+    .announcement-bar--inner-{{ section.id }}{
+      padding: {{section.settings.padding_mobile}}px 20px;
+    }
+  }
+  .announcement-bar-section{
+    position:relative;
+    z-index:4
+  }
+  .announcement-bar--wrap{
+    line-height:1;
+  }
+  .announcement-bar--inner-{{ section.id }}{
+    height:100%;
+    display:flex;
+    align-items:center;
+    max-width:none;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  .announcement-bar--inner-{{ section.id }}.direction-left>div{
+    animation:marquee-left var(--marquee-speed) linear infinite;
+  }
+  .announcement-bar--inner-{{ section.id }}.direction-right>div{
+    animation:marquee-right var(--marquee-speed) linear infinite;
+  }
+  .announcement-bar--inner-{{ section.id }}>div{
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+    will-change:transform;
+  }
+  .announcement-bar--inner-{{ section.id }}:hover>div{
+    animation-play-state:paused;
+  }
+  .announcement-bar-{{ section.id }}{
+    display:inline-flex;
+    align-items:center;
+    padding:0 {{section.settings.padding_item_desktop}}px;
+  }
+             @media only screen and (max-width: 767px){
+    .announcement-bar{
+    padding:0 {{section.settings.padding_item_mobile}}px;
+  }
+             }
+  .announcement-bar-{{ section.id }} p{
+    margin:0;
+  }
+           .announcement-bar__message {
+      min-height: 1.8rem;
+  }
+  .announcement-bar-{{ section.id }} svg{
+    margin-right:12px;
+    fill:rgb(var(--color-foreground));
+  }
+  .announcement-bar-{{ section.id }} p{
+    padding:0;
+  }
+
+  .announcement-bar-{{ section.id }} .announcement-bar-{{ section.id }}__link{
+    color:rgb(var(--color-foreground));
+    display: flex;
+    padding: 0;
+  }
+  .announcement-bar-{{ section.id }}--item:empty{
+    display:none
+  }
+          @keyframes marquee-left{
+    0%{
+      transform:translate(0)
+    }
+    to{
+      transform:translate(-100%)
+    }
+  }
+  @keyframes marquee-right {
+    0%{
+      transform:translate(-100%)
+    }
+    to{
+      transform:translate(0)
+    }
+  }
+
+  .announcement-bar-static{
+    display: block;
+  }
+  .announcement-bar-static>div{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>
+

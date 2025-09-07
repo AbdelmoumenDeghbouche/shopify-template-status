@@ -1,0 +1,51 @@
+{%- if cart.discount_code -%}
+  <p>Discount code "{{ cart.discount_code }}" applied!</p>
+{%- endif -%}
+
+<form id="discount-form" action="/cart" method="post" novalidate>
+  <input type="hidden" name="note" value="apply_discount_code">
+  <input type="text" name="discount" id="discount" placeholder="Enter discount code">
+  <button type="submit" class="btn">Apply</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var discountForm = document.getElementById('discount-form');
+    var discountInput = document.getElementById('discount');
+    
+    discountForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+      
+      var discountCode = discountInput.value.trim();
+      
+      if (discountCode === '') {
+        alert('Please enter a discount code.');
+        return;
+      }
+      
+      // Optionally, you can add additional validation here if needed
+      
+      // Update the form data before submitting
+      var formData = new FormData(discountForm);
+      formData.set('discount', discountCode);
+      
+      // Submit the form via AJAX to apply the discount code
+      fetch('/cart', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          // Reload the page to reflect the applied discount
+          location.reload();
+        } else {
+          alert('Failed to apply discount code. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error applying discount code:', error);
+        alert('An unexpected error occurred. Please try again.');
+      });
+    });
+  });
+</script>

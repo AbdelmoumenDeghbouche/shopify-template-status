@@ -1,0 +1,42 @@
+<style>
+    .lumin-text-{{ block.id }} {
+      color: {{ block.settings.announcement_color }};
+      font-size: {{ block.settings.announcement_size }}px;
+      letter-spacing: {{ block.settings.text_spacing }}px;
+      text-transform: {{ block.settings.text_transform }};
+      margin:0;
+    }
+  @media screen and (max-width: 749px) {
+     .lumin-text-{{ block.id }} {
+      font-size: {{ block.settings.announcement_size_m }}px;
+    }
+  }
+     .lumin-text-{{ block.id }} svg{
+       fill: {{ block.settings.announcement_color }};
+      width:calc({{ block.settings.announcement_size }}px + 2px);
+      height:calc({{ block.settings.announcement_size }}px + 2px);
+    }
+   @media screen and (max-width: 749px) {
+    .lumin-text-{{ block.id }} svg{
+      width:{{ block.settings.announcement_size_m }}px;
+      height:{{ block.settings.announcement_size_m }}px;
+    }
+  }
+</style>
+<div
+  class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}"
+  role="region"
+  aria-label="Announcement"
+  {{ block.shopify_attributes }}
+>
+  <span class="scroll rte">
+    {% render 'icon-accordion', icon: block.settings.icon %}
+    {{
+      block.settings.Announcement
+      | replace: '[', '<span class="lumin-text__fancy1">'
+      | replace: ']', '</span>'
+      | replace: '((', '<span class="lumin-text__fancy2">'
+      | replace: '))', '</span>'
+    }}
+  </span>
+</div>

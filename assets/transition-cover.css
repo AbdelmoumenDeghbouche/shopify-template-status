@@ -1,0 +1,60 @@
+.no-js .transition-cover {
+  display: none;
+}
+
+.transition-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(var(--color-background));
+  z-index: 1000;
+  pointer-events: none;
+  transition-property: opacity, visibility;
+  transition-duration: var(--duration-default);
+  transition-timing-function: ease;
+}
+
+.loading-bar {
+  width: 13rem;
+  height: 0.2rem;
+  border-radius: 0.2rem;
+  background-color: grey;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bar::after {
+  content: "";
+  height: 100%;
+  width: 6.8rem;
+  position: absolute;
+  transform: translate(-3.4rem);
+  background-color: rgb(var(--color-base-text));
+  border-radius: 0.2rem;
+  animation: initial-loading 1.5s ease infinite;
+}
+
+@keyframes initial-loading {
+  0% {transform: translate(-3.4rem)}
+  50% {transform: translate(9.6rem)}
+  to {transform: translate(-3.4rem)}
+}
+
+.loaded .transition-cover {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.unloading .transition-cover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.unloading.loaded .loading-bar {
+  display: none;
+}

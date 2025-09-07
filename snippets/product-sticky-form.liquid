@@ -1,0 +1,212 @@
+{{ 'product-sticky-form.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'product-sticky-form.js' | asset_url }}" defer="defer"></script>
+
+{%- assign sticky_product_form_id = 'product-form-' | append: section.id -%}
+
+<sticky-product-form class="product--sticky-form product--sticky-form__inactive{% if section.settings.hide_sticky_on_mobile %} small-hide{% endif %}{% if section.settings.hide_sticky_on_desk %} large-up-hide{% endif %}">
+  <product-form>
+     {%- form 'product',
+        product,
+        id: sticky_product_form_id,
+        class: 'form',
+        novalidate: 'novalidate',
+        data-type: 'add-to-cart-form'
+      -%}
+      <div class="small-hide" style="display: flex;">
+        {% if product.images.size > 0 %}
+          <img
+            src="{{ product.images[0] | img_url: '200x' }}"
+            alt="{{ product.title }}"
+            style="border-radius:2px;max-width:44px;margin-right: 10px;"
+          >
+        {% endif %}
+        <div class="product--sticky-form-info">
+       <input
+          type="hidden"
+          name="id"
+          value="{{ product.selected_or_first_available_variant.id }}"
+          {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+            disabled
+          {% endif %}
+          class="product-variant-id"
+        >
+          <span class="h3" style="max-width: 170px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;display: block;">{{ product.title | escape }}</span>
+          <div
+            style="margin-top: 10px;"
+            class="no-js-hidden"
+            id="price-{{ section.id }}"
+            role="status"
+            {{ block.shopify_attributes }}
+          >
+            {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--end' -%}
+          </div>
+        </div>
+      </div>
+      <div style="display: flex;justify-content: space-around;">
+        <div class="product--sticky-form__quantity product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}">
+          <quantity-input class="quantity">
+            <button class="quantity__button no-js-hidden" name="minus" type="button">
+              <span class="visually-hidden">
+                {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+              </span>
+              {% render 'icon-minus' %}
+            </button>
+            <input
+              class="quantity__input"
+              type="number"
+              name="quantity"
+              id="Quantity-{{ section.id }}"
+              min="1"
+              value="1"
+            >
+            <button class="quantity__button no-js-hidden" name="plus" type="button">
+              <span class="visually-hidden">
+                {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+              </span>
+              {% render 'icon-plus' %}
+            </button>
+          </quantity-input>
+        </div>
+        {%- unless product.has_only_default_variant -%}
+          <style>
+                  @media screen and (max-width: 749px) {
+              .product--sticky-form__variants {
+                height: 47px;
+                display: block;
+                margin-right: 10px;
+              }
+            }
+                    @media screen and (max-width: 749px) {
+              .product--sticky-form__quantity {
+                display: none;
+              }
+            }
+                         @media screen and (max-width: 749px) {
+              .product--sticky-form-info{
+                display: none;
+              }
+            }
+          </style>
+          <div class="product--sticky-form__variants">
+            <variant-selects
+              class="no-js-hidden"
+              data-section="{{ section.id }}"
+              data-url="{{ product.url }}"
+              {{ block.shopify_attributes }}
+            >
+              {%- for option in product.options_with_values -%}
+                {%- if forloop.length == 1 -%}
+                <div class="product-form__input product-form__input--dropdown" style="margin:0;">
+                  <div class="select">
+                  
+                    <select class="select__select" name="id" aria-label="Select variant">
+                                    {% for variant in product.variants %}
+
+                                        {% assign variant_image = variant.image | default: product.featured_image %}
+
+                                        <option 
+
+                                            value="{{ variant.id }}"
+
+                                            data-img="{{ variant_image | img_url: img_size }}"
+
+                                            {% if current_variant.id == variant.id %}selected{% endif %}>
+
+                                            {{ variant.title }} - {{ variant.price | money }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+                    {% render 'icon-caret' %}
+                  </div>
+                </div>
+                  {%- else -%}
+                {%- if forloop.length > 0 -%} {% unless forloop.last %}
+                <div class="product-form__input product-form__input--dropdown" style="margin:0;">
+                  <div class="select">
+                  
+                    <select class="select__select" name="id" aria-label="Select variant">
+
+                                    {% for variant in product.variants %}
+
+                                        {% assign variant_image = variant.image | default: product.featured_image %}
+
+                                        <option 
+
+                                            value="{{ variant.id }}"
+
+                                            data-img="{{ variant_image | img_url: img_size }}"
+
+                                            {% if current_variant.id == variant.id %}selected{% endif %}>
+
+                                            {{ variant.title }} - {{ variant.price | money }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+                    {% render 'icon-caret' %}
+                  </div>
+                </div>
+                  {% endunless %}
+                  {% endif %}
+                  {%- endif -%}
+              {%- endfor -%}
+
+              <script type="application/json">
+                {{ product.variants | json }}
+              </script>
+            </variant-selects>
+         
+          </div>
+        {% endunless %}
+        <div class="product--sticky-form__buttons">
+          <div class="product-form__error-message-wrapper" role="alert" hidden>
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              role="presentation"
+              class="icon icon-error"
+              viewBox="0 0 13 13"
+            >
+              <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+              <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+              <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+              <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+            </svg>
+            <span class="product-form__error-message"></span>
+          </div>
+          <input
+            type="hidden"
+            name="id"
+            value="{{ product.selected_or_first_available_variant.id }}"
+            disabled
+          >
+          <div class="product-form__buttons">
+            <button
+              type="submit"
+              name="add"
+              class="product-form__submit button button--full-width button--primary"
+              {% if product.selected_or_first_available_variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              <span>
+                {%- if product.selected_or_first_available_variant.available -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- endif -%}
+              </span>
+               {%- render 'loading-spinner' -%}
+            </button>
+          </div>
+        </div>
+      </div>
+    {%- endform -%}
+  </product-form>
+</sticky-product-form>

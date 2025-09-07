@@ -1,0 +1,219 @@
+{%- assign timezone = block.settings.timezone | split: '~' | first | strip -%}
+<style>
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock-wrap {
+    /*max-width: 450px;*/
+    flex: 1 0 auto;
+    zoom: {{block.settings.block_size}};
+    display: flex;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock {
+    {% if block.settings.hide_days %}grid-template-columns: repeat(3, minmax(0, 1fr));{% else %}grid-template-columns: repeat(4, minmax(0, 1fr));{% endif %}
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: rgba(var(--color-foreground));
+    border: thin solid rgba(var(--color-foreground));
+    font-size: 20px;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__measurement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 20px;
+    border-left: thin solid rgba(var(--color-foreground));
+  }
+
+  @media screen and (max-width: 749px){
+    .lumin-section__block-id-{{ block.id }} .lumin-section__measurement {
+    padding: 8px 10px;
+  }
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock.lumin-section__clock--style_1 {
+    border: none;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock--style_1 .lumin-section__measurement {
+    border-left: none;
+
+  }
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock.lumin-section__clock--style_2 {
+    border: none;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock--style_2 .lumin-section__measurement {
+    border-left: thin solid rgba(var(--color-foreground));
+  }
+
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock.lumin-section__clock--style_3 {
+    border: none;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock--style_3 .lumin-section__measurement {
+    border-left: none;
+    padding: 8px 12px;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock--style_3 .lumin-section__measurement .lumin-section__number {
+    border-bottom: thin solid rgba(var(--color-foreground));
+    margin-bottom: 0px;
+  }
+
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock.lumin-section__clock--style_4 {
+    border: thin solid rgba(var(--color-foreground));
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__clock--style_4 .lumin-section__measurement {
+    border-left: thin solid rgba(var(--color-foreground));
+  }
+
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__measurement:first-child {
+    border-left: none;
+  }
+
+  {% if block.settings.hide_days %}
+  .lumin-section__block-id-{{ block.id }} .lumin-section__measurement:nth-child(2) {
+    border-left: none;
+  }
+    {% endif %}
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__number {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+    font-size: clamp(16px, 24px, 85px);
+    line-height: 1;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__label {
+    font-size: clamp(9px, 0.5em, 45px);
+    width: max-content;
+    padding: 0.5em 0.8em;
+  }
+  .lumin-section-timer__justify-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.lumin-section-timer__justify-center {
+  justify-content: center;
+  text-align: center;
+}
+
+.lumin-section-timer__justify-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.lumin-section-timer__justify-justify {
+  justify-content: space-between;
+  text-align: justify;
+}
+</style>
+<div
+  class="lumin-section__clock-wrap lumin-section__flex lumin-section-timer__justify-{{ block.settings.block_alignment }}"
+  data-timer-start="{{ block.settings.start_month }} {{ block.settings.start_day }} {{ block.settings.start_year }} {{ block.settings.start_time }} {{ timezone }}"
+  data-timer-end="{{ block.settings.end_month }} {{ block.settings.end_day }} {{ block.settings.end_year }} {{ block.settings.end_time }} {{ timezone }}"
+>
+  <div class="lumin-section__clock lumin-section__grid lumin-section__clock--{{ block.settings.style_option }}"
+       style="display:grid;">
+    <div class="lumin-section__measurement{% if block.settings.hide_days %} hidden{% endif %} lumin-section__days">
+      <span class="lumin-section__number">--</span>
+      <span class="lumin-section__label">{{ block.settings.timer_day }}</span>
+    </div>
+    <div class="lumin-section__measurement lumin-section__hours">
+      <span class="lumin-section__number">--</span>
+      <span class="lumin-section__label">{{ block.settings.timer_hrs }}</span>
+    </div>
+    <div class="lumin-section__measurement lumin-section__minutes">
+      <span class="lumin-section__number">--</span>
+      <span class="lumin-section__label">{{ block.settings.timer_min }}</span>
+    </div>
+    <div class="lumin-section__measurement lumin-section__seconds">
+      <span class="lumin-section__number">--</span>
+      <span class="lumin-section__label lumin-section__seconds-text">{{ block.settings.timer_sec }}</span>
+    </div>
+  </div>
+</div>
+{% assign section.id = section.id %}
+<script type="application/json" data-lumin-section="{{ section.id }}">
+  {
+    "id": {{ section.id | json }},
+    "animation": {{ section.settings.animation | json }}
+  }
+</script>
+<script
+data-lumin-section-js="{{ section.id }}"
+  type="module"
+  defer
+>
+(function(){
+
+  const luminScript = {
+    initializeAndEnableClock(section) {
+      const clockSelector = '.lumin-section__clock';
+      const startDate = section.querySelector('[data-timer-start]').dataset.timerStart;
+      const endDate = section.querySelector('[data-timer-end]').dataset.timerEnd;
+
+      const startMs = Date.parse(startDate);
+      const endMs = Date.parse(endDate);
+      const currentMs = Date.parse(new Date());
+
+      if (endMs <= currentMs || currentMs < startMs) {
+        section.querySelector(`.lumin-section__clock-wrap`).style.display = 'none';
+        return;
+      }
+
+      const clock = section.querySelector(clockSelector);
+
+      function updateClock() {
+        const total = Date.parse(endDate) - Date.parse(new Date());
+        const days = Math.floor(total / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const seconds = Math.floor((total / 1000) % 60);
+
+        const daysSpan = clock.querySelector('.lumin-section__days .lumin-section__number');
+        const hoursSpan = clock.querySelector('.lumin-section__hours .lumin-section__number');
+        const minutesSpan = clock.querySelector('.lumin-section__minutes .lumin-section__number');
+        const secondsSpan = clock.querySelector('.lumin-section__seconds .lumin-section__number');
+
+        if (daysSpan.innerHTML != days) daysSpan.innerHTML = days;
+        if (hoursSpan.innerHTML != hours) hoursSpan.innerHTML = ('0' + hours).slice(-2);
+        if (minutesSpan.innerHTML != minutes) minutesSpan.innerHTML = ('0' + minutes).slice(-2);
+        if (secondsSpan.innerHTML != seconds) secondsSpan.innerHTML = ('0' + seconds).slice(-2);
+
+        if (total <= 0) clearInterval(timeinterval);
+      }
+
+      updateClock();
+      const timeinterval = setInterval(updateClock, 1000);
+    },
+    load: function(section) {
+      const countdownTimer = section.querySelector('.lumin-section__clock');
+      if (typeof countdownTimer !== 'undefined' && countdownTimer !== null) {
+        luminScript.initializeAndEnableClock(section);
+      }
+    },
+  };
+
+  luminScript.settings = JSON.parse(document.querySelector('[data-lumin-section="{{ section.id }}"]').innerHTML);
+  const sectionId = {{ section.id | json }};
+  const section = document.querySelector(`#LM--${sectionId}`);
+
+  if (sectionId == luminScript.settings.id) {
+    luminScript.load(section);
+  }
+})();
+
+</script>

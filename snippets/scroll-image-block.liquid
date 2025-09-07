@@ -1,0 +1,22 @@
+<style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+</style>
+<div
+  class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}"
+  role="region"
+  aria-label="Announcement"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.logo_image != blank %}
+    {{ block.settings.logo_image | image_url: width: 200 | image_tag: loading: 'lazy' }}
+  {%- else -%}
+    <p style="font-size: 40px;margin: 0;">Brand</p>
+  {%- endif -%}
+</div>

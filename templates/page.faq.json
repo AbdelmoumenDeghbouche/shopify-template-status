@@ -1,0 +1,231 @@
+{
+  "sections": {
+    "b11d4998-a007-4a26-990e-fba6ade13b76": {
+      "type": "rich-text",
+      "blocks": {
+        "6796aae3-0b94-4c0d-a460-ab06d9a3a33e": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>FAQ<\/strong>",
+            "heading_size": "h0"
+          }
+        },
+        "eb505d90-0714-42cf-b794-4012d27e6860": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Find answers to our most frequently asked questions.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "6796aae3-0b94-4c0d-a460-ab06d9a3a33e",
+        "eb505d90-0714-42cf-b794-4012d27e6860"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-52650f17-4d3d-4be4-aa3c-4ef82f95ed07",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "93d21b74-3b8b-4fd7-aea5-1624b545659e": {
+      "type": "collapsible-content",
+      "blocks": {
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What if it doesn’t work for me?",
+            "icon": "none",
+            "row_content": "<p>At Fresh™, your satisfaction is our utmost priority. We stand behind the quality and effectiveness of our products, and we're confident they will exceed your expectations. That's why <strong>we offer a 30-day money-back guarantee<\/strong> – to give you the peace of mind you deserve when making a purchase from us.<\/p>",
+            "page": ""
+          }
+        },
+        "1e45aac1-b5d4-405c-85f3-aa164a8bf820": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? <a href=\"\/pages\/contact\" title=\"Contact\">Contact us<\/a><\/p>",
+            "page": ""
+          }
+        },
+        "2eb9ef10-6d54-4a4c-8ca0-eaa76bfb9bb0": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How much is shipping? Where do you ship to?",
+            "icon": "none",
+            "row_content": "<p>We offer FREE shipping to 20+ countries around the world. If you can enter your address at checkout, we can ship to you! We'll be sure to send the correct plug type for your country, too.<\/p>",
+            "page": ""
+          }
+        },
+        "2c158525-2757-4945-95a5-4769f11a5a4a": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can you tell me more about your shipping process?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? <a href=\"\/pages\/contact\" title=\"Contact\">Contact us<\/a><\/p>",
+            "page": ""
+          }
+        },
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How can I track my order?",
+            "icon": "none",
+            "row_content": "<p>We will send you a tracking number to your email once your package has been shipped. Please track your order using <strong>our tracking page.<\/strong><\/p>",
+            "page": ""
+          }
+        },
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Will I pay customs?",
+            "icon": "none",
+            "row_content": "<p>In most cases, you will not be charged any customs fees. However, customs charges are out of our control and are dependent on the local government. If your order is subject to customs charges, you will be responsible to pay them.<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-1",
+        "1e45aac1-b5d4-405c-85f3-aa164a8bf820",
+        "2eb9ef10-6d54-4a4c-8ca0-eaa76bfb9bb0",
+        "2c158525-2757-4945-95a5-4769f11a5a4a",
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-3",
+        "template--20491899240760__93d21b74-3b8b-4fd7-aea5-1624b545659e-collapsible_row-4"
+      ],
+      "settings": {
+        "caption": "Find answers to our most frequently asked questions.",
+        "heading": "Shipping & returns",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "section",
+        "color_scheme": "scheme-52650f17-4d3d-4be4-aa3c-4ef82f95ed07",
+        "container_color_scheme": "background-1",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "e2bbbb33-f73b-42c0-8af6-4a9ef8073348": {
+      "type": "collapsible-content",
+      "blocks": {
+        "9b68b2dd-0b07-47d1-8279-cff3f916081a": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Where can I find information on sustainability?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? Contact us<\/p>",
+            "page": ""
+          }
+        },
+        "54653737-cf3e-445a-b860-abab03e2dbe3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I see your certificates?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? Contact us<\/p>",
+            "page": ""
+          }
+        },
+        "b8f2a034-785a-4ff4-ab8f-9f2aa67a5249": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Where are your products made?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? <a href=\"https:\/\/revive.lumintheme.com\/pages\/contact\" title=\"https:\/\/revive.lumintheme.com\/pages\/contact\">Contact us<\/a><\/p>",
+            "page": ""
+          }
+        },
+        "3828437e-984f-40a3-91f9-b3846476cb8b": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer samples of your product?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? Contact us<\/p>",
+            "page": ""
+          }
+        },
+        "c61a8653-63d8-48d5-a145-97d407476884": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Where can I find more information?",
+            "icon": "none",
+            "row_content": "<p>Note that this text is a demonstration example of a response you would add to answer a relevant question.<br\/><br\/><strong>Tip<\/strong>: Increase trust by being clear, informative and transparent with your customers.<br\/><br\/>Have further questions? Contact us<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "9b68b2dd-0b07-47d1-8279-cff3f916081a",
+        "54653737-cf3e-445a-b860-abab03e2dbe3",
+        "b8f2a034-785a-4ff4-ab8f-9f2aa67a5249",
+        "3828437e-984f-40a3-91f9-b3846476cb8b",
+        "c61a8653-63d8-48d5-a145-97d407476884"
+      ],
+      "settings": {
+        "caption": "Find answers about our products",
+        "heading": "Products Information",
+        "heading_size": "h1",
+        "heading_alignment": "left",
+        "layout": "section",
+        "color_scheme": "scheme-52650f17-4d3d-4be4-aa3c-4ef82f95ed07",
+        "container_color_scheme": "background-2",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "118b7732-4c38-4560-9866-c307028e8b75": {
+      "type": "rich-text",
+      "blocks": {
+        "a6c34961-b90c-4c60-8259-1dedd9e82551": {
+          "type": "heading",
+          "settings": {
+            "heading": "\"Great quality stuff for everyone who is looking for new trends. Customer support was super understanding when I ordered at the wrong address, and helped me replace it.Thanks, Your Brand!\"",
+            "heading_size": "h2"
+          }
+        },
+        "template--21373420306734__118b7732-4c38-4560-9866-c307028e8b75-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Sofia R. Alberta, Canada.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "a6c34961-b90c-4c60-8259-1dedd9e82551",
+        "template--21373420306734__118b7732-4c38-4560-9866-c307028e8b75-text-1"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": false,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "b11d4998-a007-4a26-990e-fba6ade13b76",
+    "main",
+    "93d21b74-3b8b-4fd7-aea5-1624b545659e",
+    "e2bbbb33-f73b-42c0-8af6-4a9ef8073348",
+    "118b7732-4c38-4560-9866-c307028e8b75"
+  ]
+}

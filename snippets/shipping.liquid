@@ -1,0 +1,132 @@
+<style>
+  .qa-feature-{{ block.id }} {
+        margin: 0px;
+        font-size: {{ block.settings.text_size }}px;
+        text-transform: {{ block.settings.text_style }};
+    }
+  .qa-feature-{{ block.id }} img {
+        width: {{block.settings.icon_size}}px;
+        min-width: {{block.settings.icon_size}}px;
+        height: auto;
+        vertical-align: middle;
+        margin-right: 0px;
+    }
+            .qa-feature-{{ block.id }} svg {
+        width: {{block.settings.icon_size}}px;
+        min-width: {{block.settings.icon_size}}px;
+        height: auto;
+        vertical-align: sub;
+        margin-right: 5px;
+    }
+    .ship-wrapper {
+        display: flex;
+        column-gap: 2px;
+        background: {{block.settings.ship_bg}};
+        border-radius: {{ block.settings.border_radius }}px;
+        {% if block.settings.show_border %}
+        border: {{block.settings.border_width}}px {{block.settings.border_style}} {{block.settings.ship_border}};
+        {% endif %}
+        padding: {{block.settings.padding_top}}px {{block.settings.padding_bottom}}px;
+        margin: {{block.settings.margin_top}}px 0 {{block.settings.margin_bottom}}px 0;
+        align-items: center;
+        }
+</style>
+{% assign ship_text = block.settings.text %}
+{% assign countdown = countdown | prepend: '<span id="countdown">' | append: '</span>' %}
+{% assign result = result | prepend: '<span id="result">' | append: '</span>' %}
+<div class="ship-wrapper qa-feature-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.icon != blank -%}
+    <img
+      src="{{ block.settings.icon | img_url: '100x' }}"
+      class="lumin-ani-{{ block.settings.image_ani }} is--infinite"
+    >
+  {%- else -%}
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+      <g clip-path="url(#a)" stroke="currentColor" stroke-miterlimit="10" stroke-width="1.2">
+      <path d="m15.367 14.242h2.9633v-4.8485l-2.3706-1.2121-1.778-4.8484h-5.334v10.909h1.778"/>
+      <path d="m13 16.666c1.3093 0 2.3706-1.0854 2.3706-2.4242 0-1.3389-1.0613-2.4242-2.3706-2.4242s-2.3707 1.0853-2.3707 2.4242c0 1.3388 1.0614 2.4242 2.3707 2.4242z" stroke-linecap="square"/>
+      <path d="m11.223 5.7568v2.4242h2.3706" stroke-linecap="square"/>
+      <path d="m6.4814 3.3332h-5.9267" stroke-linecap="square"/>
+      <path d="m6.4807 6.3628h-4.1487" stroke-linecap="square"/>
+      <path d="m6.48 9.394h-2.3706" stroke-linecap="square"/>
+      </g>
+      <defs>
+      <clipPath id="a">
+      <rect width="100%" height="100%" fill="none"/>
+      </clipPath>
+      </defs>
+    </svg>
+  {%- endif -%}
+  <p
+    style="margin:0; font-size: {{ block.settings.text_size }}px;"
+    class="{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
+  >
+    {{
+      ship_text
+      | replace: '(timer)', countdown
+      | replace: '(date)', result
+      | replace: '[', '<span class="lumin-text__fancy1">'
+      | replace: ']', '</span>'
+      | replace: '(', '<span class="lumin-text__fancy2">'
+      | replace: ')', '</span>'
+    }}
+  </p>
+
+  <script>
+                      function countDate() {
+                        const today = new Date();
+                        let daysCounted = 0;
+                        let weekdaysCounted = 0;
+                
+                        while (weekdaysCounted < {{ block.settings.ship_days }}) {
+                          // Increment date by one day
+                          today.setDate(today.getDate() + 1);
+                
+                          // Check if it's a weekend
+                          if (today.getDay() !== 0 && today.getDay() !== 6) {
+                            weekdaysCounted++;
+                          }
+                          
+                
+                          daysCounted++;
+                        } 
+                        // Format date as "MMM DD, ddd"
+                        const options = { month: "short", day: "numeric", weekday: "short" };
+                        const formattedDate = today.toLocaleDateString("{{block.settings.date_locale}}", options);
+                
+                        // Display result
+                        document.getElementById("result").innerHTML = `${formattedDate}`;
+                      }
+                
+                      countDate();
+  </script>
+
+  <script>
+                  // Set the end time to 4pm
+                  const endTime = new Date();
+                  endTime.setHours({{ block.settings.cut_off_time }}, 0, 0);
+                  
+                  // Update the countdown every second
+                  setInterval(updateCountdown, 1000);
+                  
+                  function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = endTime.getTime() - now;
+                  
+                    // If the countdown has ended, reset it to the next day at 4pm
+                    if (distance < 0) {
+                      endTime.setDate(endTime.getDate() + 1);
+                      endTime.setHours({{ block.settings.cut_off_time }}, 0, 0);
+                    }
+                  
+                    // Calculate remaining time
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                  
+                    // Update the countdown element
+                    const countdownElement = document.getElementById("countdown");
+                    countdownElement.innerHTML = `${hours}h ${minutes}m`;
+                  }
+  </script>
+</div>

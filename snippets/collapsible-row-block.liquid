@@ -1,0 +1,93 @@
+{%- capture closed_icon -%}
+{%- case block.settings.icon_style -%}
+{%- when 'plus_minus' -%}
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E")
+{%- when 'caret' -%}
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E")
+{%- when 'plus_minus_square' -%}
+url("data:image/svg+xml,%3Csvg clip-rule='evenodd' fill-rule='evenodd' stroke-linejoin='round' stroke-miterlimit='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m21 3.998c0-.478-.379-1-1-1h-16c-.62 0-1 .519-1 1v16c0 .621.52 1 1 1h16c.478 0 1-.379 1-1zm-16.5.5h15v15h-15zm6.75 6.752h-3.5c-.414 0-.75.336-.75.75s.336.75.75.75h3.5v3.5c0 .414.336.75.75.75s.75-.336.75-.75v-3.5h3.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-3.5v-3.5c0-.414-.336-.75-.75-.75s-.75.336-.75.75z' fill-rule='nonzero' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E")
+{%- endcase -%}
+{%- endcapture -%}
+
+{%- capture open_icon -%}
+{%- case block.settings.icon_style -%}
+{%- when 'plus_minus' -%}
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M0 10h24v4h-24z' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E")
+{%- when 'caret' -%}
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E")
+{%- when 'plus_minus_square' -%}
+url("data:image/svg+xml,%3Csvg clip-rule='evenodd' fill-rule='evenodd' stroke-linejoin='round' stroke-miterlimit='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m21 4c0-.478-.379-1-1-1h-16c-.62 0-1 .519-1 1v16c0 .621.52 1 1 1h16c.478 0 1-.379 1-1zm-16.5.5h15v15h-15zm11.75 6.752h-8.5c-.414 0-.75.336-.75.75s.336.75.75.75h8.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z' fill-rule='nonzero' fill='{{ section.settings.text_color | replace: "#", "%23" }}'/%3E%3C/svg%3E");
+{%- endcase -%}
+{%- endcapture -%}
+<style>
+  #LM--{{ section.id }} .lumin-section__block--collapsible_content + .lumin-section__block--collapsible_content {
+    margin-top: 0;
+  }
+
+  #LM--{{ section.id }} .lumin-section__block--collapsible_content + .lumin-section__block--collapsible_content .lumin-section__accordion {
+    border-top: 0;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__accordion {
+    border-top: thin solid rgba(var(--color-foreground));
+    border-bottom: thin solid rgba(var(--color-foreground));
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__question {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    padding: 10px 25px 10px 0;
+    color: rgba(var(--color-foreground));
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__small-heading {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__accordion[open] > .lumin-section__question:after {
+    background-image: {{ open_icon }};
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__question:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    height: 15px;
+    width: 15px;
+    background-image: {{ closed_icon }};
+    background-size: contain;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__answer {
+    padding-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__inner-answer {
+    padding: 10px;
+    padding-top: 0;
+  }
+</style>
+<details
+  class="lumin-section-block lumin-section__block-id-{{ block.id }} lumin-section__accordion lumin-section__icon-style-{{ block.settings.icon_style }}"
+  {%- if block.settings.show_open == true -%}
+    open
+  {%- endif -%}
+>
+  <summary class="lumin-section__block-id-{{ block.id }} lumin-section__question">
+    <h3 class="lumin-section__small-heading">{{ block.settings.title }}</h3>
+  </summary>
+  <div class="lumin-section__answer">
+    <div class="lumin-section__inner-answer lumin-section__text lumin-section__rte">
+      {{ block.settings.text }}
+    </div>
+  </div>
+</details>

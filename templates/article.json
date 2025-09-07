@@ -1,0 +1,52 @@
+{
+  "sections": {
+    "breadcrumbs_bc9cbp": {
+      "type": "breadcrumbs",
+      "settings": {
+        "padding_top": 8,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": false
+          }
+        },
+        "featured_image": {
+          "type": "featured_image",
+          "settings": {
+            "image_height": "medium"
+          }
+        },
+        "content": {
+          "type": "content",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "featured_image",
+        "content",
+        "share"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "breadcrumbs_bc9cbp",
+    "main"
+  ]
+}

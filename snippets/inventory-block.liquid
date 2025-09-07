@@ -1,0 +1,167 @@
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign text_normal = block.settings.text_normal | replace: '[qty]', current_variant.inventory_quantity
+  if current_variant.inventory_quantity == 1
+    assign text_low = block.settings.text_low_one | replace: '[qty]', current_variant.inventory_quantity
+  else
+    assign text_low = block.settings.text_low_many | replace: '[qty]', current_variant.inventory_quantity
+  endif
+  assign text_untracked = block.settings.text_untracked | replace: '[qty]', current_variant.inventory_quantity
+  assign text_soldout = block.settings.text_soldout | replace: '[qty]', current_variant.inventory_quantity
+  assign low_pill_color = block.settings.low_pill_color
+  assign untrack_pill_color = block.settings.untrack_pill_color
+  assign untrack_bg_color = block.settings.untrack_background_bar
+%}
+<p
+  class="no-js-hidden{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
+  {{ block.shopify_attributes }}
+  style="
+    display: flex;flex-wrap: wrap;gap: 5px;align-items: center;max-width:44rem; font-size: {{ block.settings.bar_font_size }}px;
+    --low_pill_color: {{ block.settings.low_pill_color.red }},{{ block.settings.low_pill_color.green }},{{ block.settings.low_pill_color.blue }};
+    --normal_pill_color: {{ block.settings.normal_pill_color.red }},{{ block.settings.normal_pill_color.green }},{{ block.settings.normal_pill_color.blue }};
+    --sold_pill_color: {{ block.settings.sold_pill_color.red }},{{ block.settings.sold_pill_color.green }},{{ block.settings.sold_pill_color.blue }};
+    --untrack_pill_color: {{ block.settings.untrack_pill_color.red }},{{ block.settings.untrack_pill_color.green }},{{ block.settings.untrack_pill_color.blue }};
+    --untrack_bg_color: {{ block.settings.untrack_background_bar.red }},{{ block.settings.untrack_background_bar.green }},{{ block.settings.untrack_background_bar.blue }};
+  "
+  id="Inventory-{{ section.id }}"
+  role="status"
+>
+  {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
+    {%- if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold -%}
+      {% if block.settings.show_inventory_pill %}
+        <svg width="15" height="15" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="7.5" fill="rgb(var(--low_pill_color), 0.3)"/>
+          <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255 255 255)" stroke-width="1" fill="rgb(var(--low_pill_color))"/>
+        </svg>
+      {% endif %}
+      {% if block.settings.text_low_one != blank %}
+        {{ text_low }}
+      {% else %}
+        {{- 'products.product.inventory_low_stock' | t -}}
+      {%- endif -%}
+      {% if block.settings.show_inventory_bar %}
+        <style>
+          #progressbar {
+               background-color: {{ block.settings.background_bar }};
+               margin-top: -8px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+             }
+
+             #progressbar>div {
+               display:block;
+               background-color: {{ block.settings.low_color }};
+               background: linear-gradient(325deg,{{ block.settings.low_color }} 0,{{ block.settings.low_color_2 }});
+               width: {{ block.settings.inv_bar_width_low }}%;
+               height: {{ block.settings.inv_bar_height }}px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+               max-width: 100%;
+               transition: width 2s ease;
+             }
+        </style>
+        <div id="progressbar"><div id="progressbarInner"></div></div>
+      {% endif %}
+    {%- else -%}
+      {% if block.settings.show_inventory_pill %}
+        <svg width="15" height="15" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="7.5" fill="rgb(var(--normal_pill_color), 0.3)"/>
+          <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255 255 255)" stroke-width="1" fill="rgb(var(--normal_pill_color))"/>
+        </svg>
+      {% endif %}
+      {% if block.settings.text_normal != blank %}
+        {{ text_normal }}
+      {% else %}
+        {{- 'products.product.inventory_in_stock' | t -}}
+      {%- endif -%}
+      {% if block.settings.show_inventory_bar %}
+        <style>
+          #progressbar {
+            background-color: {{ block.settings.background_bar }};
+            margin-top: -8px;
+            border-radius: {{ block.settings.inv_bar_radius }}px;
+          }
+
+          #progressbar>div {
+            display:block;
+            background-color: {{ block.settings.normal_color }};
+            background: linear-gradient(325deg,{{ block.settings.normal_color }} 0,{{ block.settings.normal_color_2 }});
+            width: {{ block.settings.inv_bar_width_normal }}%;
+            height: {{ block.settings.inv_bar_height }}px;
+            border-radius: {{ block.settings.inv_bar_radius }}px;
+            max-width: 100%;
+            transition: width 2s ease;
+          }
+        </style>
+        <div id="progressbar"><div id="progressbarInner"></div></div>
+      {% endif %}
+    {%- endif -%}
+  {%- else -%}
+    {%- if product.selected_or_first_available_variant.inventory_policy == 'continue'
+      or product.selected_or_first_available_variant.inventory_management == null
+    -%}
+      {% if block.settings.show_inventory_pill %}
+        <svg width="15" height="15" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="7.5" fill="rgb(var(--untrack_pill_color), 0.3)"/>
+          <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255 255 255)" stroke-width="1" fill="rgb(var(--untrack_pill_color))"/>
+        </svg>
+      {% endif %}
+      {% if block.settings.text_untracked != blank %}
+        {{ text_untracked }}
+      {% else %}
+        {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
+      {% endif %}
+      {% if block.settings.show_inventory_bar %}
+        <style>
+          #progressbar {
+               background-color: {{ block.settings.background_bar }};
+               margin-top: -8px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+             }
+
+             #progressbar>div {
+               display:block;
+               background-color: {{ block.settings.untrack_background_bar }};
+               background: linear-gradient(325deg, {{ block.settings.untrack_background_bar }} 0, {{ block.settings.untrack_background_bar }});
+               width: {{ block.settings.inv_bar_width_untrack }}%;
+               height: {{ block.settings.inv_bar_height }}px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+               max-width: 100%;
+               transition: width 2s ease;
+             }
+        </style>
+        <div id="progressbar"><div id="progressbarInner"></div></div>
+      {% endif %}
+    {%- else -%}
+      {% if block.settings.show_inventory_pill %}
+        <svg width="15" height="15" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="7.5" fill="rgb(var(--sold_pill_color), 0.3)"/>
+          <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255 255 255)" stroke-width="1" fill="rgb(var(--sold_pill_color))"/>
+        </svg>
+      {% endif %}
+      {% if block.settings.text_soldout != blank %}
+        {{ text_soldout }}
+      {% else %}
+        {{- 'products.product.inventory_out_of_stock' | t -}}
+      {% endif %}
+      {% if block.settings.show_inventory_bar %}
+        <style>
+          #progressbar {
+               background-color: {{ block.settings.background_bar }};
+               margin-top: -8px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+             }
+
+             #progressbar>div {
+               display:block;
+               background-color: #000;
+               width: {{ block.settings.inv_bar_width_sold }}%;
+               height: {{ block.settings.inv_bar_height }}px;
+               border-radius: {{ block.settings.inv_bar_radius }}px;
+               max-width: 100%;
+               transition: width 2s ease;
+             }
+        </style>
+        <div id="progressbar"><div id="progressbarInner"></div></div>
+      {% endif %}
+    {%- endif -%}
+  {%- endif -%}
+</p>

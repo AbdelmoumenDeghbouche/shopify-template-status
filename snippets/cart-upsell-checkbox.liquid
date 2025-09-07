@@ -1,0 +1,135 @@
+{% if settings.enable_cart_upsell %}
+  {% assign upsell_product = all_products[settings.cart_upsell_product_2] %}
+  {% if upsell_product %}
+    {% assign variant_price = upsell_product.variants.first.price | money %}
+  {% endif %}
+  <div class="cart-upsell-toggle-container {% if cart.item_count == 0 %}hidden{% endif %}">
+    <div style=" display: flex; align-items: center;gap: 10px;">
+      <span style="display: flex;align-items: center;gap: 14px;">
+        {%- if settings.cart_gift_icon != blank -%}
+          <img
+            src="{{ settings.cart_gift_icon | image_url }}"
+            role="presentation"
+            height="auto"
+            width="{{ settings.cart_gift_icon_width }}px"
+            loading="lazy"
+          >
+        {%- else -%}
+          <svg
+            class="icon icon-box icon-lg inline-block"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+                  <path class="fill" d="M22 14.2825V7.28202C22 7.10718 21.9083 6.94515 21.7583 6.8552C21.5995 6.75991 21.4009 6.76067 21.2429 6.85718L14.5012 10.9731C13.5927 11.5278 13.1384 11.8052 12.6525 11.9135C12.2228 12.0092 11.7772 12.0092 11.3475 11.9135C10.8616 11.8052 10.4073 11.5278 9.49878 10.9731L2.75714 6.85718C2.59906 6.76067 2.40048 6.75991 2.24166 6.8552C2.09174 6.94515 2 7.10718 2 7.28202V14.2825C2 15.2735 2 15.769 2.14219 16.2143C2.26802 16.6083 2.47396 16.972 2.74708 17.2826C3.05572 17.6336 3.48062 17.8886 4.33042 18.3984L9.53042 21.5184C10.4283 22.0572 10.8773 22.3266 11.3565 22.4318C11.7805 22.5249 12.2195 22.5249 12.6435 22.4318C13.1227 22.3266 13.5717 22.0572 14.4696 21.5184L19.6696 18.3984C20.5194 17.8886 20.9443 17.6336 21.2529 17.2826C21.526 16.972 21.732 16.6083 21.8578 16.2143C22 15.769 22 15.2735 22 14.2825Z" style="
+                stroke: none;
+                fill: #f2f2f2;
+            "></path>
+                  <path d="M7.49988 9.5L16.5 4M12 12.5L21 7M12 12.5L3 7M12 12.5V22.5M2 9.71771V14.2823C2 15.2733 2 15.7688 2.14219 16.2141C2.26802 16.6081 2.47396 16.9718 2.74708 17.2824C3.05572 17.6334 3.48062 17.8884 4.33042 18.3983L9.53042 21.5183C10.4283 22.057 10.8773 22.3264 11.3565 22.4316C11.7805 22.5247 12.2195 22.5247 12.6435 22.4316C13.1227 22.3264 13.5717 22.057 14.4696 21.5183L19.6696 18.3983C20.5194 17.8884 20.9443 17.6334 21.2529 17.2824C21.526 16.9718 21.732 16.6081 21.8578 16.2141C22 15.7688 22 15.2733 22 14.2823V9.71771C22 8.72669 22 8.23117 21.8578 7.78593C21.732 7.39192 21.526 7.02818 21.2529 6.71757C20.9443 6.36657 20.5194 6.11163 19.6696 5.60175L14.4696 2.48175C13.5717 1.94301 13.1227 1.67364 12.6435 1.56839C12.2195 1.4753 11.7805 1.4753 11.3565 1.56839C10.8773 1.67364 10.4283 1.94301 9.53042 2.48175L4.33042 5.60175C3.48062 6.11163 3.05572 6.36657 2.74708 6.71757C2.47396 7.02818 2.26802 7.39192 2.14219 7.78593C2 8.23117 2 8.72669 2 9.71771Z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        {% endif %}
+      </span>
+      <div style=" display: flex;flex-direction: column; ">
+        <span>
+          <span style="font-size: {{ settings.cart_upsell_font_size }}px; font-weight: {{ settings.cart_upsell_font_weight }};">
+            {{ settings.cart_upsell_text }}
+          </span>
+          <span style="color: {{ settings.gift_price_color }};font-size: {{ settings.cart_upsell_font_size }}px; font-weight: {{ settings.cart_upsell_font_weight }};">
+            {{ variant_price }}
+          </span>
+        </span>
+
+        <span style="font-size: {{ settings.cart_upsell_subtext_size }}px; font-weight: {{ settings.cart_upsell_sub_weight }};">
+          {{- settings.cart_upsell_subtext -}}
+        </span>
+      </div>
+    </div>
+    <label class="cart-upsell-toggle-label">
+      <input
+        type="checkbox"
+        id="cart-upsell-toggle"
+        class="cart-upsell-toggle"
+        {% if upsell_in_cart %}
+          checked
+        {% endif %}
+      >
+      <span class="cart-upsell-toggle-slider"></span>
+    </label>
+  </div>
+
+  <style>
+    .cart-upsell-toggle-container {
+      display: flex;
+      justify-content: space-between;
+       width: 100%;
+       align-items: center;
+       gap: 10px;
+       padding: {{settings.gift_wrap_padding}}px;
+       background: {{settings.gift_bg_color}};
+       border: 0.1rem solid {{settings.gift_border_color}};
+       border-radius: {{settings.gift_wrap_radius}}px;
+       {% if settings.show_cart_note %} margin-top: 1rem;{% endif %}
+       margin-bottom: 1rem;
+    }
+
+    .cart-upsell-toggle-container.hidden {
+      display: none;
+    }
+    .cart-upsell-toggle-container img {
+      border-radius: {{ settings.cart_gift_icon_radius }}px;
+    }
+    .cart-upsell-toggle-container svg {
+      border-radius: {{ settings.cart_gift_icon_radius }}px;
+      width:{{ settings.cart_gift_icon_width }}px;
+      height:auto;
+    }
+
+    .cart-upsell-toggle-label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .cart-upsell-toggle {
+      position: absolute;
+      opacity: 0;
+      height: 0;
+      width: 0;
+    }
+
+    .cart-upsell-toggle-slider {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      background-color: #ccc;
+      border-radius: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-upsell-toggle-slider::before {
+      content: "";
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .cart-upsell-toggle:checked + .cart-upsell-toggle-slider {
+      background-color: {{ settings.cart_upsell_toggle_color }};
+    }
+
+    .cart-upsell-toggle:checked + .cart-upsell-toggle-slider::before {
+      transform: translateX(20px);
+    }
+
+    #Details-CartDrawer {
+      margin-top: 0;
+    }
+  </style>
+{% endif %}

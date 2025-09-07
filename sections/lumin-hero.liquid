@@ -1,0 +1,687 @@
+{% assign scheme1 = settings.color_schemes | first %}
+<div
+  class="q-main-section-{{section.id}} color-{{ section.settings.color_scheme_2 }} gradient"
+  style="
+    {%- if section.settings.image_bg != blank -%}
+    background-image: url({{ section.settings.image_bg | img_url: '1200x' }});
+    {%- endif -%}
+    background-size: cover;
+    margin: {{section.settings.gap_section_top}}px auto {{section.settings.gap_section_bottom}}px auto;
+  "
+>
+  <div class="page-width content-container  isolate{% if settings.text_boxes_border_thickness > 0 and settings.text_boxes_border_opacity > 0 and settings.media_border_thickness > 0 and settings.media_border_opacity > 0 %} collapse-borders{% endif %}{% unless section.settings.color_scheme == scheme1 and settings.media_border_thickness > 0 and settings.text_boxes_shadow_opacity == 0 and settings.text_boxes_border_thickness == 0 or settings.text_boxes_border_opacity == 0 %} collapse-corners{% endunless %} section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+   {%- unless section.settings.title == blank and section.settings.head_text == blank -%}
+      <div class="hero-header" {% if section.settings.column_alignment == 'center' %}style="text-align:center;margin-left: auto;margin-right: auto;max-width:700px;"{% endif %}>
+     {% if section.settings.title != blank -%}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}"
+             style="{% if section.settings.column_alignment == 'center' %} text-align:center;margin-left: auto;margin-right: auto;{% endif %}">
+          {{ section.settings.title | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+        </h2>
+        {% endif %}
+        {%- if section.settings.head_text != blank -%}
+          <p style="{% if section.settings.column_alignment == 'center' %} text-align:center;margin-left: auto;margin-right: auto;{% endif %}">
+          {{ section.settings.head_text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+   {% if section.settings.code_html_head != blank %}
+     <div style="padding:20px;"> {{ section.settings.code_html_head }}</div>
+  {% endif %}
+     <div class="color-{{ section.settings.color_scheme }} gradient content-container isolate">
+    {% for block in section.blocks %}
+      <div class="qare-section" {{ block.shopify_attributes }}>
+        <div class="q-features-main small-hide">
+          {% if block.settings.show_1 %}
+            <div class="qare-feature qare-feature-{{section.id}} qare-feature-{{section.settings.column_alignment_dt}}">
+              {% if block.settings.image_1 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_1 | img_url: '300x' }}" width="300" height="auto">
+
+              {%- endif -%}
+              <h4>{{ block.settings.head_1 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_1 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_3 %}
+           <div class="qare-feature qare-feature-{{section.id}} qare-feature-{{section.settings.column_alignment_dt}}">
+              {% if block.settings.image_3 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_3 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_3 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_3 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_5 %}
+            <div class="qare-feature qare-feature-{{section.id}} qare-feature-{{section.settings.column_alignment_dt}}">
+              {% if block.settings.image_5 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_5 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_5 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_5 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+        {%- if block.settings.use_video -%}
+          <style>
+        .video-media-hero {
+          width: 100%;
+          height: 100%;
+          max-width:{{ block.settings.main_image_width }}px;
+          position: relative;
+          border-radius: var(--media-radius);
+           }
+        </style>
+
+          {%- if block.settings.video != null -%}
+        {{
+          block.settings.video
+          | video_tag:
+            image_size: '1100x',
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true, 
+            autoplay: true,
+            class: "video-media-hero"
+        }}
+        {%- else -%}
+ <video class="image-with-text__media--placeholder placeholder video-media-hero media video video-playsinline" src="https://cdn.shopify.com/videos/c/o/v/fbb140fd46e3429eba459e1549dbbe38.mp4" playsinline="" autoplay="" muted="" loop=""></video>
+      {%endif%}  
+ {% elsif block.settings.image != blank %}
+          <img
+            src="{{ block.settings.image | img_url: '1000x' }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            style="width:100%;max-width:{{ block.settings.main_image_width }}px; height:auto;"
+            loading="lazy"
+            class="q-section-img"
+          >
+        {%- endif -%}
+        
+          <div class="q-features-main small-hide">
+            {% if block.settings.show_2 %}
+              <div class="qare-feature qare-feature-{{section.id}}{% if section.settings.column_alignment_dt == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_dt}}{% endif %}">
+                {% if block.settings.image_2 != blank -%}
+                  <img alt="Lumin Theme" src="{{ block.settings.image_2 | img_url: '300x' }}" width="300" height="auto">
+                {%- endif -%}
+                <h4>{{ block.settings.head_2 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+                <p>{{ block.settings.text_2 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+              </div>
+            {%- endif -%}
+            {% if block.settings.show_4 %}
+              <div class="qare-feature qare-feature-{{section.id}}{% if section.settings.column_alignment_dt == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_dt}}{% endif %}">
+                {% if block.settings.image_4 != blank -%}
+                  <img alt="Lumin Theme" src="{{ block.settings.image_4 | img_url: '300x' }}" width="300" height="auto">
+                {%- endif -%}
+                <h4>{{ block.settings.head_4 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+                <p>{{ block.settings.text_4 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+              </div>
+            {%- endif -%}
+            {% if block.settings.show_6 %}
+              <div class="qare-feature qare-feature-{{section.id}}{% if section.settings.column_alignment_dt == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_dt}}{% endif %}">
+                {% if block.settings.image_6 != blank -%}
+                  <img alt="Lumin Theme" src="{{ block.settings.image_6 | img_url: '300x' }}" width="300" height="auto">
+                {%- endif -%}
+                <h4>{{ block.settings.head_6 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+                <p>{{ block.settings.text_6 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+        
+        <div class="q-features-mb large-up-hide medium-hide">
+          {% if block.settings.show_1 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}} qare-feature-{{section.settings.column_alignment_mb}}">
+              {% if block.settings.image_1 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_1 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_1 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_1 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_2 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}}{% if section.settings.column_alignment_mb == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_mb}}{% endif %}">
+              {% if block.settings.image_2 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_2 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_2 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_2 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_3 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}} qare-feature-{{section.settings.column_alignment_mb}}">
+              {% if block.settings.image_3 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_3 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_3 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_3 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_4 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}}{% if section.settings.column_alignment_mb == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_mb}}{% endif %}">
+              {% if block.settings.image_4 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_4 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_4 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_4 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_5 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}} qare-feature-{{section.settings.column_alignment_mb}}">
+              {% if block.settings.image_5 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_5 | img_url: '300x' }}" width="300" height="auto">
+              {%- endif -%}
+              <h4>{{ block.settings.head_5 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_5 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+          {% if block.settings.show_6 %}
+            <div class="qare-feature-mb qare-feature-mb-{{section.id}}{% if section.settings.column_alignment_mb == "alt" %} qare-feature-left{% else %} qare-feature-{{section.settings.column_alignment_mb}}{% endif %}">
+              {% if block.settings.image_6 != blank -%}
+                <img alt="Lumin Theme" src="{{ block.settings.image_6 | img_url: '300x' }}" width="300" height="auto">
+               {%- endif -%}
+              <h4>{{ block.settings.head_6 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</h4>
+              <p>{{ block.settings.text_6 | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {% endfor %}
+  </div></div></div>
+
+<style>
+
+  .hero-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+    gap: 20px;
+  }
+  .hero-header h2 {
+    margin:0;
+  }
+    .q-main-section-{{section.id}} {
+    width: 100%;
+    margin: {{section.settings.gap_section_top}}px 0 {{section.settings.gap_section_bottom}}px 0;
+    padding: {{section.settings.pad_section_top}}px 0 {{section.settings.pad_section_bottom}}px 0;
+    position: relative;
+  }
+    .qare-section {
+      margin: 0 auto;
+      position: relative;
+      max-width: calc(var(--page-width) - 170px) !important;
+      display: flex;
+      grid-template-columns: repeat(2, 2fr);
+      grid-gap: 40px;
+      grid-row-gap: 30px;
+      max-width: var(--page-width);
+      align-items: center;
+      justify-content: center;
+  }
+
+  @media (max-width: 560px){
+  .qare-section {
+      flex-direction: column;
+      padding: 10px;
+      width: 100%;
+  }
+  }
+  .q-features-main {
+      display: block;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      margin-top: 40px;
+  }
+  .qare-feature-alt {
+      align-items: end;
+      text-align:right;
+  }
+  .qare-feature-center {
+      align-items: center;
+      text-align:center;
+  }
+  .qare-feature-left {
+      align-items: flex-start;
+      text-align:left;
+  }
+  .qare-feature {
+      width: 100%;
+      color:rgba(var(--color-foreground), 1);
+      position: relative;
+      min-height: 40px;
+      line-height: 24px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+  }
+  .qare-feature-{{section.id}} img {
+      width: {{section.settings.feature_image}}px;
+      margin-bottom: 10px;
+  }
+  
+    .qare-feature-{{section.id}} svg {
+          fill: rgba(var(--color-foreground), 1);
+      width: {{section.settings.feature_image_mb}}px;
+      height:auto;
+      margin-bottom: 10px;
+  }
+    .qare-feature-{{section.id}} svg path {
+          fill: rgba(var(--color-foreground), 1);
+  }
+    .qare-feature h4 {
+      margin: 0;
+      font-size: 18px;
+      margin-bottom: 7px;
+      color:rgba(var(--color-foreground), 1);
+  }
+   .qare-feature p {
+      margin: 0;
+  }
+    .q-features-mb {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      column-gap: 10px;
+  }
+  .qare-feature-mb {
+      width: calc(50% - 10px);
+      position: relative;
+      padding: 10px;
+      min-height: 40px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+  }
+  .qare-feature-mb-{{section.id}} img {
+      width: {{section.settings.feature_image_mb}}px;
+      margin-bottom:10px;
+  }
+
+    .qare-feature-mb-{{section.id}} svg {
+          fill: rgba(var(--color-foreground), 1);
+      width: {{section.settings.feature_image_mb}}px;
+      height:auto;
+      margin-bottom: 10px;
+  }
+    .qare-feature-mb svg path {
+          fill: rgba(var(--color-foreground), 1);
+  }
+    .qare-feature-mb p {
+      margin: 0;
+  }
+    .qare-feature-mb h4 {
+      margin: 0;
+      font-size: 18px;
+     margin-bottom: 7px;
+      color:rgba(var(--color-foreground), 1);
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Lumin Hero",
+    "disabled_on": {
+    "groups": ["header", "footer", "custom.popup"]
+   },
+    "settings": [
+      {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+      {
+      "type": "color_scheme",
+      "id": "color_scheme_2",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+   {
+      "type": "image_picker",
+      "id": "image_bg",
+      "label": "Section Bacground Image"
+    },
+      {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Hero Heading",
+      "label": "t:sections.multicolumn.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+      {
+      "type": "select",
+      "id": "column_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.multicolumn.settings.column_alignment.label"
+    },
+      {
+      "type": "select",
+      "id": "column_alignment_dt",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+        },
+        {
+          "value": "alt",
+          "label": "Alt"
+        }
+      ],
+      "default": "center",
+      "label": "Text Alignment Desktop"
+    },
+      {
+      "type": "select",
+      "id": "column_alignment_mb",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+        },
+        {
+          "value": "alt",
+          "label": "Alt"
+        }
+      ],
+      "default": "center",
+      "label": "Text Alignment Mobile"
+    },
+      {
+          "type": "inline_richtext",
+          "id": "head_text",
+          "default": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.",
+          "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+        },
+       {
+      "type": "range",
+      "id": "feature_image",
+      "label": "Feature Image Desktop",
+      "min":       8,
+      "max":        300,
+      "step":       4,
+      "unit":       "px",
+
+      "default": 60
+      },
+        {
+      "type": "range",
+      "id": "feature_image_mb",
+      "label": "Feature Image Mobile",
+      "min":       8,
+      "max":        300,
+      "step":       4,
+      "unit":       "px",
+
+      "default": 40
+      },
+
+    {
+      "type": "range",
+      "id": "gap_section_top",
+      "label": "Section Gap Top",
+      "min":       0,
+      "max":        80,
+      "step":       5,
+      "unit":       "px",
+
+      "default": 20
+      },
+{
+      "type": "range",
+      "id": "gap_section_bottom",
+      "label": "Section Gap Bottom",
+      "min":       0,
+      "max":        80,
+      "step":       5,
+      "unit":       "px",
+
+      "default": 20
+      },
+   {
+      "type": "range",
+      "id": "pad_section_top",
+      "label": "Section Padding Top",
+      "min":       0,
+      "max":        80,
+      "step":       5,
+      "unit":       "px",
+
+      "default": 20
+      },
+{
+      "type": "range",
+      "id": "pad_section_bottom",
+      "label": "Section Padding Bottom",
+      "min":       0,
+      "max":        80,
+      "step":       5,
+      "unit":       "px",
+
+      "default": 20
+      }
+],
+    "max_blocks": 30,
+  "blocks": [
+       {
+        "type": "hero",
+        "name": "Hero",
+        "settings": [
+          {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main Image"
+    },
+    {
+        "type": "checkbox",
+        "id": "use_video",
+        "label": "Use Video",
+        "default": false
+      },
+      {
+          "type": "video",
+          "id": "video",
+          "label": "Select Video"
+        },
+          {
+      "type": "range",
+      "id": "main_image_width",
+      "label": "Image Size",
+      "min":       50,
+      "max":        1000,
+      "step":       10,
+      "unit":       "px",
+
+      "default": 400
+      },
+          {
+        "type": "checkbox",
+        "id": "show_1",
+        "label": "Show Block 1",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_1",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_1",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      },
+            {
+        "type": "checkbox",
+        "id": "show_2",
+        "label": "Show Block 2",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_2",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_2",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      },
+                {
+        "type": "checkbox",
+        "id": "show_3",
+        "label": "Show Block 3",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_3",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_3",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      },
+          {
+        "type": "checkbox",
+        "id": "show_4",
+        "label": "Show Block 4",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_4",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_4",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      },
+          {
+        "type": "checkbox",
+        "id": "show_5",
+        "label":  "Show Block 5",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_5",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_5",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      },
+
+        {
+        "type": "checkbox",
+        "id": "show_6",
+        "label": "Show Block 6",
+        "default": true
+      },
+          {
+      "type": "image_picker",
+      "id": "image_6",
+      "label": "Image"
+    },
+          {
+        "type": "inline_richtext",
+        "id": "head_6",
+        "label": "Heading",
+        "default": "Heading"
+      },
+           {
+        "type": "inline_richtext",
+        "id": "text_6",
+        "label": "Text",
+        "default": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+      }
+        ]
+       }
+],
+     "presets": [
+    {
+      "name": "Lumin Hero",
+      "blocks": [
+        {
+          "type": "hero"
+        }
+      ]
+    }
+  ]
+  }
+{% endschema %}

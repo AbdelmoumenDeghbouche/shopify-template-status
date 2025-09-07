@@ -1,0 +1,232 @@
+.image-comparison {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  --percent: 95%;
+}
+
+@media screen and (min-width: 750px) {
+  .image-comparison {
+    --percent: 98%;
+  }
+}
+
+.image-comparison[animate] {
+  --percent: 50%;
+}
+
+.image-comparison.animating .image-comparison__button {
+  transition-property: top, left;
+  transition-duration: var(--duration-animate);
+  transition-timing-function: ease;
+}
+
+.image-comparison.animating .image-comparison__after {
+  transition-property: clip-path;
+  transition-duration: var(--duration-animate);
+  transition-timing-function: ease;
+}
+
+.image-comparison__animate {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.1rem;
+  pointer-events: none;
+}
+
+.image-comparison__after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__after {
+  clip-path: inset(0px 0px 0px var(--percent));
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__after {
+  clip-path: inset(var(--percent) 0px 0px 0px);
+}
+
+.image-comparison__button {
+  position: absolute;
+  z-index: 2;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__button {
+  top: 0;
+  left: var(--percent);
+  width: 4rem;
+  height: 100%;
+  margin-left: -2rem;
+  cursor: col-resize;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__button {
+  left: 0;
+  top: var(--percent);
+  width: 100%;
+  height: 4rem;
+  margin-top: -2rem;
+  cursor: row-resize;
+}
+
+.image-comparison__button::before,
+.image-comparison__button::after {
+  content: '';
+  position: absolute;
+  background-color: rgb(var(--color-border));
+  pointer-events: none;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__button::before,
+.image-comparison[data-layout="horizontal"] .image-comparison__button::after {
+  width: 0.3rem;
+  height: 50%;
+  left: 50%;
+  margin-left: -0.15rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__button::before,
+.image-comparison[data-layout="vertical"] .image-comparison__button::after {
+  width: 50%;
+  height: 0.3rem;
+  top: 50%;
+  margin-top: -0.15rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__button::before {
+  top: 0;
+  margin-top: -2rem;
+}
+.image-comparison[data-layout="horizontal"]  .image-comparison__button::after {
+  bottom: 0;
+  margin-bottom: -2rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__button::before {
+  left: 0;
+  margin-left: -2rem;
+}
+.image-comparison[data-layout="vertical"]  .image-comparison__button::after {
+  right: 0;
+  margin-right: -2rem;
+}
+
+.image-comparison__button span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4rem;
+  height: 4rem;
+  margin-left: -2rem;
+  margin-top: -2rem;
+  border-radius: 50%;
+  border: 0.3rem solid rgb(var(--color-border));
+  pointer-events: none;
+}
+
+.image-comparison__button span::before,
+.image-comparison__button span::after {
+  content: '';
+  position: absolute;
+  border: 0.6rem inset transparent;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__button span::before,
+.image-comparison[data-layout="horizontal"] .image-comparison__button span::after {
+  top: 50%;
+  margin-top: -0.6rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__button span::before,
+.image-comparison[data-layout="vertical"] .image-comparison__button span::after {
+  left: 50%;
+  margin-left: -0.6rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__button span::before {
+  border-left: 0.6rem solid rgb(var(--color-border));
+  left: 50%;
+  margin-left: 0.4rem;
+}
+.image-comparison[data-layout="horizontal"] .image-comparison__button span::after {
+  border-right: 0.6rem solid rgb(var(--color-border));
+  right: 50%;
+  margin-right: 0.4rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__button span::before {
+  border-top: 0.6rem solid rgb(var(--color-border));
+  top: 50%;
+  margin-top: 0.4rem;
+}
+.image-comparison[data-layout="vertical"] .image-comparison__button span::after {
+  border-bottom: 0.6rem solid rgb(var(--color-border));
+  bottom: 50%;
+  margin-bottom: 0.4rem;
+}
+
+.image-comparison__title {
+  position: absolute;
+  margin: 0;
+  min-width: unset;
+  pointer-events: none;
+  transition: opacity var(--duration-default) ease;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__before .image-comparison__title {
+  left: 2rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__after .image-comparison__title {
+  right: 2rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__item--start .image-comparison__title {
+  top: 2rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__item--end .image-comparison__title {
+  bottom: 2rem;
+}
+
+.image-comparison[data-layout="horizontal"] .image-comparison__item--center .image-comparison__title {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__before .image-comparison__title {
+  top: 2rem;
+}
+.image-comparison[data-layout="vertical"] .image-comparison__after .image-comparison__title {
+  bottom: 2rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__item--start .image-comparison__title {
+  left: 2rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__item--end .image-comparison__title {
+  right: 2rem;
+}
+
+.image-comparison[data-layout="vertical"] .image-comparison__item--center .image-comparison__title {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.image-comparison.scrolling .image-comparison__title {
+  opacity: 0;
+}

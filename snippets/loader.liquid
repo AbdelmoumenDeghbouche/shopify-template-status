@@ -1,0 +1,130 @@
+<style>
+               #preloader {
+                   position: fixed;
+                   top: 0;
+                   left: 0;
+                   width: 100%;
+                   height: 100%;
+                   background: {{settings.load_bg}};
+                   z-index: 9999;
+                   display: flex;
+                   align-items: center;
+                   justify-content: center;
+               }
+
+               #preloader img {
+                /*   width: 100px;  Adjust size as needed */
+                   width:{{settings.load_width}}px;
+                   height: {{settings.load_width | divided_by: settings.load_img.aspect_ratio}}px;
+                   max-width: 800px;
+                   animation: {{settings.load_animation_style}} 2s linear infinite; /* Add spinning animation */
+               }
+                  #preloader > span {
+                   font-size:{{ settings.load_font }}px;
+                   text-align:center;
+                   color: {{ settings.load_color }};
+                   animation: {{settings.load_animation_style}} 2s linear infinite; /* Add spinning animation */
+               }
+
+               @keyframes spin {
+                   0% {
+                       transform: rotate(0deg);
+                   }
+                   100% {
+                       transform: rotate(360deg);
+                   }
+               }
+
+
+          @keyframes bounce {
+              0%, 100% {
+                  transform: translateY(0);
+              }
+              50% {
+                  transform: translateY(-20px); /* Adjust height of bounce */
+              }
+          }
+          @keyframes fill {
+         0% {
+             width: 0px;
+         }
+         50% {
+             width: {{settings.load_width}}px;
+         }
+         100% {
+             width: 0px;
+         }
+     }
+           @keyframes pulse {
+         0% {
+             transform: scale(1);
+             opacity: 1;
+         }
+         50% {
+             transform: scale(1.2);
+             opacity: 0.7;
+         }
+         100% {
+             transform: scale(1);
+             opacity: 1;
+         }
+     }
+          @-webkit-keyframes rotate {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @-moz-keyframes rotate {
+    from {
+      -moz-transform: rotate(0deg);
+    }
+    to {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+          @keyframes fadeOut {
+              from {
+                  opacity: 1;
+              }
+              to {
+                  opacity: 0;
+              }
+          }
+</style>
+<div id="preloader">
+  {%- if settings.load_img != blank -%}
+    {%- assign loading_alt = settings.load_img_alt | default: shop.name | escape -%}
+    {%- assign load_height = settings.load_width | divided_by: settings.load_img.aspect_ratio -%}
+    {% capture sizes %}{{ settings.load_width }}px, 50vw{% endcapture %}
+    {% capture widths %}{{ settings.load_width }}, {{ settings.load_width | times: 1.5 | round }}, {{ settings.load_width | times: 2 }}{% endcapture %}
+    {{
+      settings.load_img
+      | image_url: width: 600
+      | image_tag:
+        widths: widths,
+        height: load_height,
+        width: settings.load_width,
+        alt: loading_alt,
+        sizes: sizes,
+        preload: true
+    }}
+  {%- elsif settings.load_img_alt != blank -%}
+    <span class="h2">{{ settings.load_img_alt }}</span>
+  {%- else -%}
+    <span class="h2">{{ shop.name }}</span>
+  {%- endif -%}
+</div>

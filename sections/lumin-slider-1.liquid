@@ -1,0 +1,500 @@
+{% liquid
+  # Lumin Slider
+  # © 2025 Lumintheme
+  # https://www.lumintheme.com
+%}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {% if section.settings.show_pagination %}{{ section.settings.padding_bottom | minus: 36 | times: 0.75 | round: 0 }}px;{% else %}{{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;{% endif %}
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% liquid
+  assign scroll_speed = section.settings.scroll_speed | append: '000'
+  assign slide_count = section.settings.slide_count
+  assign slide_count_mb = section.settings.slide_count_mb
+  assign slide_count_tb = section.settings.slide_count_tb
+  assign image-height = section.settings.slide_height | append: 'px' 
+  assign image-height_mb = section.settings.slide_height_mb | append: 'px' 
+%}
+
+<div class="gradient color-{{ section.settings.color_scheme }}">
+  <div class="lumin-slider page-width section-{{ section.id }}-padding">
+    <div class="swiper luminSliderSwiper">
+      <div class="swiper-wrapper" style=" transition-timing-function: linear;">
+        {% for block in section.blocks %}
+          {% if block.type == 'review_image' %}
+            <div
+              class="swiper-slide-lumin swiper-slide lumin-slider-image-{{ section.id }}"
+              style=" width: auto"
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.video != blank %}
+                {{
+                  block.settings.video
+                  | video_tag:
+                    image_size: '1100x',
+                    autoplay: false,
+                    loop: true,
+                    controls: false,
+                    muted: true,
+                    playsinline: true,
+                    class: 'lumin-slider-image'
+                }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  focusable="false"
+                  class="icon icon-play"
+                  fill="none"t
+                  viewBox="0 0 10 14"
+                  style="
+                        position: absolute;
+                        top: 50%;
+                        width: 100px;
+                        height: 55px;
+                        padding: 3rem 0.5rem;
+                        background: rgb(255 255 255 / 75%);
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 100px;
+                        zoom: 0.5;
+                        z-index: 2;
+                        cursor: pointer;
+                    }
+                  "
+                >
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M1.48177 0.814643C0.81532 0.448245 0 0.930414 0 1.69094V12.2081C0 12.991 0.858787 13.4702 1.52503 13.0592L10.5398 7.49813C11.1918 7.09588 11.1679 6.13985 10.4965 5.77075L1.48177 0.814643Z" fill={{ section.settings.button_color }}></path>
+                </svg>
+              {% elsif block.settings.review_image != blank %}
+                {% assign aspect_ratio = block.settings.review_image.aspect_ratio %}
+                {% assign height = 600 | divided_by: aspect_ratio %}
+
+                <img
+                  src="{{ block.settings.review_image | image_url: width: 600 }}"
+                  alt="{{ block.settings.review_image.alt | escape }}"
+                  class="lumin-slider-image"
+                  width="600"
+                  height="{{ height | round }}"
+                >
+              {% else %}
+                {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg, lumin-slider-image' }}
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if section.settings.show_navigation %}
+        {% unless section.settings.auto_play == 'smooth'%}
+          <div class="swiper-button-next slider-button--next lumin-slider-button-{{section.id}} ">
+            {% render 'icon-arro' %}
+          </div>
+          <div class="swiper-button-prev slider-button--prev lumin-slider-button-{{section.id}} ">
+            {% render 'icon-arro' %}
+          </div>
+          {% endunless %}
+        {% endif %}
+      {% if section.settings.show_pagination %}
+          <div class="swiper-pagination lumin-pagination"></div>
+       {% endif %} 
+    </div>
+  </div>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+      function initializeVideoControls() {
+          document.querySelectorAll(".swiper-slide-lumin video").forEach(video => {
+              let slide = video.closest(".swiper-slide-lumin");
+              let playButton = slide ? slide.querySelector(".icon-play") : null;
+
+              if (!playButton) return;
+
+              // Play video, unmute, and hide play button on click
+              playButton.addEventListener("click", function () {
+                  if (video.paused) {
+                      video.muted = false; // Unmute the video
+                      video.play();
+                      playButton.style.display = "none"; // Hide play button
+                  }
+              });
+
+              // Pause video on click and show play button again
+              video.addEventListener("click", function () {
+                  if (!video.paused) {
+                      video.pause();
+                      playButton.style.display = "block"; // Show play button
+                  }
+              });
+
+              // Show play button when video ends
+              video.addEventListener("ended", function () {
+                  playButton.style.display = "block";
+              });
+          });
+      }
+
+      // Run the function on page load
+      initializeVideoControls();
+
+      // Reload script when a section is edited in Shopify Theme Editor
+      document.addEventListener("shopify:section:load", initializeVideoControls);
+      document.addEventListener("shopify:section:unload", initializeVideoControls);
+  });
+</script>
+
+<style>
+     .lumin-slider-button-{{section.id}} {
+      color: {{section.settings.navigation_color}} !important;
+      top: {% if section.settings.show_pagination %}calc(50% - 18px) !important{% else %}50%{% endif %}; 
+  }
+
+    .luminSliderSwiper {
+      width: 100%;
+     /* margin-bottom: 25px;*/
+      margin-top: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  
+  .swiper-slide-lumin {
+      width: calc(100% / {{ slide_count_mb }});
+      margin-right: 20px;
+      height: auto;
+    }
+
+
+    .lumin-slider-image {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f6f6f6;
+     /* padding: 0 10px;*/
+    }
+    .lumin-slider-image-{{ section.id }} video, 
+    .lumin-slider-image-{{ section.id }} img, 
+    .lumin-slider-image-{{ section.id }} svg {
+      {% if section.settings.custom_height %}height: {{ image-height_mb }};{% else %}height:100%;{% endif %}
+    }
+   .luminSliderSwiper .swiper-wrapper {
+      transition-timing-function: linear !important;
+      will-change: transform;
+      margin-bottom: {% if section.settings.show_pagination %}36px !important{% else %} 0{% endif %};
+ 
+    }
+  .lumin-pagination .swiper-pagination-bullet {
+    background: rgb(var(--color-badge-foreground));
+  }
+  .lumin-pagination .swiper-pagination-bullet-active {
+    background: rgb(var(--color-badge-foreground));
+  }
+   @media screen and (min-width: 768px) {
+      .lumin-slider-image {
+        width: 100%;
+        }
+     .swiper-slide-lumin {
+      width: calc(100% / {{ slide_count }});
+    }
+    }
+    @media screen and (min-width: 768px) {
+      .lumin-slider-image-{{ section.id }} video, 
+      .lumin-slider-image-{{ section.id }} img, 
+      .lumin-slider-image-{{ section.id }} svg{
+        {% if section.settings.custom_height %}height: {{ image-height }};{% else %}height:100%;{% endif %}
+      }
+    }
+    }
+</style>
+
+{% schema %}
+{
+  "name": "Lumin Slider #1",
+  "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+  "settings": [
+     {
+        "type": "paragraph",
+        "content": "[Use this tutorial to setup](https://help.lumintheme.com/lumin-theme-documentation/lumin-slider)"
+      },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+    "type": "color_scheme",
+    "id": "color_scheme",
+    "label": "t:sections.all.colors.label",
+    "default": "background-1"
+  },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Play Button Color",
+      "default": "#212121"
+    },
+    {
+      "type": "color",
+      "id": "navigation_color",
+      "label": "Navgation Arrows",
+      "default": "#212121"
+    },
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+        "type": "paragraph",
+        "content": "⚠️ Save after edit to take effect"
+      },
+    {
+      "type": "select",
+      "id": "auto_play",
+      "label": "Auto-scroll",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "smooth", "label": "Smooth" },
+        { "value": "slide", "label": "Slide" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Navigation",
+      "info": "Not shown on auto scroll",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show Dot Pagination",
+      "default": true
+    },
+     {
+    "type": "range",
+    "id": "scroll_speed",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "label": "Scrolling Speed",
+    "default": 4
+  },
+      {
+    "type": "range",
+    "id": "slide_count",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "label": "Slide on desktop",
+    "default": 4
+  },
+      {
+    "type": "range",
+    "id": "slide_count_mb",
+    "min": 1,
+    "max": 3,
+    "step": 1,
+    "label": "Slide on mobile",
+    "default": 2
+  },
+       {
+    "type": "range",
+    "id": "slide_count_tb",
+    "min": 1,
+    "max": 5,
+    "step": 1,
+    "label": "Slide on tablets",
+    "default": 3
+  },
+    {
+      "type": "checkbox",
+      "id": "custom_height",
+      "label": "Custom Slide Height",
+      "default": true
+    },
+        {
+    "type": "range",
+    "id": "slide_height",
+    "min": 100,
+    "max": 800,
+    "step": 10,
+    "unit": "px",
+    "label": "Slide Height Desktop",
+    "default": 300
+  },
+          {
+    "type": "range",
+    "id": "slide_height_mb",
+    "min": 100,
+    "max": 800,
+    "step": 10,
+    "unit": "px",
+    "label": "Slide Height Mobile",
+    "default": 210
+  },
+    {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_bottom",
+    "default": 36
+  },
+    {
+      "type": "header",
+      "content": "Get Support",
+      "info": "Please see our [Documentation](https://help.lumintheme.com/lumin-theme-documentation) or get [help](https://lumintheme.com/pages/contact) from our support team."
+    },
+    {
+      "type": "header",
+      "content": "Shopify Themes",
+      "info": "Want to WOW your customers?! Check out our [Shopify Themes](https://lumintheme.com/)."
+    },
+    {
+      "type": "paragraph",
+      "content": "© 2025 lumintheme.com"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review_image",
+      "name": "Media",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "review_image",
+          "label": "Review Screenshot"
+        },
+         {
+          "type": "video",
+          "id": "video",
+          "label": "Video from Shopify"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lumin Slider #1",
+      "blocks": [
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        },
+        {
+          "type": "review_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function initSwiper() {
+      var reviewSlides = document.querySelectorAll('.swiper-slide-lumin');
+      var swiperWrapper = document.querySelector('.swiper-wrapper');
+
+      if (reviewSlides.length < 6 && swiperWrapper) {
+        reviewSlides.forEach(function(slide) {
+          swiperWrapper.appendChild(slide.cloneNode(true));
+          swiperWrapper.appendChild(slide.cloneNode(true));
+        });
+      }
+
+      if (window.luminSliderSwiper) {
+        window.luminSliderSwiper.destroy(true, true); // Destroy previous instance before reinitializing
+      }
+
+      window.luminSliderSwiper = new Swiper(".luminSliderSwiper", {
+        {% if section.settings.auto_play == 'smooth' %}
+        speed: {{scroll_speed}},
+        autoplay: {delay: 0,
+                  disableOnInteraction: true,
+                  pauseOnMouseEnter: true,
+                  },
+        {% elsif section.settings.auto_play == 'slide' %}
+        autoplay: {delay: {{scroll_speed}},
+                  disableOnInteraction: true,
+                  pauseOnMouseEnter: true,
+                  },
+        {% endif %}
+         breakpoints: {
+        340: {
+          slidesPerView: {{ slide_count_mb }},
+          spaceBetween: 15,
+        },
+        750: {
+          slidesPerView: {{slide_count_tb}},
+          spaceBetween: 20,
+        },
+            1024: {
+          slidesPerView: {{ slide_count }},
+          spaceBetween: 20,
+        },
+      },
+        direction: 'horizontal',
+        loop: true,
+        freeMode: true,
+        spaceBetween: 10,
+        allowTouchMove: true,
+        grabCursor: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+        el: ".swiper-pagination",
+      },
+      });
+    }
+
+    initSwiper(); // Initialize on page load
+
+
+   if (Shopify.designMode) {
+  document.addEventListener('shopify:section:load', function(event) {
+    initSwiper();
+  });
+
+  document.addEventListener('shopify:section:unload', function(event) {
+    if (window.luminSliderSwiper) {
+      window.luminSliderSwiper.destroy(true, true);
+    }
+  });
+}
+  });
+</script>

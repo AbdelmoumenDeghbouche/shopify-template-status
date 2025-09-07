@@ -1,0 +1,72 @@
+<script>
+    let c1 = document.getElementById('c1');
+    let t1 = document.getElementById('t1');
+    document.forms.form01.range.addEventListener('change', e => {
+    let value = parseInt(e.target.value);
+    c1.style.strokeDasharray = `${value} 100`;
+    t1.textContent = `${value}%`;
+    });
+</script>
+<style>
+    .qa-feature-{{ block.id }} circle#c1 {
+      stroke-width: {{block.settings.circle_width}};
+      stroke: {{block.settings.percent_bg}};
+      fill: none;
+      stroke-dasharray: 96 100;
+    }
+  .qa-feature-{{ block.id }} text#t1 {
+      dominant-baseline: middle;
+      text-anchor: middle;
+      font-size: {{block.settings.percent_text}}px;
+      letter-spacing: 0;
+      fill:currentColor;
+    }
+  .qa-feature-{{ block.id }} {
+      display: flex;
+      align-items: center;
+  }
+  .qa-feature-{{ block.id }} h4 {
+        font-size: {{block.settings.heading_size_alt}}px;
+        margin: 0px;
+    }
+  .qa-feature-{{ block.id }} p {
+        margin: 0px;
+    }
+  .qa-feature-{{ block.id }} img {
+        width: {{block.settings.icon_size}}px !important;
+        height: auto;
+        margin-right: 20px;
+    }
+            .qa-feature-{{ block.id }} svg {
+        width: {{block.settings.icon_size}}px !important;
+        height: auto;
+        margin-right: 20px;
+    }
+</style>
+<div class="qa-feature-{{ block.id }}" {{ block.shopify_attributes }}>
+  <form name="form01">
+    <input name="range" type="range" value="{{ block.settings.circle_value_1 }}" min="0" max="100" class="hidden">
+  </form>
+  <svg width="200" xmlns="http//www.w3.org/2000/svg" viewBox="0 0 50 50">
+    <circle id="c1" cx="25" cy="25" r="20" transform="rotate(-90 25 25)" pathLength="100" style="stroke-dasharray: {{ block.settings.circle_value_1 }} 100;"/></circle>
+    <text id="t1" x="25" y="25">{{ block.settings.circle_value_1 }}%</text>
+  </svg>
+  <div style="width: calc(100% - {{block.settings.icon_size}}px + 20px);">
+    <h4>
+      {{
+        block.settings.heading
+        | replace: '[', '<span class="lumin-text__fancy1">'
+        | replace: ']', '</span>'
+        | replace: '((', '<span class="lumin-text__fancy2">'
+        | replace: '))', '</span>'
+      }}
+    </h4>
+    {{
+      block.settings.text
+      | replace: '[', '<span class="lumin-text__fancy1">'
+      | replace: ']', '</span>'
+      | replace: '((', '<span class="lumin-text__fancy2">'
+      | replace: '))', '</span>'
+    }}
+  </div>
+</div>

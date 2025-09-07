@@ -1,0 +1,481 @@
+{%- assign product = section.settings.product -%}
+{% assign product_form_id = 'product-form-' | append: section.id %}
+{% assign base_price = product.selected_or_first_available_variant.price %}
+<div class="tiered-quantity-selector" {{ block.shopify_attributes }}>
+  <style>
+           .tiered-quantity-options {
+             --columns_row: {{ block.settings.columns_block }}%;
+             --selected-bg-color: {{ block.settings.selected_button_bg_color }};
+             --selected-dot-color: {{ block.settings.selected_button_dot_color }};
+             --savings-text-color: {{ block.settings.savings_text_color }};
+             --savings-bg-color: {{ block.settings.savings_bg_color }};
+             --border-radius: {{ block.settings.border_radius }}rem;
+             --option-bottom-spacing: {{ block.settings.option_bottom_spacing }}rem;
+             --option-height-spacing: {{ block.settings.option_height_spacing }}rem;
+             --compare-price-font-size: {{ block.settings.compare_price_font_size }}rem;
+             --final-price-font-size: {{ block.settings.final_price_font_size }}rem;
+             --per-unit-font-size: {{ block.settings.per_unit_font_size }}rem;
+             --label-font-size: {{ block.settings.label_font_size }}rem;
+             --text-color-unselected: {{ block.settings.text_color_unselected }};
+             --back-color-unselected: {{ block.settings.back_color_unselected }};
+             --border-color-unselected: {{ block.settings.border_color_unselected }};
+             --border-color-hover-unselected: {{ block.settings.border-color-hover-unselected }};
+             --border-color-selected: {{ block.settings.selected_button_border_color }};
+             --buttons_border_thickness: {{ block.settings.buttons_border_thickness }}rem;
+             --text-color-selected: {{ block.settings.text_color_selected }};
+             --savings-label-font-size: {{ block.settings.savings_label_font_size }}rem;
+
+             --badge-bg-color: {{ block.settings.badge_bg_color }};
+             --badge-gradient: {{ block.settings.badge_background_gradient }};
+             --badge-font-size: {{ block.settings.badge_font_size }}rem;
+             --badge-font-color: {{ block.settings.badge_font_color }};
+
+             --title-color: {{ block.settings.title_color }};
+             --title-font-size: {{ block.settings.title_font_size }}rem;
+             --title_line_color: {{ block.settings.title_line_color }};
+             --compare-font-color: {{ block.settings.compare_font_color }};
+             --promo-text: {{ block.settings.promo_font_color }};
+             --promo-background: {{ block.settings.promo_bg_color }};
+             --promo-border: {{ block.settings.promo_border_color }};
+             --bottom-image-width: {{ block.settings.bottom_image_size }}px;
+             --bottom-font-size: {{ block.settings.bottom_font_size }}px;
+             --option-height: {{block.settings.option_height}};
+             --option-image-size: {{block.settings.option_image_size}}px;
+           }
+         .tiered-option-title {
+             --title-color: {{ block.settings.title_color }};
+             --title-font-size: {{ block.settings.title_font_size }}rem;
+             --sub-title-color: {{ block.settings.subtitle_color }};
+             --sub-title-font-size: {{ block.settings.subtitle_font_size }}rem;
+             --title-line-color: {{ block.settings.title_line_color }};
+             --title-text-align: {{ block.settings.title_text_align }};
+             --buttons_border_thickness: {{ block.settings.buttons_border_thickness }}rem;
+             --border-color-unselected: {{ block.settings.border_color_unselected }};
+             --border-radius: {{ block.settings.border_radius }}rem;
+             --title-background: {{ block.settings.title_bg_color }};
+           }
+         {% if block.settings.hide_checkbox %}
+           .tiered-option:before {
+           display: none;
+           }
+         {% endif %}
+         {% if block.settings.hide_checkbox and block.settings.quantity_style == 'vertical' %}
+             .tiered-option {
+               {% if block.settings.badge_style == 'ribbon top-short' %}
+           padding-top: 2em !important;
+               {% else %}
+           padding-top: 1em !important;
+               {% endif %}
+           }
+           {% elsif block.settings.hide_checkbox == false and block.settings.quantity_style == 'vertical' %}
+             .tiered-option {
+               {% if block.settings.badge_style == 'ribbon top-short' %}
+           padding-top: 3.3em !important;
+               {% else %}
+           padding-top: 2.7em !important;
+               {% endif %}
+           }
+           .tiered-option:before {
+             {% if block.settings.badge_style == 'ribbon top-short' %}
+             top: 32px !important;
+              {% else %}
+              top: 24px !important;
+             {% endif %}
+          }
+         {% endif %}
+       {% if block.settings.hide_checkbox and block.settings.quantity_style != 'vertical' %}
+             .tiered-option {
+           padding-left: 2em !important;
+           }
+         {% endif %}
+
+          {% if block.settings.show_head_border and block.settings.quantity_style == 'horizontal-nogap' %}
+           .tiered-option-wrapper-span {
+             padding: 10px;
+             background: var(--title-background);
+             border: var(--buttons_border_thickness) solid var(--border-color-unselected);
+             border-top-left-radius: var(--border-radius);
+             border-top-right-radius: var(--border-radius);
+             margin-bottom: calc(-1 * var(--buttons_border_thickness));
+             justify-content: center;
+         }
+
+           .tiered-quantity-options {
+             margin-top: 0 !important;
+           }
+         {% endif %}
+
+             .tiered-image-vertical {
+             max-width: 80%;
+             width: var(--option-image-size);
+             margin: auto;
+         }
+         .tiered-image-horizontal {
+             width: var(--option-image-size);
+             min-width: var(--option-image-size);
+             margin-right: 10px;
+             height: auto;
+          }
+             .tiered-image img {
+             width:100%;
+             height: auto;
+         }
+       .tiered-option__discount-area-bottom {
+           display: flex;
+           align-items: center;
+           background: var(--promo-background);
+           color: var(--promo-text);
+           width: 100%;
+           border: var(--buttons_border_thickness) solid var(--promo-border);
+           border-top: 0;
+           margin-top: 0;
+         {% if block.settings.quantity_style == 'horizontal' %}
+           border-bottom-left-radius: var(--border-radius);
+           border-bottom-right-radius: var(--border-radius);
+           padding: 0.5rem 2rem 0.4rem;
+         {% elsif block.settings.quantity_style == 'horizontal-nogap' %}
+           border-bottom-left-radius: 0;
+           border-bottom-right-radius: 0;
+           padding: 0.5rem 2rem 0.4rem;
+           margin-bottom: calc(-1 * var(--buttons_border_thickness));
+         {% elsif block.settings.quantity_style == 'vertical' %}
+           padding: 0.8rem;
+           border-bottom-left-radius: var(--border-radius);
+           border-bottom-right-radius: var(--border-radius);
+           flex-direction: column;
+         {% endif %}
+
+       }
+     .tiered-option-bottom {
+       border-bottom: none !important;
+       border-bottom-left-radius: 0 !important;
+       border-bottom-right-radius: 0 !important;
+    }
+       .promo-text {
+         font-size: var(--bottom-font-size);
+         line-height:1.1;
+       }
+  </style>
+
+  {% if block.settings.quantity_style == 'horizontal' %}
+    {{ 'tiered-quantity-horizontal.css' | asset_url | stylesheet_tag }}
+  {% elsif block.settings.quantity_style == 'horizontal-nogap' %}
+    {{ 'tiered-quantity-no-gap.css' | asset_url | stylesheet_tag }}
+  {% else %}
+    {{ 'tiered-quantity.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+  <!-- Hidden quantity input -->
+  <input type="hidden" name="quantity" id="Quantity-{{ section.id }}" value="1" form="{{ product_form_id }}">
+
+  {% assign show_zero_percent_savings = block.settings.show_zero_percent_savings %}
+  {% assign show_savings_labels = block.settings.show_savings_labels %}
+  {% assign show_strikethrough = block.settings.show_strikethrough %}
+  {% assign show_strikethrough_price = block.settings.show_strikethrough_price %}
+  {% assign show_per_unit = block.settings.show_per_unit %}
+  {% assign show_total_pricing = block.settings.show_total_pricing %}
+
+  {% assign show_quantity_label = block.settings.show_quantity_label %}
+  {% assign quantity_label_text = block.settings.quantity_title_text %}
+
+  {% if show_quantity_label %}
+    {% if block.settings.quantity_style == 'horizontal-nogap' and block.settings.show_head_border %}
+      <style>
+         .tiered-option-wrapper:first-of-type .tiered-option {
+             border-top-left-radius: 0;
+             border-top-right-radius: 0;
+        }
+      </style>
+    {% endif %}
+    <div class="tiered-option-title tiered-option-wrapper-title tiered-option-wrapper-span">
+      {% unless block.settings.hide_lines %}<span></span>{% endunless %}
+      <div class="tiered-texts">
+        <div class="tiered-heading">
+          {{
+            quantity_label_text
+            | replace: '[', '<span class="lumin-text__fancy1">'
+            | replace: ']', '</span>'
+            | replace: '((', '<span class="lumin-text__fancy2">'
+            | replace: '))', '</span>'
+          }}
+        </div>
+        <div class="tiered-sub-heading">{{ block.settings.quantity_subtitle_text }}</div>
+      </div>
+      {% unless block.settings.hide_lines %}<span></span>{% endunless %}
+    </div>
+  {% endif %}
+
+  <div class="tiered-quantity-options" data-quantity-input-id="Quantity-{{ section.id }}">
+    {% assign option_numbers = '1,2,3,4,5,6' | split: ',' %}
+    {% for i in option_numbers %}
+      {% assign label_key = 'option_' | append: i | append: '_label' %}
+      {% assign show_image_key = 'option_' | append: i | append: '_show_image' %}
+      {% assign image_key = 'option_' | append: i | append: '_image' %}
+      {% assign per_unit_key = 'option_' | append: i | append: '_unit_label' %}
+      {% assign quantity_key = 'option_' | append: i | append: '_quantity' %}
+      {% assign discount_pct_key = 'option_' | append: i | append: '_discount_percentage' %}
+      {% assign badge_enable_key = 'option_' | append: i | append: '_badge_enable' %}
+      {% assign badge_text_key = 'option_' | append: i | append: '_badge_text' %}
+      {% assign save_text_key = 'option_' | append: i | append: '_save_text' %}
+      {% assign promo_key = 'option_' | append: i | append: '_promo' %}
+      {% assign bottom_image_key = 'option_' | append: i | append: '_bottom_image' %}
+
+      {% assign label = block.settings[label_key] %}
+      {% assign show_image = block.settings[show_image_key] %}
+      {% assign image_custom = block.settings[image_key] %}
+      {% assign per_unit_label = block.settings[per_unit_key] %}
+      {% assign quantity = block.settings[quantity_key] | plus: 0 %}
+      {% assign discount_pct = block.settings[discount_pct_key] | plus: 0 | append: '%' %}
+      {% assign discount_number = block.settings[discount_pct_key] | plus: 0 %}
+      {% assign badge_enable = block.settings[badge_enable_key] %}
+      {% assign badge_text = block.settings[badge_text_key] %}
+      {% assign save_text = block.settings[save_text_key] %}
+      {% assign promo = block.settings[promo_key] %}
+      {% assign bottom_image = block.settings[bottom_image_key] %}
+
+      {% if label != blank and quantity > 0 %}
+        {% assign compare_total_cents = quantity | times: product.selected_or_first_available_variant.price %}
+        {% assign compare_total_cents_2 = quantity
+          | times: product.selected_or_first_available_variant.compare_at_price
+        %}
+
+        {% comment %}
+          Use fixed price discount if enabled; otherwise, use percentage discount.
+        {% endcomment %}
+        {% if block.settings.discount_type == 'price' %}
+          {% assign fixed_discount_key = 'option_' | append: i | append: '_fixed_discount' %}
+          {% assign fixed_discount = block.settings[fixed_discount_key] | plus: 0 | times: 100 %}
+          {% comment %}
+            Subtract the fixed discount (which is assumed to be in cents) from the total price.
+            (Ensure your fixed discount value is entered in cents in the theme editor.)
+          {% endcomment %}
+          {% assign final_price_cents = compare_total_cents | minus: fixed_discount %}
+          {% assign per_unit_cents = final_price_cents | divided_by: quantity %}
+          {% assign discount_display = fixed_discount | money %}
+        {% else %}
+          {% assign discount_number = block.settings[discount_pct_key] | plus: 0 %}
+          {% assign discount_multiplier = 100 | minus: discount_number %}
+          {% assign final_price_cents = compare_total_cents | times: discount_multiplier | divided_by: 100 %}
+          {% assign per_unit_cents = final_price_cents | divided_by: quantity %}
+          {% assign discount_display = discount_number | append: '%' %}
+        {% endif %}
+
+        {% capture compare_price_formatted_2 %}{{ compare_total_cents_2 | money }}{% endcapture %}
+        {% capture compare_price_formatted %}{{ compare_total_cents | money }}{% endcapture %}
+        {% capture final_price_formatted %}{{ final_price_cents | money }}{% endcapture %}
+        {% capture per_unit_price_formatted %}{{ per_unit_cents | money }}{% endcapture %}
+
+        {% comment %}
+
+          {% assign compare_total_cents = quantity | times: product.selected_or_first_available_variant.price %}
+          {% assign compare_total_cents_2 = quantity | times: product.selected_or_first_available_variant.compare_at_price %}
+          {% assign discount_multiplier = 100 | minus: discount_number %}
+          {% assign final_price_cents = compare_total_cents | times: discount_multiplier | divided_by: 100 %}
+          {% assign per_unit_cents = final_price_cents | divided_by: quantity %}
+
+           {% capture compare_price_formatted_2 %}{{ compare_total_cents_2 | money }}{% endcapture %}
+          {% capture compare_price_formatted %}{{ compare_total_cents | money }}{% endcapture %}
+          {% capture final_price_formatted %}{{ final_price_cents | money }}{% endcapture %}
+          {% capture per_unit_price_formatted %}{{ per_unit_cents | money }}{% endcapture %}
+        {% endcomment %}
+
+        {% if block.settings.discount_type == 'price' %}
+          {% assign show_compare = false %}
+          {% unless fixed_discount == 0 %}
+            {% if show_strikethrough_price == 'calculated' and show_strikethrough != false %}
+              {% assign show_compare = true %}
+            {% endif %}
+          {% endunless %}
+        {% else %}
+          {% assign show_compare = false %}
+          {% unless discount_number == 0 %}
+            {% if show_strikethrough_price == 'calculated' and show_strikethrough != false %}
+              {% assign show_compare = true %}
+            {% endif %}
+          {% endunless %}
+        {% endif %}
+
+        {% assign show_compare_original = false %}
+        {% if show_strikethrough_price == 'original' and show_strikethrough != false %}
+          {% assign show_compare_original = true %}
+        {% endif %}
+
+        {% assign show_promo = false %}
+        {% if promo != blank %}
+          {% assign show_promo = true %}
+        {% endif %}
+
+        {% assign show_foto = false %}
+        {% if show_image %}
+          {% if image_custom == null %}
+            {% assign show_foto = true %}
+            {% assign image = product.selected_or_first_available_variant.image | default: product.featured_image %}
+          {% elsif image_custom != null %}
+            {% assign show_foto = true %}
+            {% assign image = image_custom %}
+          {% endif %}
+        {% endif %}
+
+        {% assign show_foto_bottom = false %}
+        {% if bottom_image != null %}
+          {% assign show_foto_bottom = true %}
+          {% assign image-bottom = bottom_image %}
+        {% endif %}
+
+        {% comment %}
+          {% assign show_discount = false %}
+          {% if show_savings_labels %}
+            {% if discount_pct > 0 %}
+              {% assign show_discount = true %}
+            {% elsif discount_pct == 0 and show_zero_percent_savings %}
+              {% assign show_discount = true %}
+            {% endif %}
+          {% endif %}
+        {% endcomment %}
+
+        <div class="tiered-option-wrapper">
+          {% if badge_enable and block.settings.quantity_style == 'vertical' %}
+            <style>
+              .tiered-quantity-options {
+                margin-top: 2rem;
+              }
+            </style>
+            <div class="{{ block.settings.badge_style }}">{{ badge_text }}</div>
+          {% elsif badge_enable and block.settings.quantity_style != 'vertical' %}
+            <div class="{{ block.settings.badge_style }}">{{ badge_text }}</div>
+          {% endif %}
+          <button
+            type="button"
+            class="tiered-option{% if show_promo %} tiered-option-bottom{% endif %}{% if forloop.index == block.settings.preselected %} tiered-option--active{% endif %}"
+            data-quantity="{{ quantity }}"
+          >
+            <div class="tiered-option__content{% if block.settings.quantity_style != 'vertical' %} tiered-option__horizontal{% endif %}">
+              {% if show_foto %}
+                <div class="tiered-image{% if block.settings.quantity_style != 'vertical' %} tiered-image-horizontal{% else %} tiered-image-vertical{% endif %}">
+                  <img
+                    src="{{ image.src | image_url }}"
+                    alt="Selected Variant Image"
+                    width="{{ image.width }}"
+                    height="{{ image.width | divided_by: image.aspect_ratio | round }}"
+                    loading="lazy"
+                  >
+                </div>
+              {% endif %}
+              <div class="tiered-option-flex-content">
+                <div class="tiered-option-flex">
+                  <div style="display: flex;align-items: center;gap: 0.3rem 1rem;flex-wrap: wrap;">
+                    <span class="tiered-option__label">{{ label }}</span>
+                    {% if block.settings.quantity_style != 'vertical' and save_text != blank %}
+                      <div class="tiered-option__discount-area">
+                        {{ save_text | replace: '(%)', discount_display | replace: '($)', per_unit_price_formatted }}
+                      </div>
+                    {% endif %}
+                  </div>
+                  {% if show_per_unit and block.settings.quantity_style != 'vertical' %}
+                    <div class="tiered-option__per-unit">
+                      {{ per_unit_label | replace: '(%)', discount_pct | replace: '($)', per_unit_price_formatted }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="tiered-option__prices">
+                  {% if show_compare %}
+                    <span class="tiered-option__compare-price">{{ compare_price_formatted }}</span>
+                  {% endif %}
+                  {% if product.selected_or_first_available_variant.price
+                      < product.selected_or_first_available_variant.compare_at_price
+                    and show_compare_original
+                  %}
+                    <span class="tiered-option__compare-price">{{ compare_price_formatted_2 }}</span>
+                  {% endif %}
+                  {% if show_total_pricing %}
+                    <span class="tiered-option__final-price">{{ final_price_formatted }}</span>
+                  {% endif %}
+                  {% if show_per_unit and block.settings.quantity_style == 'vertical' %}
+                    <div class="tiered-option__per-unit">
+                      <div class="tiered-option__per-unit">
+                        {{ per_unit_label | replace: '(%)', discount_pct | replace: '($)', per_unit_price_formatted }}
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% if block.settings.quantity_style == 'vertical' and save_text != blank %}
+              <div class="tiered-option__discount-area">
+                {{ save_text | replace: '(%)', discount_display | replace: '($)', per_unit_price_formatted }}
+              </div>
+            {% endif %}
+          </button>
+          {% if show_promo %}
+            <div class="tiered-option__discount-area-bottom">
+              {% if show_foto_bottom %}
+                <img
+                  src="{{ image-bottom.src | image_url }}"
+                  alt="Selected Variant Image"
+                  width="{{ image-bottom.width }}"
+                  height="{{ image-bottom.width | divided_by: image-bottom.aspect_ratio | round }}"
+                  loading="lazy"
+                >
+              {% endif %}
+              <span class="promo-text">
+                {{- promo | replace: '(%)', discount_pct | replace: '($)', per_unit_price_formatted -}}
+              </span>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    function initializeTieredOptions() {
+      var container = document.querySelector('.tiered-quantity-options[data-quantity-input-id="Quantity-{{ section.id }}"]');
+      if (!container) return;
+      var quantityInput = document.getElementById(container.dataset.quantityInputId);
+      var buttons = container.querySelectorAll('.tiered-option');
+
+      // Get the active option from block settings
+      var activeOptionIndex = parseInt('{{ block.settings.preselected }}', 10) - 1; // Convert to zero-based index
+      if (!isNaN(activeOptionIndex) && activeOptionIndex >= 0 && activeOptionIndex < buttons.length) {
+        var activeButton = buttons[activeOptionIndex];
+        activeButton.classList.add('tiered-option--active');
+        activeButton.style.background = getComputedStyle(activeButton).getPropertyValue('--selected-bg-color') || '#000';
+        activeButton.style.color = 'var(--text-color-selected)';
+        var qty = parseInt(activeButton.getAttribute('data-quantity'), 10);
+        if (quantityInput && !isNaN(qty)) {
+          quantityInput.value = qty;
+          quantityInput.dispatchEvent(new Event('change'));
+        }
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(b => {
+            b.classList.remove('tiered-option--active');
+            b.style.background = 'var(--back-color-unselected)';
+            b.style.color = 'var(--text-color-unselected)';
+          });
+          this.classList.add('tiered-option--active');
+          this.style.background = getComputedStyle(this).getPropertyValue('--selected-bg-color') || '#000';
+          this.style.color = 'var(--text-color-selected)';
+          var qty = parseInt(this.getAttribute('data-quantity'), 10);
+          if (quantityInput && !isNaN(qty)) {
+            quantityInput.value = qty;
+            quantityInput.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+    }
+
+    // Initialize options on load
+    initializeTieredOptions();
+
+    // Listen for theme editor events to reload the script
+    document.addEventListener('shopify:section:load', initializeTieredOptions);
+    document.addEventListener('shopify:section:unload', function () {
+      var container = document.querySelector('.tiered-quantity-options[data-quantity-input-id="Quantity-{{ section.id }}"]');
+      if (container) container.innerHTML = ''; // Clear to ensure reinitialization
+    });
+  });
+</script>

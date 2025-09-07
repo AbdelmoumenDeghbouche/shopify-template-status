@@ -1,0 +1,36 @@
+{% comment %}
+  Renders card_product variant-picker
+
+  Accepts:
+  - card_product: {Object} card_product object.
+  - block: {Object} passing the block information.
+  - card_product_form_id: {String} Id of the card_product form to which the variant picker is associated.
+  - update_url: {Boolean} whether or not to update url when changing variants. If false, the url isn't updated. Default: true (optional).
+  Usage:
+  {% render 'card_product-variant-picker', card_product: card_product, block: block, card_product_form_id: card_product_form_id %}
+{% endcomment %}
+{%- unless card_product.has_only_default_variant -%}
+    <variant-radios
+      id="variant-radios-{{ section.id }}"
+      class="no-js-hidden"
+      data-section="{{ section.id }}"
+      data-url="{{ card_product.url }}"
+      {% if update_url == false %}
+        data-update-url="false"
+      {% endif %}
+      {{ block.shopify_attributes }}
+    >
+      {%- for option in card_product.options_with_values -%}
+        <fieldset class="js card_product-form__input">
+          <span class="pdkt-fetr{% if section.settings.desktop_content_alignment == 'center' %} pdkt-fetr-center{% elsif section.settings.desktop_content_alignment == 'right' %} pdkt-fetr-right{% endif %}">
+        {{ option.name }}: <legend class="form__label" id="form__label" style="margin:0;"> 
+        {% assign current_variant = card_product.selected_or_first_available_variant %} {{ current_variant.title }}</legend></span>
+          {% render 'card-variant-option-swatches', card_product: card_card_product, option: option, block: block %}
+        </fieldset>
+      {%- endfor -%}
+      <script type="application/json">
+        {{ card_product.variants | json }}
+      </script>
+    </variant-radios>
+{%- endunless -%}
+

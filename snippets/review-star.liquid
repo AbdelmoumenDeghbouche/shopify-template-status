@@ -1,0 +1,69 @@
+<div
+  class="top-lm-stars"
+  style="--top-rating: {{ section.settings.rating_range }};"
+  aria-label="Rating of this product is 2.3 out of 5."
+></div>
+<style>
+  .star-rating .star {
+    width: 24px;
+    height: 24px;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+</style>
+
+<!-- Star Rating Snippet with SVGs Based on User Input -->
+<div class="star-rating zoom-top">
+  {% assign rating = section.settings.rating_range %}
+  <!-- Replace with dynamic input -->
+  {% assign max_stars = 5 %}
+  {% assign full_stars = rating | floor %}
+  {% assign half_star = rating | minus: full_stars | times: 2 | round %}
+  {% assign remaining_stars = max_stars | minus: full_stars | minus: half_star %}
+
+  <!-- Fetch user-defined colors from theme settings -->
+  {% assign full_star_color = section.settings.feature_svg_color %}
+  {% assign half_star_color = section.settings.feature_svg_color %}
+  {% assign empty_star_color = section.settings.inactive_star_color %}
+
+  <!-- Loop to show full stars -->
+  {% for i in (1..full_stars) %}
+    <svg
+      class="star full"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="{{ full_star_color }}"
+    >
+      <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+    </svg>
+  {% endfor %}
+
+  <!-- Show half star if needed -->
+  {% if half_star == 1 %}
+    <svg class="star half" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <defs>
+        <linearGradient id="halfStarGradientTop">
+          <stop offset="50%" stop-color="{{ half_star_color }}"/>
+          <stop offset="50%" stop-color="{{ empty_star_color }}"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#halfStarGradientTop)" d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+    </svg>
+  {% endif %}
+
+  <!-- Loop to show empty stars -->
+  {% for i in (1..remaining_stars) %}
+    <svg
+      class="star empty"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="{{ empty_star_color }}"
+    >
+      <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+    </svg>
+  {% endfor %}
+</div>

@@ -1,0 +1,18 @@
+<div class="lm-stars-min" style="--rating: 5;" aria-label="Rating of this product is 2.3 out of 5."></div>
+<style>
+  
+   .lm-stars-min {
+     --percent: calc(var(--rating) / 5 * 100%);
+     display: inline-block !important;
+     font-size: 20px;
+     line-height: 1;
+     zoom: var(--star-size-min);
+   }
+   .lm-stars-min::before {
+     content: "★★★★★";
+     letter-spacing: 3px;
+     background: linear-gradient(90deg, var(--star-min-background) var(--percent), var(--star-color) var(--percent));
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+   }
+</style>

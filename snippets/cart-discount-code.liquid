@@ -1,0 +1,255 @@
+<style>
+  .cart-sidebar-discount {
+    display: flex;
+    flex-direction: column;
+    width:300px;
+    margin: 20px auto;
+  }
+  .cart-sidebar-discount input {
+    margin-top:20px;
+    background: #eee;
+    border: 1px solid #eee;
+    height:50px;
+    outline: none;
+    font-size: 18px;
+    letter-spacing: .75px;
+    text-align: center;
+  }
+  #apply-discount-btn {
+    background-color: #000;
+    color:#fff;
+    border: 0;
+    height: 60px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .75px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+  span.applied-discount-code-value>small {
+    background: #eee;
+    padding: 0px 10px;
+    color: #000;
+    font-weight: bold;
+    border-radius: 20px;
+  }
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin .5s linear infinite;
+  }
+  #discount-code-error {
+    background: #ff00004f;
+    color: #e22120;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .applied-discount-code-wrapper {
+    display: none;
+    background: #ddd;
+    padding: 3px 6px;
+    border-radius: 25px;
+  }
+  .applied-discount-code-value {
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+  
+  #discount-code-error:empty {
+    display: none;
+  }
+  .applied-discount-code-value:empty+button {
+    display: none;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<div class="cart-sidebar-discount">
+  <span id="applied-discount-code">
+    Discount Code:
+    <span class="applied-discount-code-wrapper">
+      <span class="applied-discount-code-value"></span>
+      <button id="clear-discount-btn">X</button>
+    </span>
+  </span>
+  <small id="discount-code-error"></small>
+  <input type="text" id="discount-code-input" autocomplete="on" value="">
+  <button id="apply-discount-btn">APPLY</button>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+  let clearBtn = document.querySelector("#clear-discount-btn");
+  let applyBtn = document.querySelector("#apply-discount-btn");
+  let discountCodeError = document.querySelector("#discount-code-error");
+  let discountCodeWrapper = document.querySelector("#applied-discount-code .applied-discount-code-wrapper");
+  let discountCodeValue = document.querySelector("#applied-discount-code .applied-discount-code-value");
+  let discountCodeInput = document.querySelector("#discount-code-input");
+  let totalCartSelector = document.querySelector(".totals .money"); // Total Cart Selector to update the total amount.
+  let authorization_token;
+
+  let checkoutContainer = document.createElement('div');
+  document.body.appendChild(checkoutContainer);
+
+  // Apply discount if it exists in localStorage
+  if (localStorage.discountCode) {
+    applyDiscount(JSON.parse(localStorage.discountCode).code);
+  }
+
+  if (applyBtn) {
+    applyBtn.addEventListener("click", function(e) {
+     // e.preventDefault();
+      applyDiscount(discountCodeInput.value);
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", function(e) {
+     // e.preventDefault();
+      clearDiscount();
+    });
+  }
+
+  function clearDiscount() {
+    discountCodeValue.innerHTML = "";
+    discountCodeError.innerHTML = "";
+    clearLocalStorage();
+
+    fetch("/checkout?discount=%20", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        discount_code: ""
+      })
+    }).then(response => {
+      if (response.ok) {
+        console.log("Discount cleared successfully.");
+        updateCart();
+      } else {
+        console.error("Failed to clear discount.");
+      }
+    }).catch(error => {
+      console.error("Error clearing discount:", error);
+    });
+  }
+
+  function clearLocalStorage() {
+    if (discountCodeWrapper) discountCodeWrapper.style.display = "none";
+    if (localStorage.discountCode && totalCartSelector) {
+      totalCartSelector.innerHTML = JSON.parse(localStorage.discountCode).totalCart;
+    }
+    localStorage.removeItem("discountCode");
+  }
+
+  function applyDiscount(code) {
+    if (applyBtn) {
+      applyBtn.innerHTML = "APPLYING <div class='loader'></div>";
+      applyBtn.style.pointerEvents = "none";
+    }
+
+    fetch("/payments/config", { method: "GET" })
+      .then(response => response.json())
+      .then(data => {
+        const checkout_json_url = '/wallets/checkouts/';
+        authorization_token = btoa(data.paymentInstruments.accessToken);
+
+        fetch('/cart.js')
+          .then(res => res.json())
+          .then(cartData => {
+            let body = {
+              "checkout": {
+                "country": Shopify.country,
+                "discount_code": code,
+                "line_items": cartData.items,
+                'presentment_currency': Shopify.currency.active
+              }
+            };
+
+            fetch(checkout_json_url, {
+              headers: {
+                "accept": "*/*",
+                "cache-control": "no-cache",
+                "authorization": "Basic " + authorization_token,
+                "content-type": "application/json, text/javascript",
+                "pragma": "no-cache",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin"
+              },
+              referrerPolicy: "strict-origin-when-cross-origin",
+              method: "POST",
+              mode: "cors",
+              credentials: "include",
+              body: JSON.stringify(body)
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data.checkout);
+                if (data.checkout && data.checkout.applied_discounts.length > 0) {
+                  let discountApplyUrl = "/discount/" + code + "?v=" + Date.now() + "&redirect=/checkout/";
+                  fetch(discountApplyUrl).then(response => response.text());
+
+                  if (discountCodeWrapper) discountCodeWrapper.style.display = "inline";
+                  if (discountCodeError) discountCodeError.innerHTML = "";
+                  if (discountCodeValue) {
+                    discountCodeValue.innerHTML = `${data.checkout.applied_discounts[0].title} (${data.checkout.applied_discounts[0].amount} ${Shopify.currency.active})`;
+                  }
+
+                  let localStorageValue = {
+                    'code': code.trim(),
+                    'totalCart': data.checkout.total_line_items_price
+                  };
+                  localStorage.setItem("discountCode", JSON.stringify(localStorageValue));
+                  updateCart();
+                } else {
+                  if (discountCodeValue) discountCodeValue.innerHTML = "";
+                  clearLocalStorage();
+                  if (discountCodeError) discountCodeError.innerHTML = "Please Enter Valid Coupon Code.";
+                }
+              })
+              .finally(() => {
+                if (applyBtn) {
+                  applyBtn.innerHTML = "APPLY";
+                  applyBtn.style.pointerEvents = "all";
+                }
+              });
+          });
+      });
+  }
+
+  function updateCart() {
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(data => {
+        // Update the cart UI with the new data
+        if (totalCartSelector) {
+          totalCartSelector.innerHTML = `${data.total_price / 100} ${Shopify.currency.active}`; // assuming total_price is in cents
+        }
+        // Update other elements if necessary
+        // ...
+      })
+      .catch(error => {
+        console.error("Error updating cart:", error);
+      });
+  }
+});
+
+
+
+</script>

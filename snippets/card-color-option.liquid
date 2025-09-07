@@ -1,0 +1,337 @@
+{% comment %}
+  Renders product variant options
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+
+
+  Usage:
+  {% render 'product-variant-options',
+    product: product,
+    option: option,
+    block: block
+  %}
+{% endcomment %}
+{%- liquid
+  assign variants_available_arr = product.variants | map: 'available'
+  assign variants_option1_arr = product.variants | map: 'option1'
+  assign variants_option2_arr = product.variants | map: 'option2'
+  assign variants_option3_arr = product.variants | map: 'option3'
+
+  assign product_form_id = card-product-form
+
+  assign swatchType = settings.swatchType
+  assign swatchStyle = settings.swatchStyleCard
+  assign swatchSize = settings.swatchSizeCard
+  assign swatchColors = settings.swatchColors | newline_to_br | split: '<br />'
+-%}
+
+<style>
+  /* Form Elements */
+  .product-form__input {
+    flex: 0 0 100%;
+    padding: 0;
+    margin: 0 0 1.2rem 0;
+    max-width: 44rem;
+    min-width: fit-content;
+    border: none;
+  }
+
+  variant-radios,
+  variant-selects {
+    display: block;
+  }
+
+  .product-form__input--dropdown {
+    margin-bottom: 1.6rem;
+  }
+
+  .product-form__input .form__label {
+    padding-left: 0;
+  }
+
+  fieldset.product-form__input .form__label {
+    margin-bottom: 0.2rem;
+  }
+
+  .product-form__input input[type='radio'] {
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    position: absolute;
+    height: 1px;
+    width: 1px;
+  }
+
+  .product-form__input input[type='radio'] + label {
+    border: var(--variant-pills-border-width) solid rgba(var(--color-foreground), var(--variant-pills-border-opacity));
+    background-color: rgb(var(--color-background));
+    color: rgba(var(--color-foreground));
+    border-radius: var(--variant-pills-radius);
+    color: rgb(var(--color-foreground));
+    display: inline-block;
+    margin: 0.7rem 0.5rem 0.2rem 0;
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    line-height: 1;
+    text-align: center;
+    transition: border var(--duration-short) ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .product-form__input input[type='radio'] + label:before {
+    content: '';
+    position: absolute;
+    top: calc(var(--variant-pills-border-width) * -1);
+    right: calc(var(--variant-pills-border-width) * -1);
+    bottom: calc(var(--variant-pills-border-width) * -1);
+    left: calc(var(--variant-pills-border-width) * -1);
+    z-index: -1;
+    border-radius: var(--variant-pills-radius);
+    box-shadow: var(--variant-pills-shadow-horizontal-offset) var(--variant-pills-shadow-vertical-offset)
+      var(--variant-pills-shadow-blur-radius) rgba(var(--color-shadow), var(--variant-pills-shadow-opacity));
+  }
+
+  .product-form__input input[type='radio'] + label:hover {
+    border-color: rgb(var(--color-foreground));
+  }
+
+  .product-form__input input[type='radio']:checked + label {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+
+  .product-form__input input[type='radio']:not(.disabled) + label > .visually-hidden {
+    display: none;
+  }
+
+  @media screen and (forced-colors: active) {
+    .product-form__input input[type='radio']:checked + label {
+      text-decoration: underline;
+    }
+  }
+
+  .product-form__input input[type='radio']:checked + label::selection {
+    background-color: rgba(var(--color-background), 0.3);
+  }
+
+  .product-form__input input[type='radio']:disabled + label,
+  .product-form__input input[type='radio'].disabled + label {
+    border-color: rgba(var(--color-foreground), 0.1);
+    color: rgba(var(--color-foreground), 0.6);
+    text-decoration: line-through;
+  }
+
+  .product-form__input input[type='radio'].disabled:checked + label,
+  .product-form__input input[type='radio']:disabled:checked + label {
+    color: rgba(var(--color-background), 0.6);
+  }
+  .product-form__input input[type='radio']:focus-visible + label {
+    box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
+  }
+
+  /* Fallback */
+  .product-form__input input[type='radio'].focused + label,
+  .no-js .shopify-payment-button__button [role='button']:focus + label {
+    box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
+  }
+
+  /* No outline when focus-visible is available in the browser */
+  .no-js .product-form__input input[type='radio']:focus:not(:focus-visible) + label {
+    box-shadow: none;
+  }
+
+  .product-form__input .select {
+    max-width: 25rem;
+  }
+
+  .product-form__submit {
+    margin-bottom: 1rem;
+  }
+
+  .no-js .product-form__submit.button--secondary {
+    --color-button: inherit;
+    --color-button-text: inherit;
+    --alpha-button-background: 1;
+  }
+
+  .product-form__submit[aria-disabled='true'] + .shopify-payment-button .shopify-payment-button__button[disabled],
+  .product-form__submit[disabled] + .shopify-payment-button .shopify-payment-button__button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  @media screen and (forced-colors: active) {
+    .product-form__submit[aria-disabled='true'] {
+      color: Window;
+    }
+  }
+
+
+  .card-product-form__input input[type='radio'] + label.color-swatch,
+  .card-product-form__input input[type='radio'] + label.color-swatch:after,
+  .card-product-form__input input[type='radio'] + label.color-swatch:before{
+          border-radius: 0;
+  }
+  .card-product-form__input input[type='radio'] + label.color-swatch.round,
+  .card-product-form__input input[type='radio'] + label.color-swatch.round:after,
+  .card-product-form__input input[type='radio'] + label.color-swatch.round:before{
+      border-radius: 100%;
+    }
+  .card-product-form__input input[type='radio'] + label.color-swatch.round-corners,
+  .card-product-form__input input[type='radio'] + label.color-swatch.round-corners:after,
+  .card-product-form__input input[type='radio'] + label.color-swatch.round-corners:before{
+          border-radius: 5px;
+    }
+    .card-product-form__input input[type='radio'] + label.color-swatch{
+      border:1px rgb(214,214,214) solid;
+      width: {{swatchSize}}px;
+      height: {{swatchSize}}px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      margin-right: 5px;
+      padding:0;
+    }
+    .card-product-form__input input[type='radio'] + label.color-swatch:before{
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      border: 1px rgb(214,214,214) solid;
+      z-index: 0;
+    }
+    .card-product-form__input input[type='radio'] + label.color-swatch:after{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      {%- if settings.dark or swatchType == "variantImage" -%}
+         border: none;
+      {%- else -%}
+        border: 1px rgb(255 255 255) solid;
+      {%- endif -%}
+    }
+    .card-product-form__input input[type='radio'] + label.color-swatch:hover:before{
+      border: 1px rgb(125 124 124) solid;
+    }
+    .card-product-form__input input[type='radio']:checked + label.color-swatch:before{
+    {%- if settings.dark -%}
+      box-shadow: 0 0 0 2px rgb(var(--color-foreground));
+      {%- else -%}
+      box-shadow: 0 0 0 1px rgb(var(--color-foreground));
+      {%- endif -%}
+      border-color:rgb(var(--color-foreground));
+    }
+    .card-product-form__input input[type='radio'] + label.color-swatch.variant-swatch{
+      background-color:white;
+      {%- if swatchStyle == "portrait" -%}
+      height: calc({{swatchSize}}px/ 0.66);
+      {%- endif -%}
+    }
+     .card-product-form__input input[type='radio'].disabled+label.color-swatch:before {
+      top: 50%;
+      height: .1rem;
+      clip-path: unset;
+      z-index: 2;
+      transform: translateY(-50%) rotate(-45deg);
+      border-radius: 0;
+      box-shadow: none;
+      border: 0.1rem solid;
+      border-color: #acacac;
+  }
+</style>
+<fieldset
+  class="card-product-form__input js"
+  style="padding: 2px;display: flex;flex-wrap: wrap;gap: 5px;height: calc({{swatchSize}}px + 3px);margin: 0; overflow: hidden;justify-content: var(--text-alignment);border: none;position: relative;"
+>
+  {%- for value in option.values -%}
+    {%- liquid
+      assign option_disabled = true
+
+      for option1_name in variants_option1_arr
+        case option.position
+          when 1
+            if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+              assign option_disabled = false
+            endif
+          when 2
+            if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+              assign option_disabled = false
+            endif
+          when 3
+            if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+              assign option_disabled = false
+            endif
+        endcase
+      endfor
+    -%}
+
+    <input
+      type="radio"
+      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+      name="{{ option.name }}"
+      value="{{ value | escape }}"
+      form="{{ card-product_form_id }}"
+      {% if option.selected_value == value %}
+        checked
+      {% endif %}
+      class="
+        hidden
+        {% if option_disabled %}
+          disabled
+        {% endif %}
+      "
+    >
+
+    {%- liquid
+      for colorData in swatchColors
+        assign colorDataArr = colorData | split: ':'
+        assign ruleName = colorDataArr[0] | strip
+        assign colorImg = value | append: '.png'
+        if value == ruleName
+          assign colorCodes = colorDataArr[1] | strip | split: '#'
+          assign colorNumber = 0 | plus: colorCodes.size
+          break
+        endif
+      endfor
+    -%}
+    <label
+      data-{{ option.name | downcase | replace: ' ', '-' }}="{{value}}"
+      style="
+        background: {{ value }}; background-image:url({{ colorImg | downcase | replace: ' ', '-' | file_img_url: '120x120' }});
+        {%- case colorNumber -%}
+
+            {%- when 2 -%}
+                background-color: #{{ colorCodes[1] }};
+            {%- when 3 -%}
+                background: linear-gradient(135deg, #{{ colorCodes[1] }} 50%, #{{ colorCodes[2] }} 50%);
+            {%- when 4 -%}
+                background: linear-gradient(to right,#{{ colorCodes[1] }} 33%,#{{ colorCodes[2] }} 33%,#{{ colorCodes[2] }} 66%, #{{ colorCodes[3] }} 66%);
+            {%- else -%}
+                background-image:url({{ colorCodes[0] | downcase | replace: ' ', '-' | file_img_url }});
+            {%- endcase -%} position: relative;
+      "
+      class="color-swatch {% case swatchStyle %}{% when "round" %}round{% when "square-round-corners" %}round-corners{% endcase %}"
+      for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+    >
+      <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+    </label>
+    {%- assign colorCodes = '' -%}
+  {%- endfor -%}
+</fieldset>
+<script>
+  document.querySelectorAll('input+label[data-{{ option.name | downcase | replace: ' ', '-'  }}]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      document.querySelector('#selected-{{ option.name | downcase | replace: ' ', '-'  }}').textContent = " "+el.getAttribute('data-{{ option.name | downcase | replace: ' ', '-'  }}')
+    })
+  })
+</script>

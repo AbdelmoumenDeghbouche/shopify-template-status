@@ -1,0 +1,378 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "video_with_text_iRkmyt": {
+      "type": "video-with-text",
+      "settings": {
+        "layout": "full_bleed",
+        "video_border": 0,
+        "video_height": "medium",
+        "image_overlay_opacity": 30,
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "video_content_border": 0,
+        "mobile_content_position": "middle",
+        "color_scheme": "inverse",
+        "desktop_content_alignment": "center",
+        "heading": "Inspired by You, Crafted for Life",
+        "heading_size": "h1",
+        "text": "<strong>Wear Your Elegance.<\/strong>",
+        "button_label_1": "",
+        "button_link_1": "",
+        "button_style_secondary_1": false,
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_YnVzfw": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_fByPJ9": {
+          "type": "heading",
+          "settings": {
+            "heading": "Welcome to our store",
+            "heading_size": "h1"
+          }
+        },
+        "caption_yaUDMj": {
+          "type": "caption",
+          "settings": {
+            "caption": "We believe fashion is more than just clothing—it's a celebration of individuality, confidence, and self-expression. Every piece we create reflects our dedication to timeless elegance, modern aesthetics, and uncompromising quality.",
+            "text_style": "subtitle",
+            "text_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "heading_fByPJ9",
+        "caption_yaUDMj"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 32
+      }
+    },
+    "lumin_cards_mYHpUV": {
+      "type": "lumin-cards",
+      "blocks": {
+        "card_BeEVBV": {
+          "type": "card",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "desktop_card_height": "auto",
+            "padding_size": 30,
+            "padding_size_mobile": 30,
+            "padding_left_mobile": 30,
+            "text_border": 0,
+            "use_video": false,
+            "media_ratio": "100%",
+            "icon_size": 100,
+            "icon_corner": 0,
+            "head": "<strong>Our Story<\/strong>",
+            "use_body_font": false,
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Thank you for being a part of our story. Together, we’re building something extraordinary.<\/p>",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "button_link": "",
+            "show_secondary": false,
+            "desktop_content_alignment": "center",
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "bg_color": "#e5efec",
+            "head_color": "#212121",
+            "text_color": "#212121"
+          }
+        },
+        "card_nC3izB": {
+          "type": "card",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "desktop_card_height": "auto",
+            "padding_size": 30,
+            "padding_size_mobile": 30,
+            "padding_left_mobile": 30,
+            "text_border": 0,
+            "use_video": false,
+            "media_ratio": "100%",
+            "icon_size": 100,
+            "icon_corner": 0,
+            "head": "<strong>Our Promise<\/strong>",
+            "use_body_font": false,
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Each piece is thoughtfully designed and carefully crafted with the finest materials.  <\/p>",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "button_link": "",
+            "show_secondary": false,
+            "desktop_content_alignment": "center",
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "bg_color": "#e5efec",
+            "head_color": "#212121",
+            "text_color": "#212121"
+          }
+        },
+        "card_QUhk4t": {
+          "type": "card",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "33.3333333",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "desktop_card_height": "auto",
+            "padding_size": 30,
+            "padding_size_mobile": 30,
+            "padding_left_mobile": 30,
+            "text_border": 0,
+            "use_video": false,
+            "media_ratio": "100%",
+            "icon_size": 100,
+            "icon_corner": 0,
+            "head": "<strong>Be Part of the Journey<\/strong>",
+            "use_body_font": false,
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Our brand isn’t just a fashion brand—it’s a lifestyle. We invite you to explore our collections.<\/p>",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "button_link": "",
+            "show_secondary": false,
+            "desktop_content_alignment": "center",
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "bg_color": "#e5efec",
+            "head_color": "#212121",
+            "text_color": "#212121"
+          }
+        }
+      },
+      "block_order": [
+        "card_BeEVBV",
+        "card_nC3izB",
+        "card_QUhk4t"
+      ],
+      "settings": {
+        "video_border": 14,
+        "zoom_hover": true,
+        "loading_color": "#f2f2f2",
+        "grid_gap": 18,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "margin_top": 36,
+        "margin_bottom": 36
+      }
+    },
+    "rich_text_dicEhW": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_KYhYf9": {
+          "type": "heading",
+          "settings": {
+            "heading": "Thank you for choosing Us. Together, we’re creating a world where fashion inspires and empowers.",
+            "heading_size": "h0"
+          }
+        },
+        "caption_6p36dj": {
+          "type": "caption",
+          "settings": {
+            "caption": "Our Brand isn’t just a fashion brand—it’s a lifestyle. We invite you to explore our collections, connect with us, and discover how we can become a part of your story.",
+            "text_style": "subtitle",
+            "text_size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "heading_KYhYf9",
+        "caption_6p36dj"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "lumin_gallery_YQAKK6": {
+      "type": "lumin-gallery",
+      "blocks": {
+        "image_KNhwFH": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "overlay_opacity": 32,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Follow Us",
+            "head_color": "#ffffff",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "@brandname",
+            "text_color": "#ffffff",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_EEWgpk": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_r4pE37": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_Tr9dD4": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_KNhwFH",
+        "image_EEWgpk",
+        "image_r4pE37",
+        "image_Tr9dD4"
+      ],
+      "settings": {
+        "layout": "grid",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "margin_top": 36,
+        "margin_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "video_with_text_iRkmyt",
+    "rich_text_YnVzfw",
+    "lumin_cards_mYHpUV",
+    "rich_text_dicEhW",
+    "lumin_gallery_YQAKK6"
+  ]
+}

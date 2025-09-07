@@ -1,0 +1,315 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .section-{{ section.id }}-margin {
+    padding-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-margin {
+      padding-top: {{ section.settings.margin_top }}px;
+      padding-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script>
+  // Function to generate a random number between a given range (min and max)
+  function getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Function to update the random number in the HTML
+  function updateRandomNumber() {
+      var randomNumberSpan = document.getElementById("randomNumber-{{ section.id }}");
+      var randomNumber = getRandomNumber({{ section.settings.fomo_min }}, {{ section.settings.fomo_max }}); // Change the range as needed
+      randomNumberSpan.textContent = randomNumber;
+  }
+
+  // Update the random number every 3 seconds (adjust the interval as needed)
+  setInterval(updateRandomNumber, {{ section.settings.fomo_speed | append: "000" }});
+</script>
+
+<div
+  {% unless section.settings.layout == 'full_bleed' %}
+    class="page-width"
+  {% endunless %}
+>
+  <div class="gradient color-{{ section.settings.color_scheme }} lk-fomo-buy">
+    <div class="live-circle-{{section.id}} hs-pill-{{section.id}}" style="display:block;"></div>
+    <span class="message-buy">
+      {% if section.settings.fomo_text_before != blank %}{{ section.settings.fomo_text_before | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}{% endif -%}
+      <span id="randomNumber-{{ section.id }}" {% if section.settings.number_bold %}style="font-weight: bold;padding:0 2px;"{% endif %}>
+        {{- section.settings.fomo_min | plus: 2 -}}
+      </span>{{ section.settings.fomo_text_after | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+    </span>
+  </div>
+</div>
+
+<style>
+    :root { --color-pills: {{ section.settings.pill_color.red }}, {{ section.settings.pill_color.green }}, {{ section.settings.pill_color.blue }}; }
+    .lk-fomo-buy{
+        display: flex;
+        align-items: baseline;
+        justify-content: {{section.settings.text_alignment}};
+        padding: {{section.settings.padding_top}}px {{section.settings.padding_bottom}}px;
+        margin: {{section.settings.margin_top}}px auto {{section.settings.margin_bottom}}px auto;
+        width: 100%;
+        {% if section.settings.layout == 'grid' %}border-radius:{{ section.settings.fomo_border }}px;{% endif %}
+        border:1px solid {{ section.settings.fomo_border_color }};
+    }
+      .lk-fomo-buy p {
+        margin: 0;
+    }
+    .message-buy {
+        letter-spacing:0px;
+    }
+      .live-circle-{{section.id}} {
+        border-radius: 50%;
+        display: inline-block;
+        padding: 0;
+        width: 11px;
+        min-width: 11px;
+        height: 11px;
+        margin-right: 0.7rem;
+        box-shadow: 0 0 0 0 rgba(var(--color-pills), 0.7);
+        transform: scale(1);
+        animation: 1.5s infinite pulsegate;
+        transition: opacity .35s ease-in-out;
+        background-color: rgba(var(--color-pills), 1);
+    }
+    .hs-pill-{{section.id}} {
+        position: relative;
+        pointer-events: none;
+        padding: 0;
+        border-radius: 0.625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* min-width: max-content;
+        background-color: rgba(var(--color-pills), 1);*/
+        color: rgba(var(--color-pills), 0.5);
+        border: 1px solid rgba(var(--color-background), 1);
+        z-index: 1;
+        font-weight: 500;
+        line-height: 1;
+        font-size: 1rem;
+    }
+    @keyframes pulsegate {
+      0% {
+          transform: scale(.95);
+          box-shadow: 0 0 0 0 rgba(var(--color-pills), 0.6);
+      }
+
+      70% {
+          transform: scale(1);
+          box-shadow: 0 0 0 3px rgba(236,0,140,0);
+      }
+
+      100% {
+          transform: scale(.95);
+          box-shadow: 0 0 0 0 rgba(236,0,140,0);
+      }
+  }
+</style>
+{% schema %}
+{
+  "name": "Fomo Numbers",
+  "limit": 1,
+  "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+},
+  "settings": [
+     {
+      "type": "header",
+      "content": "Section Settings"
+    },
+       {
+    "type": "select",
+    "id": "layout",
+    "options": [
+      {
+        "value": "full_bleed",
+        "label": "Full Width"
+      },
+      {
+        "value": "grid",
+        "label": "Grid"
+      }
+    ],
+    "default": "full_bleed",
+    "label": "Layout"
+  },
+    {
+    "type": "color_scheme",
+    "id": "color_scheme",
+    "label": "t:sections.all.colors.label",
+    "default": "background-1"
+  },
+    {
+          "type": "color",
+          "id": "pill_color",
+          "label": "Circle Color",
+          "default": "#F05D5E"
+        },
+    
+    {
+    "type": "range",
+    "id": "fomo_border",
+    "min": 0,
+    "max": 20,
+    "step": 2,
+    "unit": "px",
+    "label": "Corner Radius",
+    "default": 0,
+    "info": "Work on grid layout only"
+  },
+    {
+          "type": "color",
+          "id": "fomo_border_color",
+          "label": "Border Color",
+          "default": "#efefef"
+        },
+       {
+        "type": "range",
+        "id": "fomo_min",
+        "label": "Number Minimum",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "info": "Minimum number",
+        "default": 4
+      },
+          {
+        "type": "range",
+        "id": "fomo_max",
+        "label": "Number Maximum",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "info": "Maximum number",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "fomo_speed",
+        "label": "Number Speed",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "unit": "Sec",
+        "info": "Save the theme after each change for settings to apply",
+        "default": 3
+      },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+       {
+        "type": "inline_richtext",
+        "id": "fomo_text_before",
+        "label": "Fomo Text Before",
+        "default": "Some text"
+      },
+    {
+          "type": "checkbox",
+          "id": "number_bold",
+          "label": "Bold Number",
+          "default": false
+        },
+       {
+        "type": "inline_richtext",
+        "id": "fomo_text_after",
+        "label": "Fomo Text After",
+        "default": "People viewing this product"
+      },
+       {
+          "type": "select",
+          "id": "text_alignment",
+          "options": [
+            {
+              "value": "flex-start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "flex-end",
+              "label": "Right"
+            }
+           ],
+          "default": "center",
+          "label": "Content Alignment"
+
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+     {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top-Bottom",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Left-Right",
+      "default": 12
+    },
+    {
+    "type": "range",
+    "id": "margin_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Top",
+    "default": 36
+  },
+  {
+    "type": "range",
+    "id": "margin_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Margin Bottom",
+    "default": 36
+  }
+  ],
+  "presets": [
+    {
+      "name": "Fomo Numbers",
+      "category": "Lumin Sections"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

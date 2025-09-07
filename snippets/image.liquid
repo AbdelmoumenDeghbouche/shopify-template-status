@@ -1,0 +1,23 @@
+<style>
+  .lm-feature-{{ block.id }} {
+      display: block;
+      text-align:{{block.settings.img_position}};
+      margin: {{block.settings.padding_top}}px auto {{block.settings.padding_bottom}}px auto;
+  }
+  .lm-feature-{{ block.id }} img {
+        width: {{block.settings.image_size}}% !important;
+        height: auto;
+        border-radius:{{block.settings.image_border}}px;
+    }
+            .lm-feature-{{ block.id }} svg {
+        width: {{block.settings.image_size}}% !important;
+        height: auto;
+    }
+</style>
+<div class="lm-feature-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.image != blank -%}
+    <img src="{{ block.settings.image | img_url: '800x' }}">
+  {%- else -%}
+    {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+</div>

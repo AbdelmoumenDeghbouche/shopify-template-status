@@ -1,0 +1,190 @@
+{% comment %}
+  Renders a list of product's price (regular, sale)
+
+  Accepts:
+  - product: {Object} Product Liquid object (optional)
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+  - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+  - price_class: {String} Adds a price class to the price element (optional)
+  - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+
+  Usage:
+  {% render 'price', product: product %}
+{% endcomment %}
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+  assign lumin_class = 'lumin_price-' | append: section.id
+  assign sale_zoom = 'lm-style-2-sale-' | append: section.id
+  assign lm_badge = 'lm-badge-' | append: section.id
+  assign lm_sale = 'lm-sale-' | append: section.id
+   
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign price_min = product.price_min
+  assign price_max = product.price_max
+  assign available = target.available | default: false
+  if settings.currency_without_zero
+  assign money_price = price | money_without_trailing_zeros
+  assign money_price_min = price_min | money_without_trailing_zeros
+  assign money_price_max = price_max | money_without_trailing_zeros
+  else
+  assign money_price = price | money
+  assign money_price_min = price_min | money
+  assign money_price_max = price_max | money
+  endif
+  assign save_amount = 0
+  assign saving_amount = target.compare_at_price | minus: target.price | round
+  assign save_amount = saving_amount | money_without_trailing_zeros
+  assign percentage = 0
+  assign saving = target.compare_at_price | minus: target.price | times: 100 | divided_by: target.compare_at_price | round
+  assign percentage = saving | at_least: percentage | append: '%'
+  if settings.currency_code_enabled and settings.currency_without_zero
+    assign money_price = price | money_with_currency | remove: ".00"
+    assign money_price_min = price_min | money_with_currency | remove: ".00"
+    assign money_price_max = price_max | money_with_currency | remove: ".00"
+  elsif settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_price_min = price_min | money_with_currency
+    assign money_price_max = price_max | money_with_currency
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+-%}
+{% if settings.sup_enabled %}
+  <style>
+    .price--on-sale .price-item--regular {
+        text-decoration: none !important;
+        position: relative;
+    }
+    .price--on-sale .price-item--regular:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        border-bottom: 0.1rem solid currentColor;
+        opacity: .7;
+        transform: rotate(-15deg);
+    }
+    sup {
+        font-size: 65%;
+    }
+  </style>
+{% endif %}
+<style>
+  .lm-style-2 {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .lm-style-2-sale {
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+</style>
+
+<div
+  class="
+    price lm-style-2 {{ lumin_class }}
+    {%- if price_class %} {{ price_class }}{% endif -%}
+    {%- if available == false %} price--sold-out{% endif -%}
+    {%- if compare_at_price > price and product.quantity_price_breaks_configured? != true %} price--on-sale{% endif -%}
+    {%- if compare_at_price > price and product.quantity_price_breaks_configured? %} volume-pricing--sale-badge{% endif -%}
+    {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+    {%- if show_badges %} price--show-badge{% endif -%}
+  "
+  style="justify-content:{{ section.settings.desktop_content_alignment }};"
+ >
+  <div class="price__container">
+    {%- comment -%}
+      Explanation of description list:
+        - div.price__regular: Displayed when there are no variants on sale
+        - div.price__sale: Displayed when a variant is a sale
+    {%- endcomment -%}
+    <div class="price__regular lm-style-2-sale {{ sale_zoom }}">
+      {%- if product.quantity_price_breaks_configured? -%}
+        {%- if show_compare_at_price and compare_at_price -%}
+          {%- unless product.price_varies == false and product.compare_at_price_varies %}
+            <span class="visually-hidden visually-hidden--inline">
+              {{- 'products.product.price.regular_price' | t -}}
+            </span>
+            <span>
+              <s class="price-item price-item--regular variant-item__old-price" style="font-size:44px;line-height: 1;">
+                {% if settings.currency_code_enabled %}
+                    {% if settings.currency_without_zero %}{{ compare_at_price | money_with_currency | remove: ".00" -}}{% else %}{{ compare_at_price | money_with_currency -}}{% endif %}
+                {% else %}
+                    {% if settings.currency_without_zero %}{{ compare_at_price | money_without_trailing_zeros -}}{% else %}{{ compare_at_price | money -}}{% endif %}
+                {% endif %}
+              </s>
+            </span>
+          {%- endunless -%}
+        {%- endif -%}
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span class="price-item price-item--regular">
+          {{- 'products.product.volume_pricing.price_range' | t: minimum: money_price_min, maximum: money_price_max -}}
+        </span>
+      {%- else -%}
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span class="price-item price-item--regular" style="font-size:44px;line-height: 1;">
+            {{ money_price -}}
+        </span>
+      {%- endif -%}
+    </div>
+    <div class="price__sale">
+    <div class="lm-style-2-sale {{ sale_zoom }}">
+           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="price-item price-item--sale price-item--last" style="font-size:44px;line-height: 1;">
+          {{ money_price -}}
+      </span>
+      <div style="display: flex;flex-direction: column;">
+      {%- unless product.price_varies == false and product.compare_at_price_varies %}
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span style="display: grid;">
+          <s class="price-item price-item--regular lm-badge {{ lm_sale }}" style="margin-bottom: 3px;">
+            {% if settings.currency_code_enabled %}
+                {% if settings.currency_without_zero %}{{ compare_at_price | money_with_currency | remove: ".00" -}}{% else %}{{ compare_at_price | money_with_currency  -}}{% endif %}
+            {% else %}
+                {% if settings.currency_without_zero %}{{ compare_at_price | money_without_trailing_zeros -}}{% else %}{{ compare_at_price | money -}}{% endif %}
+            {% endif %}
+          </s>
+        </span>
+      {%- endunless -%}
+   <small class="unit-price caption{% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}">
+      <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      <span class="price-item price-item--last">
+        <span>{% if settings.currency_without_zero %}{{- product.selected_or_first_available_variant.unit_price | money_without_trailing_zeros -}}{% else %}{{- product.selected_or_first_available_variant.unit_price | money -}}{% endif %}</span>
+        <span aria-hidden="true">/</span>
+        <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+        <span>
+          {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+            {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+        </span>
+      </span>
+    </small>
+    {%- if show_badges -%}
+     <span class="{{ lm_badge }} price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
+        {%- render 'icon-badge' %} {{ settings.sale_message | replace: '[$]', save_amount | replace: '[%]', percentage }}
+      </span>
+     
+      <span class="{{ lm_badge }} price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
+        {{ 'products.product.sold_out' | t }}
+      </span>
+  {% endif %}
+    
+    </div>
+    </div>
+  </div>
+  </div>
+  
+</div>

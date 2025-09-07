@@ -1,0 +1,28 @@
+<style>
+  .list-payment-drawer { display: flex;flex-wrap: wrap;padding-left: 0;justify-content:{{ settings.payment_content_alignment }};margin-bottom: 0;}
+</style>
+<div class="footer__payment" {{ shopify_attributes }}>
+  <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+  <ul class="list list-payment-drawer" role="list">
+    {% if settings.original == 'original' %}
+      {%- for type in shop.enabled_payment_types -%}
+        <li class="list-payment__item">
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        </li>
+      {%- endfor -%}
+    {% else %}
+      {% assign enabled_payment_types = settings.payment_icon
+        | downcase
+        | strip_html
+        | replace: '-', '_'
+        | replace: ' ', ''
+        | split: ','
+      %}
+      {% for type in enabled_payment_types %}
+        {% if type != '' %}
+          <li class="list-payment__item">{{ type | payment_type_svg_tag: class: 'icon-svg' }}</li>
+        {% endif %}
+      {%- endfor -%}
+    {% endif %}
+  </ul>
+</div>

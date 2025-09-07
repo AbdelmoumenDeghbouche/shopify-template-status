@@ -1,0 +1,38 @@
+{{ 'image-bar.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="lm-tot-bar"
+  style="
+    --bar-font-size:{{ block.settings.text_size }}px;
+    --bar-zoom:{{ block.settings.image_size }};
+    --bar-image-space:{{ block.settings.image_space }}px;
+  "
+>
+  <div class="lm-img-bar" {{ block.shopify_attributes }}>
+    {%- assign default_images = '1.jpg,2.jpg,3.jpg,4.jpg,5.jpg' | split: ',' -%}
+
+    {%- for i in (1..5) -%}
+      {%- assign image_key = "image_" | append: i -%}
+      {%- assign hide_image_key = "hide_img_" | append: i -%}
+      {%- assign image_setting = block.settings[image_key] -%}
+      {%- assign hide_image_setting = block.settings[hide_image_key] -%}
+      {%- unless hide_image_setting -%}
+        <span>
+          {%- if image_setting != blank -%}
+            {{ image_setting | image_url: width: 100 | image_tag }}
+          {%- else -%}
+            {%- assign image_index = i -%}
+            <img src="{{ default_images[image_index] | asset_img_url: 'master' }}" alt="" width="100" height="100">
+          {%- endif -%}
+        </span>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+  {{
+    block.settings.text
+    | replace: '[', '<span class="lumin-text__fancy1">'
+    | replace: ']', '</span>'
+    | replace: '((', '<span class="lumin-text__fancy2">'
+    | replace: '))', '</span>'
+  }}
+</div>

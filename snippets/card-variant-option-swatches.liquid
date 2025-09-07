@@ -1,0 +1,124 @@
+{% comment %}
+  Renders card_product variant options
+
+  Accepts:
+  - card_product: {Object} card_product object.
+  - option: {Object} current card_product_option object.
+  - block: {Object} block object.
+
+
+  Usage:
+  {% render 'card_product-variant-options',
+    card_product: card_product,
+    option: option,
+    block: block
+  %}
+{% endcomment %}
+{%- liquid
+  assign variants_available_arr = card_product.variants | map: 'available'
+  assign variants_option1_arr = card_product.variants | map: 'option1'
+  assign variants_option2_arr = card_product.variants | map: 'option2'
+  assign variants_option3_arr = card_product.variants | map: 'option3'
+
+  assign card_product_form_id = 'card_product-form-' | append: section.id
+-%}
+
+{%- for value in option.values -%}
+  {%- liquid
+    assign option_disabled = true
+
+    for option1_name in variants_option1_arr
+      case option.position
+        when 1
+          if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+        when 2
+          if option1_name == card_product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+        when 3
+          if option1_name == card_product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == card_product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+            assign option_disabled = false
+          endif
+      endcase
+    endfor
+  -%}
+  {% liquid
+		assign color_trigger = settings.trigger_swatch | handle | strip
+		assign name_option = option.name | handle | strip 
+	%}
+
+	{% if settings.show_color_swatch and color_trigger == name_option %}
+		{% liquid
+			assign color_value = value | handle | strip
+			assign color_value_custom = color_value
+			
+			if settings.custom_colors != blank
+				assign custom_colors_string = settings.custom_colors | strip
+				assign custom_colors_obj = custom_colors_string | newline_to_br | split: '<br />'
+
+				for obj in custom_colors_obj
+					assign obj_strip = obj | strip
+					assign obj_key = obj_strip | split: ':' | first
+					assign obj_value = obj_strip | split: ':' | last
+					assign obj_color_name = obj_key | handle | strip
+
+					if color_value == obj_color_name
+						assign obj_color_value = obj_value
+						assign color_value_custom = obj_color_value | strip
+						break
+					endif
+				endfor
+			endif 
+		%}
+
+		{% liquid
+			assign variant_link = card_product.url
+
+			for variant in card_product.variants
+				assign flag = false
+				if variant.available
+					for option_variant in variant.options
+						if option_variant == value
+							assign flag = true
+							break
+						endif
+					endfor
+				endif
+
+				if flag == true
+					assign variant_link = variant.url
+					break
+				endif
+			endfor
+		%}
+
+		<input
+			type="radio"
+			id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}-{{ card_product.id }}"
+			name="{{ option.name }}-{{ section.id }}-{{ card_product.id }}"
+			value="{{ value | escape }}"
+			{% if variant_link %}
+				data-variant-link="{{ variant_link }}"
+			{% endif %}
+			{% if no_form_id != true %}
+				form="{{ card_product_form_id }}"
+			{% endif %}
+			{% if option.selected_value == value %}
+				checked
+			{% endif %}
+			{% if option_disabled and no_form_id != true %}
+				class="disabled"
+			{% endif %}
+		>
+	
+
+       <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}-{{ card_product.id }}" class="color-swatch" 
+			style="--swatch-color: {{ color_value_custom | remove: '-' }};border:1px solid #e9e7e7; border-radius: {{ settings.swatch_border_radius }}px; width: {{ settings.swatch_size}}px; height: {{ settings.swatch_size}}px; background-color: var(--swatch-color);box-shadow: 0 0 0 0px #e9e7e7, inset 0 0 0 6px #fff;"
+		>
+			<span class="visually-hidden">{{ value -}}</span>
+		</label>
+  
+  {%- endif -%}
+{%- endfor -%}

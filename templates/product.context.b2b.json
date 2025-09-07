@@ -1,0 +1,7 @@
+{
+  "parent": "product.json",
+  "context": {
+    "b2b": true
+  },
+  "sections": {}
+}

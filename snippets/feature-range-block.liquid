@@ -1,0 +1,77 @@
+<style>
+  .lumin-section__block-id-{{ block.id }} {
+    --dot-color: {{ block.settings.dot_color }};
+    --line-color: {{ block.settings.line_color }};
+    --dot-size: {{ block.settings.dot_size }}px;
+    --line-size: {{ block.settings.line_size }}px;
+  }
+  .lumin-section-block {
+    width:100%;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__feature-range {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: {{block.settings.padding_top}}px 0 {{block.settings.padding_bottom}}px 0;
+  }
+  .lumin-section__block-id-{{ block.id }} .lumin-section__feature-range p {
+    margin:0;
+  }
+
+  .lumin-section__block-id-{{ block.id }} input[type=range] {
+    width: 100%;
+    appearance: none;
+    background: var(--line-color);
+    height: var(--line-size);
+    min-height: unset;
+    border: none;
+  }
+
+  .lumin-section__block-id-{{ block.id }} input[type=range]::-webkit-slider-thumb   {
+    -webkit-appearance: none;
+    height: var(--dot-size);
+    width: var(--dot-size);
+    border-radius: var(--dot-size);
+    background: var(--dot-color);
+  }
+
+  .lumin-section__block-id-{{ block.id }} input[type=range]::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: var(--dot-size);
+    width: var(--dot-size);
+    border-radius: var(--dot-size);
+    background: var(--dot-color);
+  }
+  .product-info__promo-list {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 2rem;
+    }
+</style>
+<div class="lumin-section-block lumin-section__block-id-{{ block.id }} lumin-section__feature-range-container lumin-section__justify-{{ section.settings.text_alignment }}"
+  {{ block.shopify_attributes }}>
+  <div class="lumin-section__feature-range-title">
+    <h3 class="lumin-section__small-heading">{{ block.settings.title }}</h3>
+  </div>
+  <div class="lumin-section__feature-range">
+    <div class="lumin-section__text lumin-section__rte">
+      <p>{{ block.settings.low_range_label }}</p>
+    </div>
+    <input
+      type="range"
+      aria-hidden="true"
+      disabled=""
+      id="Flavor"
+      readonly=""
+      min="0"
+      max="10"
+      value="{{ block.settings.level }}"
+    >
+    <div class="lumin-section__text lumin-section__rte">
+      <p>{{ block.settings.high_range_label }}</p>
+    </div>
+  </div>
+</div>

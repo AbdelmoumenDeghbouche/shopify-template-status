@@ -1,0 +1,16 @@
+<style>
+  .lumin-section__block-id-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__divider {
+    height: 0;
+    border: none;
+    background: transparent;
+    margin: 0 auto;
+    width: {{ block.settings.base_width }}%;
+    border-top: {{ block.settings.thickness }}px {{ block.settings.style }} {{ block.settings.divider_color }};
+  }
+</style>
+<hr class="lumin-section__divider" aria-hidden="true">

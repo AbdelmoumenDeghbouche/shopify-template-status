@@ -1,0 +1,191 @@
+<style>
+  .lumin-section__block-id-{{ block.id }} .lumin-section__icons {
+    --flex-gap: {{ block.settings.gap }}px;
+    gap: var(--flex-gap);
+    flex-wrap: wrap;
+    margin: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px 0;
+  }
+ 
+  .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+    --flex-items: {{ 100.00 | divided_by: block.settings.icon_width }};
+    text-align: center;
+    flex: 0 1 calc((100% / var(--flex-items)) - (((var(--flex-items) - 1) / var(--flex-items)) * var(--flex-gap)));
+    width: calc((100% / var(--flex-items)) - (((var(--flex-items) - 1) / var(--flex-items)) * var(--flex-gap)));
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper {
+    position: relative;
+    width: {{ block.settings.image_size }}px;
+    height: auto;
+    display: inline-block;
+    font-size: 0;
+  }
+  .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper img,
+  .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper svg {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .lumin-section__block-id-{{ block.id }} svg.lumin-section__svg-sizer {
+    width: 100%;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__small-heading + .lumin-section__icon-text {
+    margin-top: 5px;
+  }
+
+  .lumin-section__block-id-{{ block.id }} .lumin-section__icon a,
+  .lumin-section__block-id-{{ block.id }} .lumin-section__icon p {
+    color: {{ section.settings.text_color }};
+    line-height: 1.2;
+    margin: 0;
+    text-decoration: none;
+  }
+
+  {%- if block.settings.icon_layout == 'left' -%}
+    .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper {
+      flex: 0 0 {{block.settings.image_size }}px;
+      max-width: {{block.settings.image_size }}px;
+    }
+
+    .lumin-section__block-id-{{ block.id }} .lumin-section__icon-content {
+      flex: 1 1 auto;
+      text-align: left;
+    }
+    .lumin-section__icon-heading {
+      margin: 0;
+     }
+
+  {%- elsif block.settings.icon_layout == 'top' -%}
+    .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      justify-content: flex-start;
+    }
+
+    .lumin-section__block-id-{{ block.id }} .lumin-section__icon-content {
+      text-align: center;
+    }
+     .lumin-section__icon-heading {
+      margin-bottom: 0;
+      margin-top: 1rem;
+     }
+
+  {%- endif -%}
+
+
+  @media (max-width: 767px) {
+    .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+      --flex-items: {{ 100.00 | divided_by: block.settings.mobile_icon_width }};
+    }
+    .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper {
+    width: {{ block.settings.mobile_image_width }}px;
+  }
+
+    {%- if block.settings.mobile_icon_layout == 'left' -%}
+      .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+      }
+      .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper {
+        flex: 0 0 {{block.settings.mobile_image_width }}px;
+        max-width: {{block.settings.mobile_image_width }}px;
+      }
+
+      .lumin-section__block-id-{{ block.id }} .lumin-section__icon-content {
+        flex: 1 1 auto;
+        text-align: left;
+      }
+
+    {%- elsif block.settings.mobile_icon_layout == 'top' -%}
+      .lumin-section__block-id-{{ block.id }} .lumin-section__icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+       .lumin-section__block-id-{{ block.id }} .lumin-section__image__wrapper {
+        max-width: {{block.settings.mobile_image_width }}px;
+      }
+
+      .lumin-section__block-id-{{ block.id }} .lumin-section__icon-content {
+        text-align: center;
+      }
+
+    {%- endif -%}
+  }
+</style>
+<div class="lumin-section__flex lumin-section__icons lumin-section__justify-{{ block.settings.icon_alignment }}">
+  {%- for index in (1..6) -%}
+    {%- capture icon -%}icon_{{ forloop.index }}{%- endcapture -%}
+    {%- capture icon_old -%}icon_old_{{ forloop.index }}{%- endcapture -%}
+    {%- capture heading -%}heading_{{ forloop.index }}{%- endcapture -%}
+    {%- capture text -%}text_{{ forloop.index }}{%- endcapture -%}
+    {%- capture link -%}link_{{ forloop.index }}{%- endcapture -%}
+    {%- if block.settings[icon] != blank or block.settings[icon_old] != 'none' -%}
+      <div class="lumin-section__flex-item lumin-section__icon lumin-section__rte">
+        <a
+          {% if block.settings[link] != blank %}
+            href="{{ block.settings[link] }}"
+          {% endif %}
+          class="lumin-section__block-id-{{ block.id }} lumin-section__image__wrapper"
+        >
+          {% comment %}
+            <svg
+              class="lumin-section__block-id-{{ block.id }} lumin-section__svg-sizer"
+              viewBox="0 0 {{ block.settings[icon].width }} {{ block.settings[icon].height }}"
+            ></svg>
+          {% endcomment %}
+
+          {%- capture sizes -%}
+                              (max-width: 480px) calc(100vw / {{ block.settings.icon_width }}), calc({{ section.settings.text_width | default: 50 }}vw / {{ block.settings.icon_width }})
+                            {%- endcapture -%}
+          {%- if block.settings[icon] == blank -%}
+            {%-
+              render 'icon-accordion', icon: block.settings.[icon_old], | image_url: width: block.settings[icon].width
+              | image_tag: widths: widths, sizes: sizes
+            -%}
+          {% else %}
+            {{
+              block.settings[icon]
+              | image_url: width: block.settings[icon].width
+              | image_tag: widths: widths, sizes: sizes
+            }}
+          {% endif %}
+        </a>
+        {%- if block.settings[heading] != blank or block.settings[text] != blank -%}
+          <div class="lumin-section__icon-content">
+            {%- if block.settings[heading] != blank -%}
+              <h4 class="lumin-section__icon-heading lumin-section__small-heading">
+                {%- if block.settings[link] != blank -%}
+                  <a href="{{ block.settings[link] }}">
+                {%- endif -%}
+                {{ block.settings[heading] }}
+                {%- if block.settings[link] != blank -%}
+                  </a>
+                {%- endif -%}
+              </h4>
+            {%- endif -%}
+            {%- if block.settings[text] != blank -%}
+              <p class="lumin-section__icon-text lumin-section__rte">
+                {{ block.settings[text] }}
+              </p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

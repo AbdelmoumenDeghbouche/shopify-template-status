@@ -1,0 +1,29 @@
+<style>
+  .lumin-section__block-id-{{ block.id }} video {
+    width: 100%    !important;
+    height: auto   !important;
+  }
+</style>
+<div class="lumin-section-block lumin-section__block-id-{{ block.id }} lumin-section__video__wrapper">
+  {%- assign video = block.settings.video -%}
+  <video
+    width="{{ video.aspect_ratio | times: 100 }}"
+    height="100"
+    {% if block.settings.autoplay %}
+      autoplay muted
+    {% endif %}
+    playsinline
+    {% if block.settings.loop %}
+      loop
+    {% endif %}
+    {% if block.settings.show_controls %}
+      controls controlsList="nodownload"
+    {% endif %}
+    loading="lazy"
+    poster="{{ video.preview_image | image_url: width: 2800 }}"
+  >
+    {%- for source in video.sources -%}
+      {%- if source.format == 'mp4' or source.format == 'mov' -%}<source src="{{ source.url }}">{%- endif -%}
+    {%- endfor -%}
+  </video>
+</div>

@@ -1,0 +1,1081 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    {% if section.settings.fade %}
+    -webkit-mask-box-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+    mask-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+ {% endif %}
+      }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="section-{{ section.id }}-padding">
+<div class="logo-wrapper color-{{ section.settings.color_scheme }} gradient">
+<style>
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+}
+  .logo-bar__text-label-{{section.id}} {
+    min-width: fit-content;
+    font-size: {{section.settings.announcement_head_d}}px;
+    line-height: {{section.settings.announcement_head_d}}px;
+    padding: 0 4rem;
+    color: {{section.settings.announcement_color}};
+}
+  @media screen and (max-width:749px){
+  .logo-bar__text-label-{{section.id}}  {
+    min-width: auto;
+    font-size: {{section.settings.announcement_head_m}}px;
+    line-height: {{section.settings.announcement_head_m}}px;
+    padding: 0 1.5rem;
+}
+  }
+</style>
+  {% if section.settings.announcement_head != blank %}
+<div class="logo-bar__text-label-{{section.id}} ">{{ section.settings.announcement_head }}</div>{% endif %}
+<div class="announcement-bar--inner-{{ section.id }} direction-left" style="--marquee-speed: {{ section.settings.scroll_speed }}s">
+     <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> 
+
+  <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> <div style="display: flex;">
+       <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+          {% when 'image' %}
+            <style>
+              .announcement-bar-{{ block.id }} img {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+               .announcement-bar-{{ block.id }} svg {
+    width: {{block.settings.logo_image_width}}px;
+    height:auto;
+  }
+            </style>
+        <div class="announcement-bar-{{ section.id }} announcement-bar-{{ block.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+          {% if block.settings.logo_image != blank %}
+              {{
+            block.settings.logo_image
+            | image_url: width: 200
+            | image_tag: loading: 'lazy'
+          }}
+             {%- else -%}
+              <p style="font-size: 40px;margin: 0;">LOGO</p>
+            {%- endif -%}
+                  </div>
+            
+           {% when 'announcement' %}
+             <style>
+          .lumin-text-{{ block.id }} {
+          color: {{ block.settings.announcement_color }};
+          font-size: {{ block.settings.announcement_size }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size }}px;
+          height: {{ block.settings.announcement_size }}px;
+        }
+      @media screen and (max-width: 749px) {
+         .lumin-text-{{ block.id }} {
+          font-size: {{ block.settings.announcement_size_m }}px;
+        }
+        .lumin-text-{{ block.id }} svg {
+          width: {{ block.settings.announcement_size_m }}px;
+          height: {{ block.settings.announcement_size_m }}px;
+        }
+      }
+      
+      </style>
+        <div class="lumin-text-{{ block.id }} announcement-bar-{{ section.id }}" role="region" aria-label="Announcement" {{ block.shopify_attributes }}>
+              <a {% if block.settings.text_link != blank %}{{ block.settings.text_link }}{% else %} href="/collections/frontpage"{% endif %} class="announcement-bar__link link link--text focus-inset animate-arrow">
+                {% render 'icon-accordion', icon: block.settings.icon %}  
+                <p class="announcement-bar__message h6 lumin-text-{{ block.id }}">
+                       {{ block.settings.Announcement }}
+                      </p>
+                </a>
+                  </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+     </div> 
+  
+
+</div>     
+</div>
+    </div>
+        <style data-shopify>
+       .announcement-bar--inner-{{ section.id }}{
+  max-width:1440px;
+  margin-left:auto;
+  margin-right:auto
+      }
+@media only screen and (min-width: 768px){
+  .announcement-bar--inner-{{ section.id }}{
+    padding: {{section.settings.padding_desktop}}px 20px;
+  }
+}
+          @media only screen and (max-width: 767px){
+  .announcement-bar--inner-{{ section.id }}{
+    padding: {{section.settings.padding_mobile}}px 20px;
+  }
+}
+.announcement-bar-section {
+  position:relative;
+  z-index:52
+}
+.announcement-bar--wrap {
+  line-height:1;
+}
+.announcement-bar--inner-{{ section.id }}{
+  height:100%;
+  display:flex;
+  align-items:center;
+  max-width:none;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.announcement-bar--inner-{{ section.id }}.direction-left>div{
+  animation:marquee-left var(--marquee-speed) linear infinite;
+}
+.announcement-bar--inner.direction-right>div{
+  animation:marquee-right var(--marquee-speed) linear infinite;
+}
+.announcement-bar--inner-{{ section.id }}>div{
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+  will-change:transform;
+}
+.announcement-bar--inner-{{ section.id }}:hover>div{
+  animation-play-state:paused;
+}
+.announcement-bar-{{ section.id }} {
+  display:inline-flex;
+  align-items:center;
+  padding:0 {{section.settings.padding_item_desktop}}px;
+  letter-spacing:.03em;
+  {% if section.settings.fade %}
+    -webkit-mask-box-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+    mask-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+  {% endif %}
+}
+           @media only screen and (max-width: 767px){
+  .announcement-bar{
+  padding:0 {{section.settings.padding_item_mobile}}px;
+}
+           }
+.announcement-bar-{{ section.id }} svg{
+  margin-right:12px;
+  fill:rgb(var(--color-foreground));
+}
+  
+.announcement-bar-{{ section.id }} .announcement-bar-{{ section.id }}__link{
+  color:rgb(var(--color-foreground));
+  display: flex;
+  padding: 0;
+}
+.announcement-bar-{{ section.id }}--item:empty{
+  display:none
+}
+@keyframes marquee-left{
+  0%{
+    transform:translate(0)
+  }
+  to{
+    transform:translate(-100%)
+  }
+}
+@keyframes marquee-right{
+  0%{
+    transform:translate(-100%)
+  }
+  to{
+    transform:translate(0)
+  }
+}
+
+.announcement-bar-static{
+  display: block;
+}
+.announcement-bar-static>div{
+  flex-wrap: wrap;
+  justify-content: center;
+}
+        </style>
+       
+{% schema %}
+  {
+    "name": "Brand Slider",
+     "disabled_on": {
+    "groups": ["header", "custom.popup"]
+    },
+    "settings": [
+      {
+        "type": "range",
+        "id": "scroll_speed",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "unit": "s",
+        "label": "Scrolling Speed",
+        "default": 15
+      },
+      {
+        "type": "checkbox",
+        "id": "fade",
+        "label": "Fade on the edges",
+        "default": false
+      },
+      {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+      {
+          "type": "text",
+          "id": "announcement_head",
+          "default": "Featured Everywhere",
+          "label": "Brands Heading",
+          "info": "Leave blank to hide"
+        },
+         {
+            "type": "range",
+            "id": "announcement_head_d",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Heading Size",
+            "default": 18
+          },
+          {
+            "type": "range",
+            "id": "announcement_head_m",
+            "min": 8,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Heading Size Mobile",
+            "default": 15
+          },
+          {
+            "type": "color",
+            "id": "announcement_color",
+            "label": "Announcement Color",
+            "default": "#212121"
+          },
+       {
+      "type": "range",
+      "id": "padding_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bar Height",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bar Height Mobile",
+      "default": 8
+    },
+      {
+      "type": "range",
+      "id": "padding_item_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Item Gap",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_item_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Item Gap Mobile",
+      "default": 24
+    },
+      
+      {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0
+    }
+    ],
+    "blocks": [
+      {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Image"
+       },
+         {
+      "type": "range",
+      "id": "logo_image_width",
+      "min": 20,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Image Height",
+      "default": 34
+    }
+      ]
+      },
+      {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "Announcement",
+          "default": "Take 20% Off With Code SAVE20",
+          "label": "Announcement",
+          "info": "Your Announcement Text"
+        },
+         {
+            "type": "range",
+            "id": "announcement_size",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Announcement Size",
+            "default": 18
+          },
+          {
+            "type": "range",
+            "id": "announcement_size_m",
+            "min": 8,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Announcement Size Mobile",
+            "default": 16
+          },
+          {
+            "type": "color",
+            "id": "announcement_color",
+            "label": "Announcement Color",
+            "default": "#212121"
+          },
+         {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__1.label"
+            },
+            {
+              "value": "apple",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__2.label"
+            },
+            {
+              "value": "banana",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__3.label"
+            },
+            {
+              "value": "bottle",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__4.label"
+            },
+            {
+              "value": "box",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__5.label"
+            },
+            {
+              "value": "carrot",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__6.label"
+            },
+            {
+              "value": "chat_bubble",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__7.label"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__8.label"
+            },
+            {
+              "value": "clipboard",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__9.label"
+            },
+            {
+              "value": "dairy",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__10.label"
+            },
+            {
+              "value": "dairy_free",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__11.label"
+            },
+            {
+              "value": "dryer",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__12.label"
+            },
+            {
+              "value": "eye",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__13.label"
+            },
+            {
+              "value": "fire",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__14.label"
+            },
+            {
+              "value": "gluten_free",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__15.label"
+            },
+            {
+              "value": "heart",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__16.label"
+            },
+            {
+              "value": "iron",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__17.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__18.label"
+            },
+            {
+              "value": "leather",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__19.label"
+            },
+            {
+              "value": "lightning_bolt",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__20.label"
+            },
+            {
+              "value": "lipstick",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__21.label"
+            },
+            {
+              "value": "lock",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__22.label"
+            },
+            {
+              "value": "map_pin",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__23.label"
+            },
+            {
+              "value": "nut_free",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__24.label"
+            },
+            {
+              "value": "pants",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__25.label"
+            },
+            {
+              "value": "paw_print",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__26.label"
+            },
+            {
+              "value": "pepper",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__27.label"
+            },
+            {
+              "value": "perfume",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__28.label"
+            },
+            {
+              "value": "plane",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__29.label"
+            },
+            {
+              "value": "plant",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__30.label"
+            },
+            {
+              "value": "price_tag",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__31.label"
+            },
+            {
+              "value": "question_mark",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__32.label"
+            },
+            {
+              "value": "recycle",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__33.label"
+            },
+            {
+              "value": "return",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__34.label"
+            },
+            {
+              "value": "ruler",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__35.label"
+            },
+            {
+              "value": "serving_dish",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__36.label"
+            },
+            {
+              "value": "shirt",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__37.label"
+            },
+            {
+              "value": "shoe",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__38.label"
+            },
+            {
+              "value": "silhouette",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__39.label"
+            },
+            {
+              "value": "snowflake",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__40.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__41.label"
+            },
+            {
+              "value": "stopwatch",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__42.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__43.label"
+            },
+            {
+              "value": "washing",
+              "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__44.label"
+            }
+          ],
+          "default": "check_mark",
+          "label": "Select Icon"
+        },
+       {
+          "type": "url",
+          "id": "text_link",
+          "label": "Link"
+        }
+    ]
+      }
+    ],
+      "presets": [
+    {
+    "name": "Brand Slider",
+    "category": "Lumin Section",
+    "settings": {
+    },
+    "blocks": [
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      },
+      {
+        "type": "image"
+      }
+    ]
+  }
+  ]
+  }
+{% endschema %}

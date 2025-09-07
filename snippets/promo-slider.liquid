@@ -1,0 +1,86 @@
+<div>
+  <slideshow-component class="slider-mobile-gutter">
+    {% liquid
+      assign slide_count = 1
+      if block.settings.show_slide_2
+        assign slide_count = 2
+      elsif block.settings.show_slide_2 and block.settings.show_slide_3
+        assign slide_count = 3
+      elsif block.settings.show_slide_2 == false and block.settings.show_slide_3
+        assign slide_count = 2
+      endif
+    %}
+    {%- assign number_of_slides = slide_count | plus: 0.0 | divided_by: block.settings.slide_per_page | ceil -%}
+    <div
+      id="Slider-{{ block.id }}"
+      class="contains-card contains-card--product complementary-slider grid grid--1-col slider slider--everywhere"
+      role="list"
+      {% if number_of_slides > 1 %}
+        aria-label="{{ 'general.slider.name' | t }}"
+      {% endif %}
+    >
+      {%- for i in (1..number_of_slides) -%}
+        <div
+          id="Slide-{{ block.id }}-{{ forloop.index }}"
+          class="complementary-slide complementary-slide--{{ settings.card_style }} grid__item slider__slide slideshow__slide"
+          tabindex="-1"
+          role="group"
+          {% if number_of_slides > 1 %}
+            aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+            aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+          {% endif %}
+        >
+          <ul class="list-unstyled" role="list">
+            <li>slide 1</li>
+            {% if block.settings.show_slide_2 %}
+              <li>slide 2</li>
+            {% endif %}
+            {% if block.settings.show_slide_3 %}
+              <li>slide 3</li>
+            {% endif %}
+          </ul>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if number_of_slides > 1 -%}
+      <div class="slider-buttons no-js-hidden">
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          name="previous"
+          aria-label="{{ 'general.slider.previous_slide' | t }}"
+        >
+          {% render 'icon-arro' %}
+        </button>
+        <div class="slider-counter slider-counter--dot">
+          {%- if block.settings.pagination_style == 'counter' -%}
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ number_of_slides }}</span>
+          {%- else -%}
+            <div class="slideshow__control-wrapper">
+              {%- for i in (1..number_of_slides) -%}
+                <button
+                  class="slider-counter__link slider-counter__link--{{ block.settings.pagination_style }} link"
+                  aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                  aria-controls="Slider-{{ block.id }}"
+                >
+                    <span class="dot"></span>
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          name="next"
+          aria-label="{{ 'general.slider.next_slide' | t }}"
+        >
+          {% render 'icon-arro' %}
+        </button>
+      </div>
+    {%- endif -%}
+  </slideshow-component>
+</div>

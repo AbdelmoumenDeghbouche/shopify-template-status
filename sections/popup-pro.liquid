@@ -1,0 +1,733 @@
+{%- unless section.settings.mode == 'disabled' -%}
+{%- liquid
+  assign show_popup = true
+
+  if section.settings.mode == 'disabled'
+    assign show_popup = false
+  endif
+
+  if section.settings.only_homepage and request.page_type != 'index'
+    assign show_popup = false
+  endif
+
+  if section.settings.only_visitor and customer
+    assign show_popup = false
+  endif
+
+  assign show_image = false
+  if section.settings.text_box_position == 'center' and section.settings.image != blank
+    if section.settings.image_position == 'top' or section.settings.image_position == 'bottom'
+      assign show_image = true
+    elsif section.settings.width >= 720
+      assign show_image = true
+    endif
+  endif
+-%}
+
+{%- if show_popup -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} .popup {
+      --popup-width: {{ section.settings.width }}px;
+      --popup-padding: {{ section.settings.padding }}px;
+      --color-background: {{ section.settings.colors_background.red }}, {{ section.settings.colors_background.green }}, {{ section.settings.colors_background.blue }};
+      --color-foreground: {{ section.settings.colors_text.red }}, {{ section.settings.colors_text.green }}, {{ section.settings.colors_text.blue }};
+      --color-border: {{ section.settings.colors_border.red }}, {{ section.settings.colors_border.green }}, {{ section.settings.colors_border.blue }};
+      --color-shadow: {{ section.settings.colors_shadow.red }}, {{ section.settings.colors_shadow.green }}, {{ section.settings.colors_shadow.blue }};
+      --color-circle: {{ section.settings.colors_circle.red }}, {{ section.settings.colors_circle.green }}, {{ section.settings.colors_circle.blue }};
+      --color-discount-border: {{ section.settings.colors_border_dis.red }}, {{ section.settings.colors_border_dis.green }}, {{ section.settings.colors_border_dis.blue }};
+      --color-discount-background: {{ section.settings.colors_bg_dis.red }}, {{ section.settings.colors_bg_dis.green }}, {{ section.settings.colors_bg_dis.blue }};
+      --color-discount: {{ section.settings.colors_discount.red }}, {{ section.settings.colors_discount.green }}, {{ section.settings.colors_discount.blue }};
+      --color-link: var(--color-foreground);
+      --color-heading: var(--color-foreground);
+      --color-button-text: var(--color-background);
+      --color-button-border: var(--color-foreground);
+      --color-button-background: var(--color-foreground);
+    }
+
+    #shopify-section-{{ section.id }} .button--tertiary {
+      --color-button-text: var(--color-foreground);
+      --color-button-border: var(--color-border);
+      --color-button-background: var(--color-background);
+    }
+  {%- endstyle -%}
+
+  <link rel="stylesheet" href="{{ 'section-popup.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript>{{ 'section-popup.css' | asset_url | stylesheet_tag }}</noscript>
+
+  <promo-popup data-section-id="{{ section.id }}" class="hidden" data-delay="{{ section.settings.delay }}" data-expiry="{{ section.settings.expiry }}" 
+    data-test-mode="{% if section.settings.mode == 'testing' or section.settings.mode == 'success_testing' %}true{% else %}false{% endif %}">
+    <div class="promo-popup{% if section.settings.mode == 'testing' %} is-active show-image{% endif %}" data-position="{{ section.settings.text_box_position }}">
+      {%- if section.settings.text_box_position == 'center' -%}
+        <div class="popup-overlay"></div>
+      {%- endif -%}
+      <div class="popup-wrapper">
+        <button class="popup-close" type="button" aria-label="{{ 'accessibility.close' | t }}">
+          <span class="icon icon-plus-alt"></span>
+        </button>
+        <div class="popup {{ section.settings.text_alignment }}{% if show_image %} popup-image--{{ section.settings.image_position }}{% endif %}">
+          {%- if show_image -%}
+            <div class="popup__image-wrapper">
+              <img
+                srcset="{%- if section.settings.image.width >= 165 -%}{{ section.settings.image | image_url: width: 165 }} 165w{%- endif -%}
+                  {%- if section.settings.image.width >= 375 -%},{{ section.settings.image | image_url: width: 375 }} 375w{%- endif -%}
+                  {%- if section.settings.image.width >= 550 -%},{{ section.settings.image | image_url: width: 550 }} 550w{%- endif -%}
+                  {%- if section.settings.image.width >= 750 -%},{{ section.settings.image | image_url: width: 750 }} 750w{%- endif -%}
+                  {%- if section.settings.image.width >= 1100 -%},{{ section.settings.image | image_url: width: 1100 }} 1100w{%- endif -%}
+                  {%- if section.settings.image.width >= 1500 -%},{{ section.settings.image | image_url: width: 1500 }} 1500w{%- endif -%},
+                  {{ section.settings.image | image_url }} {{ section.settings.image.width }}w"
+                src="{{ section.settings.image | image_url: width: 1500 }}"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                alt="{{ section.settings.image.alt | escape }}"
+                loading="lazy"
+                width="{{ section.settings.image.width }}"
+                height="{{ section.settings.image.height }}"
+                class="popup__image"
+              />
+            </div>
+          {%- endif -%}
+          <div class="popup__content-wrapper">
+            <div class="popup__content">
+             
+                    <form-state {{ block.shopify_attributes }}>
+                      {% form 'customer', class: 'popup__newsletter' %}
+                        <input type="hidden" name="contact[tags]" value="newsletter"/>
+                        {%- if form.errors -%}
+                          <small class="form__message errors" id="Newsletter-error--{{ section.id }}">
+                            {% render 'icon-error' %}
+                            {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+                          </small>
+                        {%- endif -%}
+                        {%- if form.posted_successfully? or section.settings.mode == 'success_testing' -%}
+                          <script>
+                             document.addEventListener('DOMContentLoaded', function() {
+                            const discountCode = "{{ section.settings.discount_code }}";
+                            const copySuccessMsg = sucessPopupModal.querySelector('.popup-modal__success-msg');
+                            const copyBtn = sucessPopupModal.querySelector('.popup-modal__copy-btn');
+                              copyBtn.addEventListener('click', function() {
+                              navigator.clipboard.writeText(discountCode);
+                              copySuccessMsg.style.display = 'block';
+                              })
+                             });
+                          </script>
+                          <div class="form__message {% if section.settings.mode == 'success_testing' %}is-active{% endif %}">
+                           <!-- <h2 class="popup__heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>{{ block.settings.success_heading }}</h2>
+                            <div class="popup__text{% if block.settings.secondary_color %} popup__text--colored{% endif %} {{ block.settings.text_size }} rte" {{ block.shopify_attributes }}>{{ block.settings.success_text }}</div>
+                          <h3 id="Newsletter-success--{{ section.id }}" tabindex="-1" autofocus>
+                            {% render 'icon', icon: 'success' %}
+                            {{ 'newsletter.success' | t }}
+                          </h3>-->
+                            {%- unless section.settings.success_heading == blank
+                            and section.settings.success_heading_prefix == blank
+                            and section.settings.success_heading_suffix == blank
+                          -%}
+                            <h2 class="popup-modal__title">
+                              {%- unless section.settings.success_heading_prefix == blank -%}
+                                <span class="popup-modal__title__prefix">
+                                  {{ section.settings.success_heading_prefix | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                </span>
+                              {%- endunless -%}
+                              {%- unless section.settings.success_heading == blank -%}
+                                <span class="title {{ section.settings.success_heading_size }}">
+                                  {{ section.settings.success_heading | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                </span>
+                              {%- endunless -%}
+                              {%- unless section.settings.success_heading_suffix == blank -%}
+                                <span class="popup-modal__title__suffix">
+                                  {{ section.settings.success_heading_suffix | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                </span>
+                              {%- endunless -%}
+                            </h2>
+                          {%- endunless -%}
+                          {%- unless section.settings.success_text == blank -%}
+                            <div class="popup-modal__text success-popup-modal__text">
+                              {{ section.settings.success_text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                            </div>
+                          {%- endunless -%}
+                            <div class="popup-modal__discount-code">
+                          <div class="">
+                           <!-- <input
+                              id="DiscountCode--{{ section.id }}"
+                              type="text"
+                              class="field__input"
+                              style="padding:1rem 2rem 0.5rem 2rem;"
+                              value="{{ section.settings.discount_code }}"
+                              autocorrect="off"
+                              autocapitalize="off"
+                              placeholder="{{ section.settings.discount_code_label }}"
+                              readonly
+                            >-->
+                            <div onload="copyToClipboard('#p1')" class="discount-code">
+                              {{- section.settings.discount_code_label -}} <h4 id="p1">{{ section.settings.discount_code }}</h4>
+                            </div>
+                            <!--<a onload="copyToClipboard('#p1')" class="popup-modal__copy-btn">
+                              {{ section.settings.copy_button_label }}
+                              {% render 'icon-clipboard' %}
+                            </a>-->
+                          </div>
+                          <!--<p style="display:none;" class="popup-modal__success-msg">{{ block.settings.copy_message }}</p>-->
+                        </div>
+                          </div>
+                        {%- endif -%}
+
+                        {%- unless form.posted_successfully? or section.settings.mode == 'success_testing'  -%}
+                          <div>
+                             {%- unless section.settings.heading == blank
+                              and section.settings.heading_prefix == blank
+                              and section.settings.heading_suffix == blank
+                            -%}
+                              <h2 class="popup-modal__title">
+                                {%- unless section.settings.heading_prefix == blank -%}
+                                  <span class="popup-modal__title__prefix">
+                                    {{ section.settings.heading_prefix | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                  </span>
+                                {%- endunless -%}
+                                {%- unless section.settings.heading == blank -%}
+                                  <span class="title {{ section.settings.heading_size }}">
+                                    {{ section.settings.heading | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                  </span>
+                                {%- endunless -%}
+                                {%- unless section.settings.heading_suffix == blank -%}
+                                  <span class="popup-modal__title__suffix">
+                                    {{ section.settings.heading_suffix | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                  </span>
+                                {%- endunless -%}
+                              </h2>
+                            {%- endunless -%}
+                              {%- unless section.settings.text == blank -%}
+                                <div class="popup-modal__text">
+                                  {{ section.settings.text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                                </div>
+                              {%- endunless -%}
+                                                   <!-- <h2 class="popup__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+                            <div class="popup__text{% if block.settings.secondary_color %} popup__text--colored{% endif %} {{ block.settings.text_size }} rte" {{ block.shopify_attributes }}>Sign up for our email newsletter for special discounts and exclusive offers.</div>
+                         -->   <div class="field">
+                            <input
+                              id="NewsletterForm--{{ section.id }}"
+                              type="email"
+                              name="contact[email]"
+                              class="field__input required{% if form.errors %} invalid{% endif %}"
+                              value="{{ form.email }}"
+                              aria-required="true"
+                              autocorrect="off"
+                              autocapitalize="off"
+                              autocomplete="email"
+                              {% if form.errors %}
+                                autofocus
+                                aria-invalid="true"
+                                aria-describedby="Newsletter-error--{{ section.id }}"
+                              {% elsif form.posted_successfully? %}
+                                aria-describedby="Newsletter-success--{{ section.id }}"
+                              {% endif %}
+                              placeholder="{{ section.settings.text_email }}"
+                              required
+                            />
+                            <label class="visually-hidden" for="NewsletterForm--{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+                           <!-- <button type="submit" class="button{% if block.settings.button_style_secondary %} button--tertiary{% endif %}{% if block.settings.button_full_width %} button--full-width{% endif %} button--small" name="commit">
+                              {{ 'newsletter.button_label' | t }}
+                            </button>-->
+                            <button
+                              type="submit"
+                              class="newsletter-form__button field__button"
+                              name="commit"
+                              aria-label="{{ 'newsletter.button_label' | t }}"
+                            >
+                              {% render 'icon-arrow' %}
+                            </button>
+                          </div>
+                          <div class="newsletter__text rte">{{ section.settings.bottom_text }}</div>
+                          {%- if section.settings.social_media -%}
+                          <ul class="list-unstyled list-social" role="list" style="margin-top: 1.5rem;">
+                            {%- render 'social-icons' -%}
+                          </ul>
+                            {% endif %}
+                          </div>
+                        {%- endunless -%}
+                      {% endform %}
+                    </form-state>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    {%- if section.settings.floating -%}
+      {%- style -%}
+        #shopify-section-{{ section.id }} .popup-floating {
+          --color-foreground: {{ section.settings.flo_colors_text.red }}, {{ section.settings.flo_colors_text.green }}, {{ section.settings.flo_colors_text.blue }};
+          --color-link: var(--color-foreground);
+          --color-heading: var(--color-foreground);
+          {% unless section.settings.flo_bg_transparent %}
+           --color-background-fl: {{ section.settings.flo_colors_text_bg.red }}, {{ section.settings.flo_colors_text_bg.green }}, {{ section.settings.flo_colors_text_bg.blue }}; 
+          {% endunless %}
+          --radius-fl: {{ section.settings.flo_radius }}px;
+        }
+      {%- endstyle -%}
+      <div class="popup-floating popup-floating--{{ section.settings.text_box_position }}{% if section.settings.mobile_disabled %} small-hide{% endif %}">
+        {%- if section.settings.floating_social_media -%}
+          <ul class="list-unstyled list-social" role="list">
+            {%- render 'social-icons' -%}
+          </ul>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <div class="popup-open">
+            <h3 class="h5">{{ section.settings.flo_heading | escape }}</h3>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </promo-popup>
+
+  {%- unless request.design_mode -%}
+    <script src="{{ 'popup-news.js' | asset_url }}" defer="defer"></script>
+  {%- endunless -%}
+{%- endif -%}
+
+{%- if request.design_mode -%}
+  <script src="{{ 'popup-news.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{% endunless %}
+  
+{% schema %}
+{
+  "name": "t:sections.popup.name",
+   "enabled_on": {
+    "groups": ["custom.popup"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "mode",
+      "options": [
+        {
+          "value": "enabled",
+          "label": "t:sections.popup.settings.mode.options__1.label"
+        },
+        {
+          "value": "disabled",
+          "label": "t:sections.popup.settings.mode.options__2.label"
+        },
+        {
+          "value": "testing",
+          "label": "t:sections.popup.settings.mode.options__3.label"
+        },
+        {
+          "value": "success_testing",
+          "label": "Success Test"
+        }
+      ],
+      "default": "disabled",
+      "label": "t:sections.popup.settings.mode.label",
+      "info": "t:sections.popup.settings.mode.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "only_homepage",
+      "label": "t:sections.popup.settings.only_homepage.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "only_visitor",
+      "label": "t:sections.popup.settings.only_visitor.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "max": 60,
+      "min": 2,
+      "step": 1,
+      "unit": "t:sections.popup.settings.delay.unit",
+      "label": "t:sections.popup.settings.delay.label",
+      "info": "t:sections.popup.settings.delay.info",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "expiry",
+      "max": 30,
+      "min": 1,
+      "step": 1,
+      "unit": "t:sections.popup.settings.expiry.unit",
+      "label": "t:sections.popup.settings.expiry.label",
+      "info": "t:sections.popup.settings.expiry.info",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "max": 1000,
+      "min": 300,
+      "step": 10,
+      "unit": "t:sections.popup.settings.width.unit",
+      "label": "t:sections.popup.settings.width.label",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "max": 80,
+      "min": 20,
+      "step": 4,
+      "unit": "t:sections.popup.settings.padding.unit",
+      "label": "t:sections.popup.settings.padding.label",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.popup.settings.text_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.popup.settings.text_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.popup.settings.text_alignment.options__3.label"
+        }
+      ],
+      "default": "left",
+      "label": "t:sections.popup.settings.text_alignment.label"
+    },
+    {
+      "type": "select",
+      "id": "text_box_position",
+      "options": [
+        {
+          "value": "center",
+          "label": "t:sections.popup.settings.text_box_position.options__1.label"
+        },
+        {
+          "value": "bottom-left",
+          "label": "t:sections.popup.settings.text_box_position.options__2.label"
+        },
+        {
+          "value": "bottom-right",
+          "label": "t:sections.popup.settings.text_box_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.popup.settings.text_box_position.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.popup.settings.header.content",
+      "info": "t:sections.popup.settings.header.info"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.popup.settings.paragraph.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.popup.settings.image_position.options__1.label"
+        },
+        {
+          "value": "left",
+          "label": "t:sections.popup.settings.image_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.popup.settings.image_position.options__3.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.popup.settings.image_position.options__4.label"
+        }
+      ],
+      "default": "top",
+      "label": "t:sections.popup.settings.image_position.label",
+      "info": "t:sections.popup.settings.image_position.info"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "colors_text",
+      "label": "Text",
+      "default": "#1a1b18"
+    },
+    {
+      "type": "color",
+      "id": "colors_border",
+      "label": "Borders",
+      "default": "#d2d5d9"
+    },
+    {
+      "type": "color",
+      "id": "colors_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "colors_shadow",
+      "label": "Shadow",
+      "default": "#a8e8e2"
+    },
+    {
+      "type": "color",
+      "id": "colors_circle",
+      "label": "Heading Backdrop",
+      "default": "#efefef"
+    },
+     {
+      "type": "color",
+      "id": "colors_border_dis",
+      "label": "Discount border",
+      "default": "#000"
+    },
+    {
+      "type": "color",
+      "id": "colors_bg_dis",
+      "label": "Discount background",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "color",
+      "id": "colors_discount",
+      "label": "Discount Text",
+      "default": "#000"
+    },
+     {
+            "type": "header",
+            "content": "Content"
+        },
+        {
+            "type": "text",
+            "id": "heading_prefix",
+            "label": "Heading prefix",
+            "default": "Sign up and"
+        },
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "GET 10% OFF"
+        },
+        {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+                {
+                    "value": "h3",
+                    "label": "Extra Small"
+                },
+                {
+                    "value": "h2",
+                    "label": "Small"
+                },
+                {
+                    "value": "h1",
+                    "label": "Medium"
+                },
+                {
+                    "value": "h0",
+                    "label": "Large"
+                }
+            ],
+            "default": "h1",
+            "label": "Heading size"
+        },
+        {
+            "type": "text",
+            "id": "heading_suffix",
+            "label": "Heading suffix"
+        },
+        {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Sign up for our email newsletter for special discounts and exclusive offers.</p>"
+        },
+        {
+            "type": "text",
+            "id": "text_email",
+            "label": "Placeholder Text",
+            "default": "Enter Email Here"
+        },
+        {
+            "type": "text",
+            "id": "bottom_text",
+            "label": "Sign up bottom text",
+            "default": "Be the first to know about new collections and exclusive offers.",
+            "info": "NOTE: Make sure you put in your own discount code in the settings under \"SUCCESS\" category down bellow."
+        },
+       {
+          "type": "checkbox",
+          "id": "social_media",
+          "label": "t:sections.popup.blocks.floating.settings.social_media.label",
+          "default": true
+        },
+        {
+            "type": "text",
+            "id": "dismiss_btn_label",
+            "label": "Dismiss button label",
+            "default": "No thanks"
+        },
+        {
+          "type": "header",
+          "content": "Success"
+        },
+        {
+            "type": "text",
+            "id": "discount_code",
+            "label": "Discount code",
+            "default": "EXAMPLE10"
+        },
+        {
+            "type": "text",
+            "id": "success_heading_prefix",
+            "label": "Heading prefix",
+            "default": "Enjoy your"
+        },
+        {
+            "type": "text",
+            "id": "success_heading",
+            "label": "Heading",
+            "default": "DISCOUNT!"
+        },
+        {
+            "type": "select",
+            "id": "success_heading_size",
+            "options": [
+                {
+                    "value": "h3",
+                    "label": "Extra Small"
+                },
+                {
+                    "value": "h2",
+                    "label": "Small"
+                },
+                {
+                    "value": "h1",
+                    "label": "Medium"
+                },
+                {
+                    "value": "h0",
+                    "label": "Large"
+                }
+            ],
+            "default": "h1",
+            "label": "Heading size"
+        },
+        {
+            "type": "text",
+            "id": "success_heading_suffix",
+            "label": "Heading suffix"
+        },
+        {
+            "type": "richtext",
+            "id": "success_text",
+            "label": "Text",
+            "default": "<p>Use the code bellow to get 10% off your whole order!</p>"
+        },
+        {
+            "type": "text",
+            "id": "discount_code_label",
+            "label": "Discount code field label",
+            "default": "Discount code:"
+        },
+    {
+      "type": "header",
+      "content": "Floating Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "floating",
+      "label": "Show Floating Bar",
+      "default": true
+    },
+     {
+          "type": "paragraph",
+          "content": "t:sections.popup.blocks.floating.settings.paragraph.content"
+        },
+        {
+          "type": "text",
+          "id": "flo_heading",
+          "default": "Newsletter",
+          "label": "t:sections.popup.blocks.floating.settings.heading.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "floating_social_media",
+          "label": "t:sections.popup.blocks.floating.settings.social_media.label",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "flo_text_box_position",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.popup.blocks.floating.settings.text_box_position.options__1.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.popup.blocks.floating.settings.text_box_position.options__2.label"
+            }
+          ],
+          "default": "left",
+          "label": "t:sections.popup.blocks.floating.settings.text_box_position.label"
+        },
+        {
+          "type": "color",
+          "id": "flo_colors_text",
+          "label": "t:sections.popup.blocks.floating.settings.colors_text.label",
+          "default": "#1a1b18"
+        },
+       {
+          "type": "color",
+          "id": "flo_colors_text_bg",
+          "label": "Background"
+        },
+    {
+          "type": "checkbox",
+          "id": "flo_bg_transparent",
+          "label": "Transparent Background"
+        },
+       {
+        "type": "range",
+        "id": "flo_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "t:settings_schema.global.settings.corner_radius.label",
+        "default": 0
+      },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_disabled",
+          "label": "t:sections.popup.blocks.floating.settings.mobile_disabled.label",
+          "default": true
+        }
+  ],
+   "presets": [
+    {
+      "name": "Newsletter Popup"
+    }
+  ]
+}
+{% endschema %}

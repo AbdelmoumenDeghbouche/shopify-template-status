@@ -1,0 +1,26 @@
+{%- if block.settings.text != blank -%}
+<div class="style style-{{block.id}}">
+<p>{{block.settings.text}}</p>
+</div>
+{%- endif -%}
+<style>
+  .style p {
+    margin:0;
+    width: fit-content;
+    padding: 6px 16px;
+    border-radius: 100px;
+}
+   .style-{{block.id}} p {
+    background: {{block.settings.text_bg}};
+    font-size: {{block.settings.font_size}}px;
+    border: 1px solid {{block.settings.border}};
+}
+.style-{{block.id}} em {
+    color: {{block.settings.italic_text}};
+    font-style: normal;
+}
+.style-{{block.id}} strong {
+    color: {{block.settings.bold_text}};
+    font-style: normal;
+}
+</style>

@@ -1,0 +1,135 @@
+.content-and-comparison-table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  column-gap: 5rem;
+  row-gap: 2rem;
+}
+.content-and-comparison-table--no-content {
+  grid-template-columns: repeat(1, 1fr);
+}
+@media screen and (max-width: 899px) {
+  .content-and-comparison-table {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+@media screen and (min-width: 900px) {
+  .content-and-comparison-table--table-first .comparison-table-container {
+    order: -1;
+  }
+}
+
+.content-and-comparison-table .content-container .title {
+  margin-top: 0;
+}
+.comparison-table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 50rem;
+}
+.comparison-table {
+  flex-grow: 1;
+  border-spacing: 0;
+}
+.comparison-table tbody {
+/* box-shadow: var(--table-shadow-horizontal-offset) var(--table-shadow-vertical-offset) var(--table-shadow-blur-radius) var(--table-border-width) rgba(var(--color-foreground),var(--table-shadow-opacity));
+  box-shadow:var(--table-border-width) var(--table-border-width) var(--table-border-width) calc(var(--table-border-width) + var(--table-shadow-horizontal-offset)) rgb(var(--color-foreground)), var(--table-shadow-horizontal-offset) var(--table-shadow-vertical-offset) var(--table-shadow-blur-radius) var(--table-border-width) rgba(var(--color-button), var(--alpha-button-background));        
+*/
+ border-radius:  var(--table-corner-radius);
+}
+.comparison-table td {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  box-shadow:0 0rem rgba(var(--color-foreground), var(--table-shadow-opacity)), var(--table-shadow-horizontal-offset) var(--table-shadow-vertical-offset) var(--table-shadow-blur-radius) var(--table-border-width) rgba(var(--color-foreground), var(--table-shadow-opacity));
+}
+.comparison-table img {
+  vertical-align: middle;
+}
+.comparison-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 1.8rem;
+  line-height: 1.3;
+}
+.comparison-table tbody tr:first-of-type .comparison-table__row-name {
+  border-radius:  var(--table-corner-radius) 0 0 0;
+}
+.comparison-table tbody tr:last-of-type .comparison-table__row-name {
+  border-radius: 0 0 0  var(--table-corner-radius);
+}
+.comparison-table tbody tr:first-of-type td:last-child {
+  border-radius: 0  var(--table-corner-radius) 0 0;
+}
+.comparison-table tbody tr:last-of-type td:last-child {
+  border-radius: 0 0  var(--table-corner-radius) 0;
+}
+.comparison-table tbody td:not(.comparison-table__row-name) {
+  padding: 1rem 2rem;
+}
+.comparison-table__x {
+  width: 2rem;
+  height: 2rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.comparison-table__checkmark {
+  width: 2rem;
+  height: 2rem;
+  vertical-align: middle;
+  margin: auto;
+  display: inline-block;
+}
+.comparison-table__x span {
+  content: "";
+  display: block;
+  height: 0.3rem;
+  width: 1.8rem;
+  background: var(--normal-x);
+  border-radius: 1rem;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.active-comparison-table__x span {
+  background: var(--active-x);
+}
+.comparison-table__x span:nth-child(2) {
+  position: absolute;
+  transform: rotate(-45deg);
+}
+.comparison-table .comparison-table__row-name h3 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+ .active-table-logo{
+    background: rgba(var(--active-color), 1);
+    color: var(--active-text-color);
+    border-top-left-radius: var(--table-corner-radius);
+    border-top-right-radius: var(--table-corner-radius);
+    box-shadow: var(--table-shadow-horizontal-offset) var(--table-shadow-vertical-offset) var(--table-shadow-blur-radius) var(--table-border-width) rgba(var(--active-border-color), 1) !important;
+  }
+   .active-table-content{
+    background: rgba(var(--active-color), 1);
+    box-shadow: var(--table-shadow-horizontal-offset) var(--table-shadow-vertical-offset) var(--table-shadow-blur-radius) var(--table-border-width) rgba(var(--active-border-color), 1) !important;
+  }
+@media screen and (max-width: 750px) {
+  .comparison-table .comparison-table__row-name h3,
+  .comparison-table th {
+    font-size: 1.6rem;
+  }
+  .comparison-table__checkmark,
+  .comparison-table__x {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+@media screen and (max-width: 500px) {
+  .comparison-table__logo img {
+    max-width: var(--mobile-logo-width);
+    height: auto;
+  }
+}

@@ -1,0 +1,712 @@
+{% liquid
+  assign header_block = section.blocks | where: 'type', 'header' | first
+
+  if header_block.settings.cell_7_text != blank or header_block.settings.cell_7_img != null
+    assign cols_count = 7
+  elsif header_block.settings.cell_6_text != blank or header_block.settings.cell_6_img != null
+    assign cols_count = 6
+  elsif header_block.settings.cell_5_text != blank or header_block.settings.cell_5_img != null
+    assign cols_count = 5
+  elsif header_block.settings.cell_4_text != blank or header_block.settings.cell_4_img != null
+    assign cols_count = 4
+  elsif header_block.settings.cell_3_text != blank or header_block.settings.cell_3_img != null
+    assign cols_count = 3
+  elsif header_block.settings.cell_2_text != blank or header_block.settings.cell_2_img != null
+    assign cols_count = 2
+  else
+    assign cols_count = 1
+  endif
+%}
+
+{%- style -%}
+    #lumin-table-{{ section.id }} {
+      overflow: hidden;
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+
+    @media (min-width: 750px) {
+      #lumin-table-{{ section.id }} {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+    #lumin-table-{{ section.id }}  .table > :not(caption) > * > * {
+      {% assign table_border_opacity = section.settings.table_border_opacity | divided_by: 100.0 %}
+      border-color: {{ section.settings.table_text_color | color_modify: 'alpha', table_border_opacity }};
+    }
+
+    #lumin-table-{{ section.id }} .table-striped > tbody > tr:nth-of-type(odd) > * {
+      {% assign table_striped_bg_opacity = section.settings.table_striped_bg_opacity | divided_by: 100.0 %}
+      background-color: {{ section.settings.table_text_color | color_modify: 'alpha', table_striped_bg_opacity }};
+    }
+
+    .lumin-tbody-{{section.id}} tbody {
+      {% assign table_border_opacity = section.settings.table_border_opacity | divided_by: 100.0 %}
+      box-shadow: inset 0 0 0 1px {{ section.settings.table_text_color | color_modify: 'alpha', table_border_opacity }};
+      border-radius: var(--table-border-radius);
+      border:0px solid;
+  }
+  .lumin-table-{{section.id}} .table tr:first-child th:first-child {
+    border-top-left-radius: var(--table-border-radius);
+  }
+
+  .lumin-table-{{section.id}} .table tr:first-child td:last-child {
+    border-top-right-radius: var(--table-border-radius);
+  }
+
+  .lumin-table-{{section.id}} .table tr:last-child th:first-child {
+    border-bottom-left-radius: var(--table-border-radius);
+  }
+
+  .lumin-table-{{section.id}} .table tr:last-child td:last-child {
+    border-bottom-right-radius: var(--table-border-radius);
+  }
+{%- endstyle -%}
+{{ 'lumin-table.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="lumin-table-{{ section.id }}"
+  class="lumin-table lumin-table-{{section.id}} color-{{ section.settings.color_scheme }} gradient {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+>
+  <div
+    class="{% if section.settings.container %}page-width{% endif %}"
+    style="max-width: {{ section.settings.container_max_width | append: 'px' }}"
+  >
+    <div class="section-header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank %}
+        <div class="description rte">
+          {{ section.settings.description | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+        </div>
+      {% endif %}
+    </div>
+    <div class="table-responsive">
+      <table
+        class="table table-striped lumin-tbody-{{section.id}}"
+        style="
+          background: {{ section.settings.table_bg_color }};
+          color: {{ section.settings.table_text_color }};
+          --table-min-width: {{ section.settings.table_min_width | append: 'px' }};
+          --table-first-col-width: {{ section.settings.table_first_col_width | append: '%' }};
+          --icon-checked-circle-color: {{ section.settings.icon_color_checked_circle }};
+          --icon-checked-color: {{ section.settings.icon_color_checked }};
+          --icon-unchecked-color: {{ section.settings.icon_color_unchecked }};
+          --table-border-radius: {{ section.settings.table_border_radius | append: 'px' }};
+        "
+      >
+        {% unless section.settings.table_caption == blank %}
+          <caption class="">
+            {{ section.settings.table_caption | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+          </caption>
+        {% endunless %}
+        <thead>
+          <tr>
+            {% for count in (1..cols_count) %}
+              {% liquid
+                case count
+                  when 1
+                    assign img = header_block.settings.cell_1_img
+                    assign text = header_block.settings.cell_1_text
+                  when 2
+                    assign img = header_block.settings.cell_2_img
+                    assign text = header_block.settings.cell_2_text
+                  when 3
+                    assign img = header_block.settings.cell_3_img
+                    assign text = header_block.settings.cell_3_text
+                  when 4
+                    assign img = header_block.settings.cell_4_img
+                    assign text = header_block.settings.cell_4_text
+                  when 5
+                    assign img = header_block.settings.cell_5_img
+                    assign text = header_block.settings.cell_5_text
+                  when 6
+                    assign img = header_block.settings.cell_6_img
+                    assign text = header_block.settings.cell_6_text
+                  when 7
+                    assign img = header_block.settings.cell_7_img
+                    assign text = header_block.settings.cell_7_text
+                endcase
+              %}
+              <th scope="col">
+                {% unless img == null %}
+                  <img
+                    src="{{ img | image_url: width: 400 }}"
+                    alt="{{ img.alt }}"
+                    width="200"
+                    height="{{ 200 | divided_by: img.aspect_ratio | round }}"
+                    loading="lazy"
+                  >
+                {% endunless %}
+                {% unless text == blank or text == '#' %}
+                  <span>
+                    {{ text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                  </span>
+                {% endunless %}
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for block in section.blocks %}
+            {% if block.type == 'row' %}
+              <tr>
+                <th scope="row" style="text-align: {{ section.settings.first_col_text_align }}">
+                  {{ block.settings.title | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                </th>
+                {% for count in (2..cols_count) %}
+                  {% liquid
+                    case count
+                      when 2
+                        assign checkbox = block.settings.cell_2_checkbox
+                        assign text = block.settings.cell_2_text
+                      when 3
+                        assign checkbox = block.settings.cell_3_checkbox
+                        assign text = block.settings.cell_3_text
+                      when 4
+                        assign checkbox = block.settings.cell_4_checkbox
+                        assign text = block.settings.cell_4_text
+                      when 5
+                        assign checkbox = block.settings.cell_5_checkbox
+                        assign text = block.settings.cell_5_text
+                      when 6
+                        assign checkbox = block.settings.cell_6_checkbox
+                        assign text = block.settings.cell_6_text
+                      when 7
+                        assign checkbox = block.settings.cell_7_checkbox
+                        assign text = block.settings.cell_7_text
+                    endcase
+                  %}
+                  <td>
+                    {{ block.settings.checkbox }}
+                    {% unless checkbox == blank %}
+                      {% if checkbox == 'checked-circle' %}
+                  {% comment %}      <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          class="lumin-icon lumin-icon-checked-circle"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg> {% endcomment %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                          class="lumin-icon lumin-icon-checked-circle">
+                          <circle cx="10" cy="10" r="9.375" stroke="currentColor" stroke-width="1.25"/>
+                          <path d="M5.55469 9.99995L8.88802 13.3333L14.9991 7.22217" stroke="currentColor" stroke-width="2"/></svg>
+                      {% elsif checkbox == 'checked' %}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          class="lumin-icon lumin-icon-checked"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      {% else %}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          class="lumin-icon lumin-icon-unchecked"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      {% endif %}
+                    {% endunless %}
+                    {% unless text == blank %}
+                      <span>
+                        {{ text | replace: '[', '<span class="lumin-text__fancy1">' | replace: ']', '</span>' | replace: '((', '<span class="lumin-text__fancy2">' | replace: '))', '</span>' }}
+                      </span>
+                    {% endunless %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Table Compare Pro",
+  "tag": "section",
+  "class": "section",
+   "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "container",
+      "label": "Wrap in a container",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "container_max_width",
+      "label": "Container max-width (px)",
+      "info": "Leave empty to use the default container width"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading - ✨ Fancy enabled",
+      "default": "Table for Comparison"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description - ✨ Fancy enabled",
+      "default": "<p>Description for this Comparison</p>",
+      "info": "Leave empty to hide"
+    },
+    {
+      "type": "header",
+      "content": "Table"
+    },
+    {
+      "type": "text",
+      "id": "table_min_width",
+      "label": "Min-width (px)",
+      "info": "Prevent the table from shrinking too much on mobile",
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "table_first_col_width",
+      "label": "First column width",
+      "info": "Fine-tune the table propotions.",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "default": 30,
+      "unit": "%"
+    },
+    {
+      "type": "text_alignment",
+      "id": "first_col_text_align",
+      "label": "First column text-align",
+      "default": "center"
+    },
+    {
+      "type": "textarea",
+      "id": "table_caption",
+      "label": "Caption - ✨ Fancy enabled",
+      "default": "Add on optional text explaining the table comparison or leave empty to Hide."
+    },
+    {
+      "type": "color",
+      "id": "table_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "table_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "table_border_opacity",
+      "label": "Border opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 100,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "table_border_radius",
+      "label": "Border corner radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "table_striped_bg_opacity",
+      "label": "Striped rows bg opacity",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 5,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Icon colors"
+    },
+    {
+      "type": "color",
+      "id": "icon_color_checked_circle",
+      "label": "Checked circle",
+      "default": "#15803d"
+    },
+    {
+      "type": "color",
+      "id": "icon_color_checked",
+      "label": "Checked",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "icon_color_unchecked",
+      "label": "Unchecked",
+      "default": "#b91c1c"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "header",
+      "name": "Header",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "This section is ✨ Fancy enabled"
+        },
+        {
+          "type": "header",
+          "content": "Cell 1"
+        },
+        {
+          "type": "text",
+          "id": "cell_1_text",
+          "label": "Text",
+          "default": "#"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_1_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 2"
+        },
+        {
+          "type": "text",
+          "id": "cell_2_text",
+          "label": "Text",
+          "default": "Our Brand"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_2_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 3"
+        },
+        {
+          "type": "text",
+          "id": "cell_3_text",
+          "label": "Text",
+          "default": "Competitor 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_3_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 4"
+        },
+        {
+          "type": "text",
+          "id": "cell_4_text",
+          "label": "Text",
+          "default": "Competitor 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_4_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 5"
+        },
+        {
+          "type": "text",
+          "id": "cell_5_text",
+          "label": "Text",
+          "default": "Competitor 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_5_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 6"
+        },
+        {
+          "type": "text",
+          "id": "cell_6_text",
+          "label": "Text",
+          "default": "Competitor 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_6_img",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Cell 7"
+        },
+        {
+          "type": "text",
+          "id": "cell_7_text",
+          "label": "Text",
+          "default": "Competitor 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "cell_7_img",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "This section is ✨ Fancy enabled"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature/Benefit"
+        },
+        {
+          "type": "header",
+          "content": "Cell 2"
+        },
+        {
+          "type": "select",
+          "id": "cell_2_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" },
+          ],
+          "default": "checked-circle"
+        },
+        {
+          "type": "text",
+          "id": "cell_2_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Cell 3"
+        },
+        {
+          "type": "select",
+          "id": "cell_3_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" }
+          ],
+           "default": "unchecked"
+        },
+        {
+          "type": "text",
+          "id": "cell_3_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Cell 4"
+        },
+        {
+          "type": "select",
+          "id": "cell_4_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" }
+          ],
+           "default": "unchecked"
+        },
+        {
+          "type": "text",
+          "id": "cell_4_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Cell 5"
+        },
+        {
+          "type": "select",
+          "id": "cell_5_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" }
+          ],
+           "default": "unchecked"
+        },
+        {
+          "type": "text",
+          "id": "cell_5_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Cell 6"
+        },
+        {
+          "type": "select",
+          "id": "cell_6_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" }
+          ],
+           "default": "unchecked"
+        },
+        {
+          "type": "text",
+          "id": "cell_6_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Cell 7"
+        },
+        {
+          "type": "select",
+          "id": "cell_7_checkbox",
+          "label": "Checkbox",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "checked-circle", "label": "Checked circle" },
+            { "value": "checked", "label": "Checked" },
+            { "value": "unchecked", "label": "Unchecked" }
+          ],
+           "default": "unchecked"
+        },
+        {
+          "type": "text",
+          "id": "cell_7_text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table Compare Pro",
+      "blocks": [
+        { "type": "header" },
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" }
+      ]
+    }
+  ]
+}
+{% endschema %}

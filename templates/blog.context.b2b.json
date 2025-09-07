@@ -1,0 +1,7 @@
+{
+  "parent": "blog.json",
+  "context": {
+    "b2b": true
+  },
+  "sections": {}
+}

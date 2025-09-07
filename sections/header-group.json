@@ -1,0 +1,125 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "lumin_scrolling_text_XiXQBh": {
+      "type": "lumin-scrolling-text",
+      "blocks": {
+        "announcement_fxpe7x": {
+          "type": "announcement",
+          "settings": {
+            "Announcement": "<p><strong>MID SEASONS SALE:20% OFF<\/strong><\/p>",
+            "announcement_size": 14,
+            "announcement_size_m": 14,
+            "text_spacing": 0,
+            "text_transform": "none",
+            "announcement_color": "#212121",
+            "icon": "stopwatch",
+            "text_link": ""
+          }
+        },
+        "announcement_eg7Wkj": {
+          "type": "announcement",
+          "settings": {
+            "Announcement": "<p><strong>((Save Up to 20%))<\/strong><\/p>",
+            "announcement_size": 14,
+            "announcement_size_m": 14,
+            "text_spacing": 0,
+            "text_transform": "none",
+            "announcement_color": "#212121",
+            "icon": "none",
+            "text_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_fxpe7x",
+        "announcement_eg7Wkj"
+      ],
+      "settings": {
+        "scroll_speed": 15,
+        "reverse": false,
+        "fade": false,
+        "color_scheme": "",
+        "padding_desktop": 8,
+        "padding_mobile": 8,
+        "padding_item_desktop": 16,
+        "padding_item_mobile": 8,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "announcement_bar_GFUcVz": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_CtCp9F": {
+          "type": "announcement",
+          "settings": {
+            "text": "Gentle Care - Powerful Results",
+            "link": ""
+          }
+        },
+        "announcement_FxUixL": {
+          "type": "announcement",
+          "settings": {
+            "text": "Midseason Sale: 20% Off",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_CtCp9F",
+        "announcement_FxUixL"
+      ],
+      "settings": {
+        "color_scheme": "scheme-52377e07-d339-4279-a779-52e97c9fce5f",
+        "show_line_separator": false,
+        "show_social": true,
+        "auto_rotate": false,
+        "hide_arrows": false,
+        "change_slides_speed": 3,
+        "enable_country_selector": true,
+        "enable_language_selector": true
+      }
+    },
+    "header": {
+      "type": "header",
+      "custom_css": [],
+      "settings": {
+        "logo_position": "middle-left",
+        "hide_search": true,
+        "menu": "main-menu",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "transparent_header": "none",
+        "content_color": "#000000",
+        "menu_type_desktop": "mega",
+        "menu_hover": true,
+        "mega_columns": "20",
+        "menu_align": "start",
+        "extended-megamenu-show-imgs": "yes",
+        "link_img_size": 100,
+        "img_radius": 6,
+        "mega_menu_head_size": 20,
+        "head_menu_bold": true,
+        "mega_menu_link_size": 14,
+        "menu_bold": false,
+        "mega_menu_head_color": "#000000",
+        "mega_menu_link_color": "#636363",
+        "color_scheme": "scheme-58ff9a05-7092-43ee-84e7-6f05d1cc9431",
+        "menu_color_scheme": "background-1",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    }
+  },
+  "order": [
+    "lumin_scrolling_text_XiXQBh",
+    "announcement_bar_GFUcVz",
+    "header"
+  ]
+}

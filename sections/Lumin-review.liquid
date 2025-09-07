@@ -1,0 +1,1083 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<style>
+  .star-rating .star {
+    width: 24px;
+    height: 24px;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+  .zoom-top {
+    zoom: {{ section.settings.star_size_top }};
+  }
+  .zoom-bottom {
+    zoom: {{ section.settings.star_size }};
+  }
+</style>
+{% if section.settings.star_style == 'star_bg' or section.settings.star_style == 'star_bg_2' %}
+  <style>
+    .rating {
+      margin: 10px 0;
+    }
+
+    .rating i {
+      display: inline-block;
+      width: 34px;
+      height: 34px;
+      border-width: 0 16px;
+      border-style: solid;
+      border-color: {{ section.settings.inactive_star_color }};
+      border-radius: {{ section.settings.star_radius }}px;
+      color: white;
+      background: {{ section.settings.inactive_star_color }};
+      {% if section.settings.star_style == 'star_bg' %}
+      padding: 0.3rem 0;
+      line-height:43px;
+      text-indent: -12px;
+      {% else %}
+      padding: 0;
+      line-height:47px;
+      text-indent: -12px;
+      {% endif %}
+      text-shadow: 1px 0 1px #b3b3b3;
+    }
+    .rating svg {
+     {% if section.settings.star_style == 'star_bg' %} width:26px;{% else %}width:26px;{% endif %}
+      height: auto;
+      fill: #fff;
+    }
+
+    /** Colors */
+    [data-rating^="1"] .star-1 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="1.5"] .star-2 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="2"] .star-1 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="2"] .star-2 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="2.5"] .star-3 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="3"] .star-1 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="3"] .star-2 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="3"] .star-3 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="3.5"] .star-4 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="4"] .star-1 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="4"] .star-2 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="4"] .star-3 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="4"] .star-4 {
+      border-color: {{ section.settings.feature_svg_color }};
+      background: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating^="4.5"] .star-5 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+    [data-rating^="4.6"] .star-5 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+    [data-rating^="4.7"] .star-5 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+                          [data-rating^="4.8"] .star-5 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+    [data-rating^="4.9"] .star-5 {
+      border-left-color: {{ section.settings.feature_svg_color }};
+    }
+
+    [data-rating="5"] i {
+      background: {{ section.settings.feature_svg_color }};
+      border-color: {{ section.settings.feature_svg_color }};
+    }
+  </style>
+{% endif %}
+
+{%- if request.design_mode -%}
+  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{% assign scheme1 = settings.color_schemes | first %}
+<div id="lmReview" class="rw-main-wrapper color-{{ section.settings.color_scheme }} gradient">
+  <div class="rw-sub-wrapper page-width content-container isolate{% if settings.text_boxes_border_thickness > 0 and settings.text_boxes_border_opacity > 0 and settings.media_border_thickness > 0 and settings.media_border_opacity > 0 %} collapse-borders{% endif %}{% unless section.settings.color_scheme == scheme1 and settings.media_border_thickness > 0 and settings.text_boxes_shadow_opacity == 0 and settings.text_boxes_border_thickness == 0 or settings.text_boxes_border_opacity == 0 %} collapse-corners{% endunless %} section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="page-width">
+      <style>
+        :root {
+           --star-size: 20px;
+           --star-color: {{ section.settings.inactive_star_color }};
+           --star-background: {{ section.settings.feature_svg_color }};
+         }
+      </style>
+      <h1 class="rw-title" style="text-align:center;">
+        {{
+          section.settings.header_text
+          | replace: '[', '<span class="lumin-text__fancy1">'
+          | replace: ']', '</span>'
+          | replace: '((', '<span class="lumin-text__fancy2">'
+          | replace: '))', '</span>'
+        }}
+      </h1>
+      {% if section.settings.show_top %}
+        <div class="top-review-box">
+          <div class="rating-box">
+            <p style="margin: 0;font-size:40px;font-weight:bold; line-height: 1;">{{ section.settings.rating_text }}</p>
+            {% if section.settings.star_style == 'star' %}
+              {% render 'review-star', section: section %}
+            {% elsif section.settings.star_style == 'star_bg' %}
+              {% render 'review-star-background', section: section %}
+            {% elsif section.settings.star_style == 'star_bg_2' %}
+              {% render 'review-star-crisp', section: section %}
+            {% endif %}
+            {% unless section.settings.rating_count == blank %}
+              <p style="margin: 0;text-align: center;">
+                {{
+                  section.settings.rating_count
+                  | replace: '[', '<span class="lumin-text__fancy1">'
+                  | replace: ']', '</span>'
+                  | replace: '((', '<span class="lumin-text__fancy2">'
+                  | replace: '))', '</span>'
+                }}
+              </p>
+            {% endunless %}
+          </div>
+        </div>
+        <lr></lr>
+      {% endif %}
+    </div>
+    <div class="load-more-container">
+      <input class="visually-hidden" type="checkbox" id="load-more">
+      <ul class="rw-container no-js-hidden">
+        {% for block in section.blocks %}
+          <li class="rw-container-contant" {{ block.shopify_attributes }}>
+            <div class="review-wrapper">
+              <div class="main-review">
+                <div class="rw-text">
+                  <div class="rw-detail">
+                    <div style="display: grid;grid-gap: 14px;">
+                      <div style="display: flex;align-items: center;justify-content: space-between;">
+                        <span class="rw-text-name h2">
+                          {{-
+                            block.settings.name_text
+                            | replace: '[', '<span class="lumin-text__fancy1">'
+                            | replace: ']', '</span>'
+                            | replace: '((', '<span class="lumin-text__fancy2">'
+                            | replace: '))', '</span>'
+                          -}}
+                        </span>
+                        <span class="rw-date">
+                          {{-
+                            block.settings.date_text
+                            | replace: '[', '<span class="lumin-text__fancy1">'
+                            | replace: ']', '</span>'
+                            | replace: '((', '<span class="lumin-text__fancy2">'
+                            | replace: '))', '</span>'
+                          -}}
+                        </span>
+                      </div>
+
+                      {% if section.settings.star_style == 'star' %}
+                        {% render 'rating-star', block: block, section: section %}
+                      {% elsif section.settings.star_style == 'star_bg' %}
+                        {% render 'rating-star-background', block: block, section: section %}
+                      {% elsif section.settings.star_style == 'star_bg_2' %}
+                        {% render 'rating-star-crisp', block: block, section: section %}
+                      {% endif %}
+                      {% if section.settings.verify_text != blank %}
+                        <div class="verify-container">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 14 14"
+                            class="svg font-size-sm ml-1 text-tsw"
+                            style="height: 1em;fill: {{section.settings.section_bg2}};"
+                          >
+                            <path d="M6.506.28a1.49 1.49 0 011.806.051l.107.096.808.793c.137.134.307.226.492.267l.141.021 1.118.081a1.49 1.49 0 011.353 1.214l.019.134.109 1.125c.018.2.095.39.22.545l.08.09.808.792c.474.475.57 1.202.249 1.779l-.075.121-.627.936a1.022 1.022 0 00-.177.532l.004.143.109 1.13a1.492 1.492 0 01-.949 1.54l-.136.045-1.088.3a1.018 1.018 0 00-.494.312l-.073.094-.633.932a1.49 1.49 0 01-1.715.57l-.133-.053-1.029-.468a1.019 1.019 0 00-.554-.082l-.14.028-1.094.317c-.65.18-1.332-.1-1.674-.667l-.068-.126-.486-1.027a1.019 1.019 0 00-.394-.433l-.106-.055-1.029-.468a1.494 1.494 0 01-.858-1.588l.029-.14.283-1.1A1.01 1.01 0 00.693 7.5l-.052-.133-.493-1.019A1.493 1.493 0 01.51 4.576l.113-.089.918-.65c.165-.117.291-.28.363-.467l.037-.115.287-1.097a1.49 1.49 0 011.418-1.121l.144.004 1.124.084c.19.015.38-.025.548-.112l.122-.075.922-.658zm3.756 5.105c.686-.682-.401-1.526-.947-.98l-.334.344-2.872 3.05-.57-.612-.327-.34-.359-.367-.123-.124a.687.687 0 10-.947.985l.45.46 1.078 1.133.798.851 3.29-3.502.796-.83.067-.068z"></path>
+                          </svg>
+                          <span class="verify">
+                            {{-
+                              section.settings.verify_text
+                              | replace: '[', '<span class="lumin-text__fancy1">'
+                              | replace: ']', '</span>'
+                              | replace: '((', '<span class="lumin-text__fancy2">'
+                              | replace: '))', '</span>'
+                            -}}
+                          </span>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="rw-detail-main" style="margin-top:24px;">
+                      <div class="rw-text-head h4" style="margin-bottom:10px;">
+                        {{
+                          block.settings.review_head
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '((', '<span class="lumin-text__fancy2">'
+                          | replace: '))', '</span>'
+                        }}
+                      </div>
+                      <div class="rw-text-main">
+                        {{
+                          block.settings.review_text
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '((', '<span class="lumin-text__fancy2">'
+                          | replace: '))', '</span>'
+                        }}
+                      </div>
+                      {% assign review_image_width = section.settings.rw_img_size | times: 2 %}
+                      {% if block.settings.img_block != blank %}
+                        {{ block.settings.img_block | image_url: width: review_image_width | image_tag }}
+                        <!-- <img src="{{block.settings.img_block.src | img_url: '200x'}}" alt="" loading="lazy"> -->
+                      {% endif %}
+                      {% if block.settings.img_block2 != blank %}
+                        {{ block.settings.img_block2 | image_url: width: review_image_width | image_tag }}
+                        <!-- <img src="{{block.settings.img_block2.src | img_url: '200x'}}" alt="" loading="lazy"> -->
+                      {% endif %}
+
+                      {% if section.settings.show_footer %}
+                        <div class="rw-text-footer">
+                          {% if section.settings.show_product %}
+                            <span style="display: flex;align-items: center;gap: 10px;">
+                              {% if product.images.size > 0 %}
+                                <div
+                                  style="
+                                    background-image: url('{{ product.images[0] | img_url: 'medium' }}');
+                                    background-size: cover;
+                                    background-position: center;
+                                    width: 50px;
+                                    min-width: 50px;
+                                    height: 50px;
+                                    display:block;
+                                  "
+                                  role="img"
+                                  aria-label="{{ product.title }}"
+                                ></div>
+                              {% endif %}
+                              <span class="lm-text-clip">{{ product.title | escape }}</span>
+                            </span>
+                          {% endif %}
+                          {% if section.settings.like_text != blank %}
+                            <span
+                              {% unless section.settings.show_product %}
+                                style="display: flex;justify-content: space-between;width: 100%;"
+                              {% endunless %}
+                            >
+                              <span>
+                                {{-
+                                  section.settings.like_text
+                                  | replace: '[', '<span class="lumin-text__fancy1">'
+                                  | replace: ']', '</span>'
+                                  | replace: '((', '<span class="lumin-text__fancy2">'
+                                  | replace: '))', '</span>'
+                                -}}
+                              </span>
+                              <span>
+                                <svg
+                                  enable-background="new 0 0 949.3 949.3"
+                                  style="height:auto;margin:0 2px 0 10px;width:14px"
+                                  version="1.1"
+                                  viewBox="0 0 949.3 949.3"
+                                  xml:space="preserve"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path d="m899.3 338.1-355.3-0.4s20.6-84.3 24.3-123.8c2.5-27 3.101-53.9-3.1-80.5-9.2-40-19.5-65-35.9-96-8.8-16.4-25.8-26.6-44.3-26.6h-68.8c-27.7 0-50.101 22.5-50 50.2 0.2 46.3 0.2 108.1-0.8 110.2-27 56.8-58.3 111.3-93.6 163.3-16.1 23.8-33 46.9-52.6 68-8.6 9.2-13.3 21.4-13.3 33.9v437.2c0 12.898 5 25.398 14 34.699 13.4 13.801 37.4 30.199 76.8 30.199 124.3-0.5 325.7-1.6 468.9-0.6 17.9 0.1 34.5-9.299 43.5-24.799l126.3-216.2c8.6-15 13.1-32 13.199-49.299l0.7-259.3c1e-3 -27.7-22.399-50.1-49.999-50.2z"/><path d="m94.8 409.5h-44.8c-27.6 0-50 22.4-50 50v429c0 27.602 22.4 50 50 50h44.7c27.6 0 50-22.398 50-50v-429c0.1-27.6-22.3-50-49.9-50z"/>
+                                </svg>
+                                {{ block.settings.like_size }}
+                                <svg
+                                  enable-background="new 0 0 512 512"
+                                  style="height:auto;margin:0 2px 0 10px;width:14px"
+                                  version="1.1"
+                                  viewBox="0 0 512 512"
+                                  xml:space="preserve"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path d="m495.97 297.23-24.695 14.225c-9.711 5.598-20.727 8.543-31.945 8.543h-71.329c-8.836 0-16 7.164-16 16v132.16c0 15.375-12.469 27.84-27.844 27.84h-0.094c-11.977 0-22.617-7.668-26.406-19.035l-30.719-80.355c-7.117-18.611-19.844-34.547-36.422-45.598l-70.515-47.012v-240h14.273c11.602 0 22.977-3.152 32.93-9.121l49.594-29.758c9.953-5.969 21.328-9.121 32.93-9.121h136.94c13.852 0 27.32 4.492 38.398 12.801l34.141 25.6c8.054 6.042 12.796 15.527 12.796 25.599v189.5c0 11.443-6.109 22.016-16.031 27.728z"/><path d="m128 304v-240c0-17.672-14.328-32-32-32h-96v304h96c17.672 0 32-14.326 32-32zm-32-208c0 17.672-14.328 32-32 32s-32-14.328-32-32 14.328-32 32-32 32 14.328 32 32z"/>
+                                </svg>
+                                {{ block.settings.dislike_size }}
+                              </span>
+                            </span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% if section.settings.show_border %}
+                <lr></lr>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <div style="text-align:center;margin-top:20px;">
+        <a id="loadMore" class="link-review button">
+          {{-
+            section.settings.load_text
+            | replace: '[', '<span class="lumin-text__fancy1">'
+            | replace: ']', '</span>'
+            | replace: '((', '<span class="lumin-text__fancy2">'
+            | replace: '))', '</span>'
+          -}}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+      const products = document.querySelectorAll(".rw-container-contant");
+      const loadMoreBtn = document.getElementById("loadMore");
+      let visibleProductsCount = 0;
+      const productsPerPage = {{ section.settings.review_load }};
+
+      // Function to show products
+      function showProducts() {
+          for (let i = visibleProductsCount; i < visibleProductsCount + productsPerPage; i++) {
+              if (products[i]) {
+                  products[i].style.display = "block";
+              }
+          }
+          visibleProductsCount += productsPerPage;
+
+          // Hide the button if all products are visible
+          if (visibleProductsCount >= products.length) {
+              loadMoreBtn.style.display = "none";
+          }
+      }
+
+      // Initial load
+      showProducts();
+
+      // Load more products on button click
+      loadMoreBtn.addEventListener("click", function() {
+          showProducts();
+      });
+
+      // Listen for design mode changes
+      if (typeof Shopify.designMode !== 'undefined' && Shopify.designMode) {
+          document.addEventListener('shopify:section:load', function(event) {
+              // Reload the script or reinitialize the functionality
+              visibleProductsCount = 0;
+              Array.prototype.forEach.call(products, function(product) {
+                  product.style.display = 'none';
+              });
+              loadMoreBtn.style.display = 'flex';
+              showProducts();
+          });
+      }
+  });
+</script>
+
+<style>
+    .checked {
+    color: orange;
+  }
+      .top-review-box {
+        margin-bottom:40px;
+      }
+      lr {
+      border: none;
+      height: 0rem;
+      background-color: {{section.settings.rw_border}};
+      display: block;
+      margin: 0rem auto;
+      width: 90%;
+      }
+         .noContent {
+    color: #000 !important;
+    background-color: transparent !important;
+    pointer-events: none;
+  }
+    .rw-percent {
+      color: {{section.settings.feature_svg_color}};
+      font-size: 17px;
+      font-weight: 700;
+      padding: 0px 10px 3px 10px;
+      border: 1px solid {{section.settings.feature_svg_color}};
+      border-radius: 4px;
+    }
+      .rw-container {
+      padding: 0px;
+        -webkit-column-count: {{section.settings.review_column_desk}};
+  	-webkit-column-gap: 15px;
+  	-webkit-column-fill: auto;
+  	-moz-column-count: {{section.settings.review_column_desk}};
+  	-moz-column-gap: 15px;
+  	-moz-column-fill: auto;
+  	column-count: {{section.settings.review_column_desk}};
+  	column-gap: 15px;
+  	    /* column-fill: auto; */
+    }
+    @media screen and (max-width: 600px){
+      .rw-container {
+    column-count: {{section.settings.review_column_mobile}};
+  	column-gap: 15px;
+    }
+    }
+    @media only screen and (min-width: 600px) and (max-width: 900px) {
+     .rw-container {
+    column-count: {{section.settings.review_column_tab}};
+  	column-gap: 15px;
+    }
+    }
+       @media only screen and (min-width: 900px) and (max-width: 1150px) {
+     .rw-container {
+    column-count: {{section.settings.review_column_desk}};
+  	column-gap: 15px;
+    }
+       }
+
+      .rating-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+  }
+     .link-review {
+      cursor: pointer !important;
+      white-space: nowrap;
+  }
+      .review-wrapper {
+      padding: {{section.settings.review_pd}}px;
+      background:{{section.settings.review_bg}};
+      margin-bottom: 0px;
+      border-radius: {{ section.settings.border_radius }}px;
+        {% if section.settings.show_border %}
+      box-shadow: 0 0 0 1px {{section.settings.rw_border}};{% endif %}
+  }
+      @media screen and (max-width: 600px){
+      .review-wrapper {
+      padding: {{section.settings.review_pd_m}}px;
+  }
+      }
+      .rw-sub-wrapper{
+        margin-bottom: {{section.settings.rw_margin}}px;
+      }
+      .stars-rw {
+        color: {{section.settings.feature_svg_color}};
+        display: flex !important;
+        gap: 0px;
+      }
+      .stars-rw svg {
+        height: 1.4em;
+        fill:{{section.settings.feature_svg_color}};
+      }
+      .verify-container{
+      display: flex;
+      align-items: center;
+      column-gap: 5px;
+      }
+      .verify {
+      color: {{section.settings.section_bg3}};
+      font-size: 14px;
+      position: relative;
+      white-space: nowrap;
+      line-height: 1;
+  }
+      .rw-date {
+      font-size: {{ section.settings.date_size }}px;
+      color: #8c8a91;
+      white-space: nowrap;
+      line-height: 1;
+      text-transform: uppercase;
+  }
+      .rw-text-name {
+      font-size: {{ section.settings.block_name_size}}px;
+      }
+      .rw-text-head {
+      font-size: {{ section.settings.block_head_size}}px;
+      line-height: 120%;
+      letter-spacing: 0px;
+      padding: 5px 0 5px 0;
+      text-align: center;
+      border: none;
+      text-align: left;
+     }
+      .rw-text-main {
+      font-size: {{ section.settings.block_text_size}}px;
+      /*white-space: pre-wrap;*/
+      margin-bottom:30px;
+      }
+      .rw-text-footer {
+      font-size: 14px;
+      line-height: 1.4;
+      padding: 20px 0 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 20px;
+      border-top: 1px solid rgba(var(--color-badge-foreground), 0.03);
+     }
+      .main-review img {
+      width: 100%;
+      max-width: {{ section.settings.rw_img_size}}px;
+      height: auto;
+      border-radius: {{ section.settings.rw_img_radius}}px;
+      text-align: center;
+      margin-right: 10px;
+      margin-bottom:30px;
+      line-height: 0;
+      overflow: hidden;
+     }
+        .rw-container-contant {
+     -webkit-column-break-inside: avoid;
+  	-moz-column-break-inside: avoid;
+  	column-break-inside: avoid;
+      padding-bottom: 15px;
+      border-bottom: 0px solid #f3f3f3;
+      {% if request.design_mode and section.settings.editing %}display:block; {% else %} display: none; {% endif %}
+    }
+
+    @media screen and (max-width: 600px){
+      .rw-container-contant {
+    padding-bottom: 15px;
+    }
+    }
+     .rw-container-contant:last-child {
+      border-bottom: 0;
+    }
+  .load-more-container ul {
+     list-style: none;
+     padding:0;
+    }
+       .rw-text-footer {
+      font-size: 13px;
+      font-weight:500;
+      line-height: 1.4;
+      padding: 20px 0 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 20px;
+      grid-gap: 10px;
+     }
+
+     .lm-text-clip {
+      white-space: pre-wrap;
+      width: -webkit-fill-available;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+     }
+</style>
+
+{% schema %}
+{
+  "name": "Lumin Review",
+   "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+ "settings": [
+   {
+        "type": "header",
+        "content": "Note",
+        "info": "This review section is for demostration purpose. If you want to collect reviews from customers, please consider installing any review app from Shopify [App Store](https:\/\/apps.shopify.com\/)"
+      },
+   {
+        "type": "checkbox",
+        "id": "editing",
+        "label": "Edit Mode",
+        "default": true,
+        "info": "Save after changing this setting to see effect."
+      },
+   {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+   {
+        "type": "header",
+        "content": "Top Header"
+      },
+{
+        "type": "text",
+        "id": "header_text",
+        "label": "t:sections.image-with-text.blocks.heading.name",
+        "default": "what our customers say about us"
+      },
+   {
+        "type": "checkbox",
+        "id": "show_top",
+        "label": "Show Header Contents",
+        "default": true
+      },
+   {
+        "type": "inline_richtext",
+        "id": "rating_text",
+        "label": "Rating Text",
+        "default": "4.8",
+        "info": "Remove to hide"
+      },
+   {
+        "type":      "range",
+        "id":        "rating_range",
+        "min":       1,
+        "max":        5,
+        "step":       0.5,
+        "label":     "Star Rating",
+        "default":   4.5
+     },
+    {
+    "type":      "range",
+    "id":        "star_size_top",
+    "min":       0.5,
+    "max":        2,
+    "step":       0.1,
+    "label":     "Star Size",
+    "default":   1
+    },
+    {
+        "type": "inline_richtext",
+        "id": "rating_count",
+        "label": "Review count",
+        "default": "Based on 16 Reviews",
+        "info": "Remove to hide"
+      },
+   {
+        "type": "header",
+        "content": "Section Settings"
+      },
+
+{
+        "type": "text",
+        "id": "review_column_mobile",
+        "label": "Review column Mobile",
+        "default": "1"
+      },
+{
+        "type": "text",
+        "id": "review_column_tab",
+        "label": "Review column Tablet",
+        "default": "1"
+      },
+{
+        "type": "text",
+        "id": "review_column_desk",
+        "label": "Review column Desktop",
+        "default": "1"
+      },
+   {
+        "type": "text",
+        "id": "review_load",
+        "label": "Load more",
+        "default": "4",
+        "info": "This setting will work on web browser. Not in shopify theme editor."
+      },
+   {
+        "type": "text",
+        "id": "load_text",
+        "label": "Button Text",
+        "default": "Load More"
+      },
+    {
+        "type": "header",
+        "content": "Sizes"
+      },
+      {
+    "type":      "range",
+    "id":        "rw_img_size",
+    "min":       20,
+    "max":        400,
+    "step":       10,
+    "unit":       "px",
+    "label":     "Review Image size",
+    "default":   140
+ },
+     {
+    "type":      "range",
+    "id":        "rw_img_radius",
+    "min":       0,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Image Radius",
+    "default":   0
+ },
+   {
+    "type":      "range",
+    "id":        "block_name_size",
+    "min":       10,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Customer name size",
+    "default":   20
+},
+        {
+    "type":      "range",
+    "id":        "date_size",
+    "min":       6,
+    "max":        50,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Date size",
+    "default":   16
+},
+ {
+    "type":      "range",
+    "id":        "block_head_size",
+    "min":       10,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Review Heading size",
+    "default":   20
+},
+    {
+    "type":      "range",
+    "id":        "block_text_size",
+    "min":       6,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Review text size",
+    "default":   14
+},
+   {
+        "type": "header",
+        "content": "Stars"
+      },
+   {
+      "type": "select",
+      "id": "star_style",
+      "label": "Star Style",
+      "options": [
+        {
+          "value": "star",
+          "label": "Stars"
+        },
+        {
+          "value": "star_bg",
+          "label": "Colors"
+        },
+        {
+          "value": "star_bg_2",
+          "label": "Crisp"
+        }
+      ],
+      "default": "star"
+    },
+    {
+    "type":      "range",
+    "id":        "star_size",
+    "min":       0.5,
+    "max":        2,
+    "step":       0.1,
+    "label":     "Star Size",
+    "default":   1
+},
+    {
+    "type":      "range",
+    "id":        "star_radius",
+    "min":       0,
+    "max":        30,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Star Corner Radius",
+    "default":   0
+},
+   {
+        "type": "color",
+        "id": "feature_svg_color",
+        "label": "Star Color",
+        "default": "#000"
+      },
+   {
+        "type": "color",
+        "id": "inactive_star_color",
+        "label": "Disable Star Color",
+        "default": "#e2e2e2"
+      },
+   {
+        "type": "header",
+        "content": "Colors"
+      },
+   {
+        "type": "checkbox",
+        "id": "show_border",
+        "label": "Show Border",
+        "default": true
+      },
+{
+        "type": "color",
+        "id": "rw_border",
+        "label": "Border",
+        "default": "#f2f2f2"
+      },
+   {
+    "type":      "range",
+    "id":        "border_radius",
+    "min":       0,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Corner Radius",
+    "default":   0
+},
+{
+        "type": "color",
+        "id": "section_bg3",
+        "label": "Verify Text",
+        "default": "#000"
+      },
+{
+        "type": "color",
+        "id": "section_bg2",
+        "label": "Verify Badge",
+        "default": "#000"
+      },
+   {
+        "type": "text",
+        "id": "verify_text",
+        "label": "Verify Text",
+        "default": "Verified Buyer",
+        "info": "Remove to hide"
+      },
+{
+        "type": "color",
+        "id": "review_bg",
+        "label": "Review Background",
+        "default": "#fff"
+      },
+
+   {
+        "type": "color",
+        "id": "feature_acc_color",
+        "label": "Accent Color",
+        "default": "#000"
+      },
+   {
+      "type": "range",
+      "id": "review_pd",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Review Padding",
+      "default": 20
+    },
+   {
+      "type": "range",
+      "id": "review_pd_m",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Review Padding Mobile",
+      "default": 20
+    },
+   {
+        "type": "header",
+        "content": "Review Footer"
+      },
+     {
+        "type": "checkbox",
+        "id": "show_footer",
+        "label": "Show Review Footer",
+        "default": true
+      },
+     {
+        "type": "checkbox",
+        "id": "show_product",
+        "label": "Show Product",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "like_text",
+        "label": "Like Dislike Text",
+        "default": "Was this helpful?",
+        "info": "Leave blank to hide"
+      },
+   {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+   {
+      "type": "range",
+      "id": "rw_margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 0
+    },
+   {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+
+],
+
+  "max_blocks": 30,
+  "blocks": [
+
+
+    {
+        "type": "review",
+        "name": "review",
+        "settings": [
+
+{
+        "type": "image_picker",
+        "id": "img_block",
+        "label": "Image"
+      },
+          {
+        "type": "image_picker",
+        "id": "img_block2",
+        "label": "Image"
+      },
+             {
+    "type":      "range",
+    "id":        "star_rating",
+    "min":       1,
+    "max":        5,
+    "step":       0.5,
+    "label":     "Star Rating",
+    "default":   5
+ },
+{
+        "type": "text",
+        "id": "name_text",
+        "label": "Name",
+        "default": "Johan D."
+      },
+          {
+        "type": "text",
+        "id": "date_text",
+        "label": "Date",
+        "default": "June 2024"
+      },
+{
+        "type": "text",
+        "id": "review_head",
+        "label": "Review Title",
+        "default": "Nice Product"
+      },
+{
+        "type": "text",
+        "id": "review_text",
+        "label": "Review Text",
+        "default": "Nice Product. I'm happy with my purchase."
+      },
+          {
+    "type":      "range",
+    "id":        "like_size",
+    "min":       0,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Likes",
+    "default":   0
+},
+                  {
+    "type":      "range",
+    "id":        "dislike_size",
+    "min":       0,
+    "max":        100,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Dislikes",
+    "default":   0
+},
+{
+    "type":      "range",
+    "id":        "feature_font_size",
+    "min":       10,
+    "max":        50,
+    "step":       1,
+    "unit":       "px",
+    "label":     "Font size",
+    "default":   16
+}
+]
+}
+],
+
+  "presets": [
+    {
+      "name": "Lumin Review",
+      "blocks": [
+        {
+          "type": "review"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

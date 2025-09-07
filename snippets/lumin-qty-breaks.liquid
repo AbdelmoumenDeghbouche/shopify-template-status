@@ -1,0 +1,499 @@
+{{ 'lumin-quantity-breaks.css' | asset_url | stylesheet_tag }}
+<script>
+     document.addEventListener('DOMContentLoaded', () => {
+    let clickedSecondOption = false;
+
+    const initQtyBreaks = () => {
+        setupHiddenInput();
+        setupQtyBreaksChange();
+        setupVariantChange();
+        autoClickSecondOptionOnce();
+    };
+
+    const setupHiddenInput = () => {
+        const productInfo = document.querySelector('product-info');
+        const productFormQty = productInfo.querySelector('.product-form__quantity');
+
+        if (!productFormQty) {
+            productInfo.querySelector('.product-form__buttons').insertAdjacentHTML('beforebegin', `
+                <input class="product-form__quantity" type="hidden" name="quantity" value="1">
+            `);
+        }
+    };
+
+    const setupQtyBreaksChange = () => {
+        const wrapper = document.querySelector('.lumin-qty-breaks-hidden');
+        const productInfo = document.querySelector('product-info');
+        
+        
+        document.querySelectorAll('.lumin-qty-breaks input').forEach(input => {
+            input.addEventListener('change', () => {
+                productInfo.querySelector('[name="quantity"]').value = input.value;
+
+                productInfo.querySelectorAll('.quantity__button.disabled').forEach(btn => {
+                    btn.classList.remove('disabled');
+                });
+
+                if (wrapper.dataset.btnAnimate.length) {
+                    setTimeout(() => {
+                        productInfo.querySelector('button[name="add"]').classList.add('animate__animated', wrapper.dataset.btnAnimate);
+                    }, 250);
+
+                    setTimeout(() => {
+                        productInfo.querySelector('button[name="add"]').classList.remove('animate__animated', wrapper.dataset.btnAnimate);
+                    }, 1500);
+                }
+            });
+        });
+
+       /* productInfo.querySelector('.quantity__input')?.addEventListener('change', () => {
+            document.querySelectorAll('.lumin-qty-breaks input').forEach(input => {
+                input.checked = false;
+            });
+        });*/
+    };
+
+    const setupVariantChange = () => {
+        document.querySelectorAll('variant-selects [name], .product-form__input').forEach(elem => {
+            elem.addEventListener('change', () => {
+                document.querySelector('.lumin-qty-breaks').style.opacity = '.2';
+
+                setTimeout(async () => {
+                    const response = await fetch(window.location.href);
+                    const text = await response.text();
+                    const newDocument = new DOMParser().parseFromString(text, 'text/html');
+
+                    document.querySelector('.lumin-qty-breaks-hidden')
+                        .replaceWith(newDocument.querySelector('.lumin-qty-breaks-hidden'));
+
+                    initQtyBreaks(); // Re-apply event listeners to the new elements
+                }, 300);
+            });
+        });
+    };
+
+    const autoClickSecondOptionOnce = () => {
+        if (!clickedSecondOption) {
+            const secondOption = document.querySelectorAll('.lumin-qty-breaks input')[{{block.settings.preselected}}];
+            if (secondOption) {
+                secondOption.click();
+                clickedSecondOption = true;
+            }
+        }
+    };
+
+    // Run the function initially
+    initQtyBreaks();
+
+    // Re-run the function when changes are made in the Shopify editor
+    if (Shopify.designMode) {
+        const shopifyEvents = [
+            'shopify:section:load',
+            'shopify:section:unload',
+            'shopify:section:select',
+            'shopify:section:deselect',
+            'shopify:section:reorder',
+            'shopify:block:select',
+            'shopify:block:deselect'
+        ];
+
+        shopifyEvents.forEach(event => {
+            document.addEventListener(event, initQtyBreaks);
+        });
+    }
+});
+                </script>
+
+               
+                  
+                  <div
+                    id="lumin-qty-breaks"
+                    class="lumin-qty-breaks"
+                    style="
+                      padding-top: {{ block.settings.padding_top | times: 0.75 | round: 0 }}px;
+                      padding-bottom: {{ block.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+                    "
+                    {{ block.shopify_attributes }}
+                  >
+                    {% unless block.settings.top_info %}
+                    <div class=" lumin-qty-breaks-line">
+                      <span></span>
+                      <p
+                        id="lumin-qty-breaks-title"
+                        class="lumin-qty-breaks-title"
+                        style="font-size:{{ block.settings.title_size }}px; margin:0;"
+                      >
+                        {{
+                          block.settings.title
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '(', '<span class="lumin-text__fancy2">'
+                          | replace: ')', '</span>'
+                        }}
+                      </p>
+                      <p
+                        id="lumin-qty-breaks-title"
+                        class="lumin-qty-breaks-title"
+                        style="font-size:{{ block.settings.subtitle_size }}px; margin:0;"
+                      >
+                        {{
+                          block.settings.subtitle_top
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '(', '<span class="lumin-text__fancy2">'
+                          | replace: ')', '</span>'
+                        }}
+                      </p>
+                      <span></span>
+                    </div>
+                    {% endunless %}
+                    <ul aria-labelledby="lumin-qty-breaks-title">
+                      {% if block.settings.qty_1 != 0 %}
+                        <li>
+                          {% liquid
+                            assign item_price = 100 | minus: block.settings.discount_1 | divided_by: 100.0 | times: current_variant.price | money_without_trailing_zeros
+                            assign total_price = 100 | minus: block.settings.discount_1 | divided_by: 100.0 | times: current_variant.price | times: block.settings.qty_1 | money_without_trailing_zeros
+                            assign item_price_compare = current_variant.price | times: block.settings.qty_1 | money_without_trailing_zeros
+
+                            assign qty_replace = '<span class="lumin-qty-breaks-label-qty">' | append: block.settings.qty_1 | append: '</span>'
+                            assign discount_replace = '<span class="lumin-qty-breaks-label-discount">' | append: block.settings.discount_1 | append: '%</span>'
+                            assign item_price_replace = '<span class="lumin-qty-breaks-label-item-price">' | append: item_price | append: '</span>'
+                            assign total_price_replace = '<span class="lumin-qty-breaks-label-total-price">' | append: total_price | append: '</span>'
+                          %}
+                          <input
+                            id="lumin-qty-breaks-1"
+                            class=""
+                            type="radio"
+                            value="{{ block.settings.qty_1 }}"
+                            name="lumin-qty-breaks"
+                          >
+                          <label for="lumin-qty-breaks-1">
+                            <div class="lumin-qty-breaks-label-inner">
+                              <div class="lumin-qty-breaks-label-left">
+                                <div class="lumin-qty-breaks-label-title">
+                                  {{
+                                    block.settings.title_1
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                  {% unless block.settings.badge == blank %}
+                                    <span class="badge-qb">
+                                      {{
+                                        block.settings.badge
+                                        | replace: '[qty]', qty_replace
+                                        | replace: '[discount]', discount_replace
+                                        | replace: '[item_price]', item_price_replace
+                                        | replace: '[total_price]', total_price_replace
+                                      -}}
+                                    </span>
+                                  {% endunless %}
+                                </div>
+                                <div class="lumin-qty-breaks-label-subtitle">
+                                  {{
+                                    block.settings.subtitle
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                </div>
+                              </div>
+                              <div class="lumin-qty-breaks-label-right">
+                                <div class="lumin-qty-price">
+                                  <span class="lumin-qty-breaks-label-item-price">{{ total_price }}</span>
+                                  {% if total_price < item_price_compare %}
+                                    <span class="lumin-qty-breaks-label-item-price lumin-qty-price-compare">
+                                      {{- item_price_compare -}}
+                                    </span>
+                                  {% endif %}
+                                </div>
+                                {% unless block.settings.badge_1_alt == blank %}
+                                  <div class="{{ block.settings.badge_style }}">
+                                    {{
+                                      block.settings.badge_1_alt
+                                      | replace: '[qty]', qty_replace
+                                      | replace: '[discount]', discount_replace
+                                      | replace: '[item_price]', item_price_replace
+                                      | replace: '[total_price]', total_price_replace
+                                    }}
+                                  </div>
+                                {% endunless %}
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                      {% endif %}
+                      {% if block.settings.qty_2 != 0 %}
+                        <li>
+                          {% liquid
+                            assign item_price = 100 | minus: block.settings.discount_2 | divided_by: 100.0 | times: current_variant.price | money_without_trailing_zeros
+                            assign total_price = 100 | minus: block.settings.discount_2 | divided_by: 100.0 | times: current_variant.price | times: block.settings.qty_2 | money_without_trailing_zeros
+                            assign item_price_compare = current_variant.price | times: block.settings.qty_2 | money_without_trailing_zeros
+
+                            assign qty_replace = '<span class="lumin-qty-breaks-label-qty">' | append: block.settings.qty_2 | append: '</span>'
+                            assign discount_replace = '<span class="lumin-qty-breaks-label-discount">' | append: block.settings.discount_2 | append: '%</span>'
+                            assign item_price_replace = '<span class="lumin-qty-breaks-label-item-price">' | append: item_price | append: '</span>'
+                            assign total_price_replace = '<span class="lumin-qty-breaks-label-total-price">' | append: total_price | append: '</span>'
+                          %}
+                          <input
+                            id="lumin-qty-breaks-2"
+                            class=""
+                            type="radio"
+                            value="{{ block.settings.qty_2 }}"
+                            name="lumin-qty-breaks"
+                          >
+                          <label for="lumin-qty-breaks-2">
+                            <div class="lumin-qty-breaks-label-inner">
+                              <div class="lumin-qty-breaks-label-left">
+                                <div class="lumin-qty-breaks-label-title">
+                                  {{
+                                    block.settings.title_2
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                  {% unless block.settings.badge_2 == blank %}
+                                    <span class="badge-qb">
+                                      {{
+                                        block.settings.badge_2
+                                        | replace: '[qty]', qty_replace
+                                        | replace: '[discount]', discount_replace
+                                        | replace: '[item_price]', item_price_replace
+                                        | replace: '[total_price]', total_price_replace
+                                      -}}
+                                    </span>
+                                  {% endunless %}
+                                </div>
+                                <div class="lumin-qty-breaks-label-subtitle">
+                                  {{
+                                    block.settings.subtitle_2
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                </div>
+                              </div>
+                              <div class="lumin-qty-breaks-label-right">
+                                <div class="lumin-qty-price">
+                                  <span class="lumin-qty-breaks-label-item-price">{{ total_price }}</span>
+                               
+                                    <span class="lumin-qty-breaks-label-item-price lumin-qty-price-compare">
+                                      {{- item_price_compare -}}
+                                    </span>
+                             
+                                </div>
+                                {% comment %}
+                                  {% unless block.settings.badge_2 == blank %}
+                                  <div class="ribbon ribbon-bottom-left">
+                                      {{
+                                      block.settings.badge_2
+                                      | replace: '[qty]', qty_replace
+                                      | replace: '[discount]', discount_replace
+                                      | replace: '[item_price]', item_price_replace
+                                      | replace: '[total_price]', total_price_replace
+                                    }}
+                                    </div>
+                                  {% endunless %}
+                                {% endcomment %}
+                                {% unless block.settings.badge_2_alt == blank %}
+                                  <div class="{{ block.settings.badge_style }}">
+                                    {{
+                                      block.settings.badge_2_alt
+                                      | replace: '[qty]', qty_replace
+                                      | replace: '[discount]', discount_replace
+                                      | replace: '[item_price]', item_price_replace
+                                      | replace: '[total_price]', total_price_replace
+                                    }}
+                                  </div>
+                                {% endunless %}
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                      {% endif %}
+                      {% if block.settings.qty_3 != 0 %}
+                        <li>
+                          {% liquid
+                            assign item_price = 100 | minus: block.settings.discount_3 | divided_by: 100.0 | times: current_variant.price | money_without_trailing_zeros
+                            assign total_price = 100 | minus: block.settings.discount_3 | divided_by: 100.0 | times: current_variant.price | times: block.settings.qty_3 | money_without_trailing_zeros
+                            assign item_price_compare = current_variant.price | times: block.settings.qty_3 | money_without_trailing_zeros
+
+                            assign qty_replace = '<span class="lumin-qty-breaks-label-qty">' | append: block.settings.qty_3 | append: '</span>'
+                            assign discount_replace = '<span class="lumin-qty-breaks-label-discount">' | append: block.settings.discount_3 | append: '%</span>'
+                            assign item_price_replace = '<span class="lumin-qty-breaks-label-item-price">' | append: item_price | append: '</span>'
+                            assign total_price_replace = '<span class="lumin-qty-breaks-label-total-price">' | append: total_price | append: '</span>'
+                          %}
+                          <input
+                            id="lumin-qty-breaks-3"
+                            class=""
+                            type="radio"
+                            value="{{ block.settings.qty_3 }}"
+                            name="lumin-qty-breaks"
+                          >
+                          <label for="lumin-qty-breaks-3">
+                            <div class="lumin-qty-breaks-label-inner">
+                              <div class="lumin-qty-breaks-label-left">
+                                <div class="lumin-qty-breaks-label-title">
+                                  {{
+                                    block.settings.title_3
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                  {% unless block.settings.badge_3 == blank %}
+                                    <span class="badge-qb">
+                                      {{
+                                        block.settings.badge_3
+                                        | replace: '[qty]', qty_replace
+                                        | replace: '[discount]', discount_replace
+                                        | replace: '[item_price]', item_price_replace
+                                        | replace: '[total_price]', total_price_replace
+                                      -}}
+                                    </span>
+                                  {% endunless %}
+                                </div>
+                                <div class="lumin-qty-breaks-label-subtitle">
+                                  {{
+                                    block.settings.subtitle_3
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                </div>
+                              </div>
+                              <div class="lumin-qty-breaks-label-right">
+                                <div class="lumin-qty-price">
+                                  <span class="lumin-qty-breaks-label-item-price">{{ total_price }}</span>
+                                  <span class="lumin-qty-breaks-label-item-price lumin-qty-price-compare">
+                                    {{- item_price_compare -}}
+                                  </span>
+                                </div>
+                                {% unless block.settings.badge_3_alt == blank %}
+                                  <div class="{{ block.settings.badge_style }}">
+                                    {{
+                                      block.settings.badge_3_alt
+                                      | replace: '[qty]', qty_replace
+                                      | replace: '[discount]', discount_replace
+                                      | replace: '[item_price]', item_price_replace
+                                      | replace: '[total_price]', total_price_replace
+                                    }}
+                                  </div>
+                                {% endunless %}
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                      {% endif %}
+                      {% if block.settings.qty_4 != 0 %}
+                        <li>
+                          {% liquid
+                            assign item_price = 100 | minus: block.settings.discount_4 | divided_by: 100.0 | times: current_variant.price | money_without_trailing_zeros
+                            assign total_price = 100 | minus: block.settings.discount_4 | divided_by: 100.0 | times: current_variant.price | times: block.settings.qty_4 | money_without_trailing_zeros
+                            assign item_price_compare = current_variant.price | times: block.settings.qty_4 | money_without_trailing_zeros
+
+                            assign qty_replace = '<span class="lumin-qty-breaks-label-qty">' | append: block.settings.qty_4 | append: '</span>'
+                            assign discount_replace = '<span class="lumin-qty-breaks-label-discount">' | append: block.settings.discount_4 | append: '%</span>'
+                            assign item_price_replace = '<span class="lumin-qty-breaks-label-item-price">' | append: item_price | append: '</span>'
+                            assign total_price_replace = '<span class="lumin-qty-breaks-label-total-price">' | append: total_price | append: '</span>'
+                          %}
+                          <input
+                            id="lumin-qty-breaks-4"
+                            class=""
+                            type="radio"
+                            value="{{ block.settings.qty_4 }}"
+                            name="lumin-qty-breaks"
+                          >
+                          <label for="lumin-qty-breaks-4">
+                            <div class="lumin-qty-breaks-label-inner">
+                              <div class="lumin-qty-breaks-label-left">
+                                <div class="lumin-qty-breaks-label-title">
+                                  {{
+                                    block.settings.title_4
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                  {% unless block.settings.badge_4 == blank %}
+                                    <span class="badge-qb">
+                                      {{
+                                        block.settings.badge_4
+                                        | replace: '[qty]', qty_replace
+                                        | replace: '[discount]', discount_replace
+                                        | replace: '[item_price]', item_price_replace
+                                        | replace: '[total_price]', total_price_replace
+                                      -}}
+                                    </span>
+                                  {% endunless %}
+                                </div>
+                                <div class="lumin-qty-breaks-label-subtitle">
+                                  {{
+                                    block.settings.subtitle_4
+                                    | replace: '[qty]', qty_replace
+                                    | replace: '[discount]', discount_replace
+                                    | replace: '[item_price]', item_price_replace
+                                    | replace: '[total_price]', total_price_replace
+                                  }}
+                                </div>
+                              </div>
+                              <div class="lumin-qty-breaks-label-right">
+                                <div class="lumin-qty-price">
+                                  <span class="lumin-qty-breaks-label-item-price">{{ total_price }}</span>
+                                  <span class="lumin-qty-breaks-label-item-price lumin-qty-price-compare">
+                                    {{- item_price_compare -}}
+                                  </span>
+                                </div>
+                                {% unless block.settings.badge_4_alt == blank %}
+                                  <div class="{{ block.settings.badge_style }}">
+                                    {{
+                                      block.settings.badge_4_alt
+                                      | replace: '[qty]', qty_replace
+                                      | replace: '[discount]', discount_replace
+                                      | replace: '[item_price]', item_price_replace
+                                      | replace: '[total_price]', total_price_replace
+                                    }}
+                                  </div>
+                                {% endunless %}
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                      {% endif %}
+                    </ul>
+                    {% unless block.settings.bottom_info %}
+                    <div class=" lumin-qty-breaks-line-bottom">
+                      <p
+                        id="lumin-qty-breaks-title"
+                        class="lumin-qty-breaks-title-bottom"
+                        style="font-size:{{ block.settings.title_size_bottom }}px; margin:0;"
+                      >
+                        {{
+                          block.settings.title_bottom
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '(', '<span class="lumin-text__fancy2">'
+                          | replace: ')', '</span>'
+                        }}
+                      </p>
+                      <p
+                        id="lumin-qty-breaks-title"
+                        class="lumin-qty-breaks-title-bottom"
+                        style="font-size:{{ block.settings.subtitle_size_bottom }}px; margin:0;"
+                      >
+                        {{
+                          block.settings.subtitle_bottom
+                          | replace: '[', '<span class="lumin-text__fancy1">'
+                          | replace: ']', '</span>'
+                          | replace: '(', '<span class="lumin-text__fancy2">'
+                          | replace: ')', '</span>'
+                        }}
+                      </p>
+                    </div>
+                    {% endunless %}
+                  </div>

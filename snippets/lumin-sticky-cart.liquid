@@ -1,0 +1,162 @@
+{% comment %}
+  Lumin Sticky add-to-cart
+  © 2023 LuminTheme
+  https://wwww.lumintheme.com
+{% endcomment %}
+
+{% if section.settings.show_sticky_cart_button and request.page_type == 'product' and product.available %}
+  {{ 'lumin-sticky-cart.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'lumin-sticky-cart.js' | asset_url }}" defer="defer"></script>
+
+  {% liquid
+    assign current_variant = product.selected_or_first_available_variant
+    assign product_form_id = 'product-form-' | append: id
+    assign image = current_variant.image | default: product.featured_image
+    assign img_size = settings.img_width | times: 2 | append: 'x' | append: settings.img_height | times: 2
+  %}
+
+  {% if product.has_only_default_variant and settings.show_quantity_input != true %}
+    <style>
+       @media screen and (max-width: 600px) {
+      #lumin-sticky-atc, .product-form, .quantity-input-wrapper {
+       display: block !important;
+       }
+       }
+    </style>
+  {% endif %}
+  <style>
+      {% if settings.show_border %}
+      #lumin-sticky-atc {
+      box-shadow: 0 0 1px 0px #a4a3a3;
+     }
+      {% endif%}
+
+    .atc-content {
+      display: flex;
+     {% if settings.show_price_under %}
+      flex-direction: column;
+      gap: 2px;
+      {% else %}
+       flex-direction: row-reverse;
+       gap: 20px;
+       align-items: center;
+      {% endif %}
+    }
+
+      @media screen and (max-width: 750px) {
+    .atc-content {
+      flex-direction: column;
+      gap: 5px;
+     }
+     }
+
+      {% if settings.sticky_position == 'top' %}
+      #lumin-sticky-atc {
+      position: fixed;
+      top: 0;
+      bottom: auto;
+     }
+      {% endif%}
+      {% if settings.sticky_position_mb == 'top' %}
+       @media (max-width: 740px) {
+     #lumin-sticky-atc {
+      position: fixed;
+      top: 0;
+      bottom: auto;
+        }
+      }
+      {% else %}
+        @media (max-width: 740px) {
+     #lumin-sticky-atc {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+        }
+      }
+      {% endif %}
+
+      @media screen and (max-width: 750px) {
+    .atc-content {
+      flex-direction: column;
+      gap: 5px;
+     }
+     }
+  </style>
+  {% assign scheme1 = settings.color_schemes | first %}
+  <div
+    id="lumin-sticky-atc"
+    class="color-{{ settings.color_scheme_main }} gradient"
+    aria-hidden="true"
+    data-offset="{{ settings.offset }}"
+    style="padding-top: {{ settings.padding_top }}px; padding-bottom: {{ settings.padding_bottom }}px;"
+  >
+    <div class="page-width">
+      <div class="page-width-inner">
+        <div class="product-content">
+          {% if settings.show_img_dt %}
+            <img
+              src="{{ image | img_url: img_size, crop: 'center' }}"
+              class="mobile-hide tablet-hide"
+              width="{{ settings.img_width }}"
+              height="{{ settings.img_height }}"
+              loading="lazy"
+            >
+          {% endif %}
+          {% if settings.show_img_mb %}
+            <img
+              src="{{ image | img_url: img_size, crop: 'center' }}"
+              class="medium-up-hide large-up-hide"
+              width="{{ settings.img_width }}"
+              height="{{ settings.img_height }}"
+              loading="lazy"
+            >
+          {% endif %}
+          <div class="atc-content">
+            <h3 class="product__title {{ settings.title_size }} {% unless settings.show_title_mb  %} mobile-hide{% endunless %}">
+              {{ product.title | truncatewords: 4 }}
+            </h3>
+            <div
+              class="no-js-hidden {% unless settings.show_price_mb  %} mobile-hide{% endunless %}"
+              id="price-{{ section.id }} price-sticky"
+              role="status"
+              {{ block.shopify_attributes }}
+            >
+              {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: '' -%}
+            </div>
+          </div>
+
+          <button class="atcbutton product-form__submit button button--full-width{% if settings.btn_style == 'primary' %} button--primary{% else %} button--secondary{% endif %}">
+            {%- if product.selected_or_first_available_variant.available -%}
+              {{ 'products.product.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+            {%- render 'loading-spinner' -%}
+          </button>
+
+          <script>
+
+document.querySelector('.atcbutton').onclick = clickBuyButton;
+
+function clickBuyButton(e) {
+    // Get the current quantity from the input field
+    const quantityInput = document.querySelector('.product-form__quantity');
+    let quantity = 1; // Default quantity value
+    if (quantityInput) {
+        quantity = quantityInput.value;
+    } else {
+        // If the quantity input doesn't exist, create a hidden input with a default quantity value
+        document.querySelector('.product-form__buttons').insertAdjacentHTML('beforebegin', `
+            <input class="product-form__quantity" type="hidden" name="quantity" value="${quantity}">
+        `);
+    }
+
+    // Click the submit button
+    document.querySelector('.product-form__submit').click();
+}
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

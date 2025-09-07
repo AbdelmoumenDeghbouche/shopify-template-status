@@ -1,0 +1,139 @@
+{
+  "sections": {
+    "breadcrumbs_H4e38M": {
+      "type": "breadcrumbs",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "title_home": "Home",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "rich_text_NVLnXb": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_zf4V66": {
+          "type": "heading",
+          "settings": {
+            "heading": "Blog Posts",
+            "heading_size": "h1"
+          }
+        },
+        "caption_C9pVnn": {
+          "type": "caption",
+          "settings": {
+            "caption": "Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "text_BhXbkg": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pretium, erat a facilisis convallis, ligula purus tincidunt quam, ut tincidunt lorem felis a elit. Quisque vehicula, sem id fermentum dictum, est mauris ullamcorper lorem, sit amet tristique arcu eros nec elit. Integer posuere, nisi sit amet dapibus bibendum, nulla metus laoreet risus, nec luctus eros nunc eget nisl.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_zf4V66",
+        "caption_C9pVnn",
+        "text_BhXbkg"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "disabled": true,
+      "settings": {
+        "layout": "grid",
+        "show_image": true,
+        "image_height": "adapt",
+        "show_date": true,
+        "show_author": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_blog_gdwAff": {
+      "type": "featured-blog",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "collection_text_alignment": "left",
+        "blog": "",
+        "post_limit": 12,
+        "columns_desktop": 3,
+        "navigation_show": false,
+        "color_scheme": "",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_view_all": true,
+        "padding_top": 12,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_EPJmnN": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_WhdFU9": {
+          "type": "slide",
+          "settings": {
+            "caption": "Here’s some placeholder text",
+            "block_cap_size": 20,
+            "cap_color": "#222222",
+            "heading": "Your awesome Heading",
+            "block_head_size-2": 38,
+            "block_head_size-mobile": 20,
+            "block_head_line": 1.4,
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "Button label",
+            "link": "",
+            "link-2": "",
+            "button_style_secondary": false,
+            "box_align": "middle-right",
+            "show_text_box": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "text_alignment_mobile": "center",
+            "mobile_box_align": "center",
+            "mobile_text_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_WhdFU9"
+      ],
+      "settings": {
+        "layout": "grid",
+        "banner_border": 0,
+        "slide_height": "medium",
+        "slider_visual": "dots",
+        "auto_rotate": false,
+        "hide_navigation": false,
+        "change_slides_speed": 5,
+        "show_text_below": true,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs_H4e38M",
+    "rich_text_NVLnXb",
+    "main",
+    "featured_blog_gdwAff",
+    "slideshow_EPJmnN"
+  ]
+}

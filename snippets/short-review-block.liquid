@@ -1,0 +1,115 @@
+
+<div
+  id="page5"
+  style="
+    margin-bottom:{{ block.settings.margin_bottom }}px;margin-top: {{ block.settings.margin_top }}px;
+    --star-min-background: {{ block.settings.lrw_star_color }};
+    --star-color:#eee;
+    --star-size-short: {{ block.settings.star_size }};
+    --short-rating: {{ block.settings.star_rating }};
+    --short-star-color: {{ block.settings.lrw_star_color }};
+    --short-star-inactive: {{ block.settings.lrw_star_color_disable }};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% assign star_size_short = block.settings.star_size %}
+  {% assign rating_short = block.settings.star_rating %}
+
+  <a
+    class="review-link" href="#lmReview"
+    style="text-decoration: none; display: flex;margin-top: 0;column-gap: 10px;column-gap: 10px;align-items: center;font-weight: 500;cursor: pointer;"
+  >
+    <span style="color: rgba(var(--color-base-accent-2), 1);padding: 0;display:block;">
+      {% if block.settings.star_style == 'star' %}
+        <span class="star-rating-short" style="zoom: {{ star_size_short }};">
+          <!-- Replace with dynamic input -->
+          {% assign max_stars = 5 %}
+          {% assign full_stars = rating_short | floor %}
+          {% assign half_star = rating_short | minus: full_stars | times: 2 | round %}
+          {% assign remaining_stars = max_stars | minus: full_stars | minus: half_star %}
+
+          <style>
+            .star-rating-short .star-short {
+              width: 24px;
+              height: 24px;
+              margin-right: 2px;
+              vertical-align: text-bottom;
+            }
+          </style>
+
+          <!-- Loop to show full stars -->
+          {% for i in (1..full_stars) %}
+            <svg
+              class="star-short full"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="var(--short-star-color)"
+            >
+              <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+            </svg>
+          {% endfor %}
+
+          <!-- Show half star if needed -->
+          {% if half_star == 1 %}
+            <svg
+              class="star-short half"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
+              <defs>
+                <linearGradient id="halfStarGradientShort">
+                  <stop offset="50%" stop-color="var(--short-star-color)"/>
+                  <stop offset="50%" stop-color="var(--short-star-inactive)"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#halfStarGradientShort)" d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+            </svg>
+          {% endif %}
+
+          <!-- Loop to show empty stars -->
+          {% for i in (1..remaining_stars) %}
+            <svg
+              class="star-short empty"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="var(--short-star-inactive)"
+            >
+              <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.826 1.608 8.144L12 18.896l-7.544 4.38 1.608-8.144L.587 9.306l8.332-1.151z"/>
+            </svg>
+          {% endfor %}
+        </span>
+      {% endif %}
+      {% if block.settings.star_style == 'star_bg' %}
+        <span class="rating-mn" data-rating="{{ rating_short }}" style="zoom: {{ star_size_short }};">
+          {% render 'short-review-2' %}
+        </span>
+      {% endif %}
+      {% if block.settings.star_style == 'star_bg_2' %}
+        <span class="rating-mn" data-rating="{{ rating_short }}" style="zoom: {{ star_size_short }};">
+          {% render 'short-review-3' %}
+        </span>
+      {% endif %}
+
+      <span style="color:{{ block.settings.lrw_color }}; font-size: {{ block.settings.text_size }}px; text-underline-offset: 1.5px;">
+        {{- block.settings.lrw_text -}}
+      </span>
+    </span>
+  </a>
+</div>
+                <script type="text/javascript">
+  $(document).ready(function(){
+    $(".review-link").click(function(){
+      $('html,body').animate({
+        scrollTop: $('#lmReview').offset().top
+      }, 500);
+
+      return false;
+    });
+  })
+</script>

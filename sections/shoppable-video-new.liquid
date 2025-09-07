@@ -1,0 +1,1187 @@
+{% liquid
+  # Lumin Slider
+  # © 2025 Lumintheme
+  # https://www.lumintheme.com
+%}
+
+{%- style -%}
+  #lumin-shoppable-videos-{{ section.id }} {
+    display: block;
+    overflow: hidden;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+   /* margin-bottom: {% if section.settings.slider_scrollbar %} 15px; {% else %} 5px;{% endif %}*/
+  }
+
+  #lumin-shoppable-videos-{{ section.id }} .swiper {
+    --swiper-theme-color: rgba(var(--color-foreground), 0.75);
+    --swiper-navigation-size: 16px;
+    --swiper-navigation-sides-offset: -4px;
+    --swiper-pagination-bullet-inactive-color: var(--swiper-theme-color);
+    --swiper-pagination-bottom: -24px;
+    --swiper-scrollbar-bottom: -40px;
+    --swiper-scrollbar-bg-color: rgba(var(--color-foreground), 0.1);
+    --swiper-scrollbar-drag-bg-color: var(--swiper-theme-color);
+    margin-left: -{{ section.settings.gap | times: 0.75 | round: 0 }}px;
+    margin-right: -{{ section.settings.gap | times: 0.75 | round: 0 }}px;
+  }
+
+  .lumin-shoppable-videos .section-header .title {
+    margin: 0 0 .5rem;
+  }
+
+  .lumin-shoppable-videos .section-header .description {
+    margin-bottom: 1.75rem;
+  }
+
+  @media (min-width: 750px) {
+    #lumin-shoppable-videos-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    #lumin-shoppable-videos-{{ section.id }} .swiper {
+      --swiper-pagination-bottom: -30px;
+      --swiper-scrollbar-bottom: -46px;
+      margin-left: -{{ section.settings.gap }}px;
+      margin-right: -{{ section.settings.gap }}px;
+    }
+    .lumin-shoppable-videos .section-header .title {
+      margin: 0 0 1rem;
+    }
+    .lumin-shoppable-videos .section-header .description {
+      margin-bottom: 2.25rem;
+    }
+  }
+
+  .lumin-shoppable-videos div:empty {
+    display: block;
+  }
+
+  .lumin-shoppable-videos .section-header {
+    text-align: center;
+  }
+
+  .lumin-shoppable-videos .swiper {
+    opacity: 0;
+    transition: all .2s ease-out;
+    transition-delay: .2s;
+    overflow: visible;
+  }
+
+  .lumin-shoppable-videos .swiper.swiper-initialized {
+    opacity: 1;
+  }
+
+  .lumin-shoppable-videos .swiper .swiper-slide {
+    display: flex;
+    opacity: .25;
+    transform: scale(.9);
+    transition: all .2s ease-out;
+  }
+
+  #lumin-shoppable-videos-{{ section.id }} .swiper .swiper-slide {
+    {% if section.settings.card_equal_height %}
+      height: auto;
+    {% endif %}
+  }
+
+  .lumin-shoppable-videos .swiper .swiper-slide-visible {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .lumin-shoppable-videos .swiper-pagination {
+   /* bottom: -5px !important;*/
+  }
+
+  .lumin-shoppable-videos .swiper-scrollbar {
+   /* max-width: 600px;
+    left: 50%;
+    bottom: -14px !important;
+    transform: translateX(-50%);*/
+  }
+
+  @media (max-width: 575px) {
+    .lumin-shoppable-videos .swiper-scrollbar {
+      max-width: 70vw;
+    }
+  }
+
+  .lumin-shoppable-videos .swiper-button-prev, 
+  .lumin-shoppable-videos .swiper-button-next {
+    width: 32px;
+    height: 32px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50rem;
+    background-color: rgba(var(--color-foreground, 1));
+    color: rgba(var(--color-background));
+  }
+
+  .lumin-shoppable-videos .swiper-navigation-disabled .swiper-button-next, 
+  .lumin-shoppable-videos .swiper-navigation-disabled .swiper-button-prev {
+    display: none !important;
+  } 
+
+  @media (max-width: 575px) {
+    .lumin-shoppable-videos[data-partial-slides-mobile="true"] .swiper-button-prev, 
+    .lumin-shoppable-videos[data-partial-slides-mobile="true"] .swiper-button-next {
+      display: none !important;
+    }
+  }
+
+  .lumin-shoppable-videos .swiper-pagination-fraction {
+    margin-bottom: -4px;
+  }
+
+  .lumin-shoppable-videos-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 750px) {
+    .lumin-shoppable-videos-container {
+      padding: 0 3rem;
+    }
+  }
+
+  .lumin-shoppable-videos-card-fake-bg {
+    background: #eee;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+  }
+
+  .lumin-shoppable-videos-card {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-style: solid;
+    border-color: currentColor;
+  }
+
+
+  .lumin-shoppable-videos-card-inner {
+  }
+
+  #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card {
+    border-width: {{ section.settings.card_border_width }}px;
+    border-radius: {{ section.settings.card_border_radius }}px;
+    margin: {{ section.settings.gap | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ section.settings.gap | plus: 15 }}px;
+
+    {% if section.settings.card_box_shadow %}
+      box-shadow: 0 0 1rem rgba(var(--color-foreground), .25);
+    {% endif %}
+  }
+
+  @media (min-width: 750px) {
+    #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card {
+      margin: {{ section.settings.gap }}px;
+      margin-bottom: {{ section.settings.gap | plus: 15 }}px;
+    }
+  }
+
+  .lumin-shoppable-videos-video-wrapper {
+    height: 100%;
+  }
+
+  .lumin-shoppable-videos-card video {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .swiper-is-changing .lumin-shoppable-videos-card video {
+    z-index: -1;
+  }
+
+  .lumin-shoppable-videos [data-is-playing="true"] video {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='10' y1='15' x2='10' y2='9'%3E%3C/line%3E%3Cline x1='14' y1='15' x2='14' y2='9'%3E%3C/line%3E%3C/svg%3E"), auto;
+  }
+
+  .lumin-shoppable-videos-btn-play {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--color-foreground), .5);
+    color: rgba(var(--color-background), 1);
+    border: none;
+    backdrop-filter: blur(6px);
+    border-radius: 50rem;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    z-index: 99;
+    cursor: pointer;
+    transition: all .2s ease-out;
+  }
+
+  .lumin-shoppable-videos-btn-play:hover,
+  .lumin-shoppable-videos-btn-play:focus {
+    background: rgba(var(--color-foreground), .75);
+  }
+
+  [data-is-playing="true"] .lumin-shoppable-videos-btn-play {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .lumin-shoppable-videos-card-views {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(var(--color-foreground), .75);
+    color: white;
+    backdrop-filter: blur(6px);
+    padding: 1px 8px 2px;
+    line-height: normal;
+    font-size: 13px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lumin-shoppable-videos-card-views svg {
+    margin-right: 4px;
+    transform: translateY(1px);
+    fill: currentColor;
+    height: 17px;
+    width: 17px;
+  }
+
+  .lumin-shoppable-videos-card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(var(--color-foreground), .75);
+    color: white;
+    padding: 1px 8px 2px;
+    line-height: normal;
+    font-size: 13px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lumin-shoppable-videos-card-product {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    width: calc(100% - 24px);
+    box-sizing: border-box;
+    background: rgba(var(--color-background), .75);
+    color: rgba(var(--color-foreground), 1);
+    backdrop-filter: blur(8px);
+    padding: 6px 8px 6px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    opacity: .9;
+    transition: all .2s ease-out;
+  }
+
+  [data-is-playing="true"] .lumin-shoppable-videos-card-product {
+    bottom: 20px;
+    opacity: 1;
+  }
+
+  .lumin-shoppable-videos-card-product:hover,
+  .lumin-shoppable-videos-card-product:focus {
+    opacity: 1;
+  }
+
+  .lumin-shoppable-videos-card-product img {
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .lumin-shoppable-videos-card-product-content {
+    line-height: normal;
+  }
+
+  .lumin-shoppable-videos-card-product-title {
+    font-size: 15px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+    color: inherit;
+  }
+
+  .lumin-shoppable-videos-card-product-title span {
+    display: inline-block;
+    transition: all .2s ease-out;
+  }
+
+  .lumin-shoppable-videos-card-product:hover .lumin-shoppable-videos-card-product-title span {
+    transform: translateX(3px);
+  }
+
+  .lumin-shoppable-videos-card-product-price {
+    font-size: 15px;
+  }
+
+  .lumin-shoppable-videos-card-product-price s {
+    opacity: .5;
+  }
+
+  #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card-product {
+    border-radius: {{ section.settings.card_border_radius }}px;
+  }
+   #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card-views,
+   #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card-badge {
+    border-radius: {{ section.settings.badge_border_radius }}px;
+  }
+  
+  #lumin-shoppable-videos-{{ section.id }} .lumin-shoppable-videos-card-product img {
+    border-radius: {{ section.settings.card_border_radius | divided_by: 1.5 | round }}px;
+  }
+
+{%- endstyle -%}
+
+{%- javascript -%}
+class KsShoppableVideos extends HTMLElement {
+  constructor () {
+    super()
+/*
+    if (!document.querySelector('#swiper-stylesheet')) {
+      const stylesheet = document.createElement('link')
+      stylesheet.setAttribute('href', 'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-bundle.min.css')
+      stylesheet.setAttribute('rel', 'stylesheet')
+      stylesheet.setAttribute('id', 'swiper-stylesheet')
+      stylesheet.setAttribute('integrity', 'sha256-5nkrwjVsiNfKz3NR1k2h5+qt5pS5SF2u9/TIT1hElow=')
+      stylesheet.setAttribute('crossorigin', 'anonymous')
+      document.head.appendChild(stylesheet)
+    }
+
+    if (!document.querySelector('#swiper-script')) {
+      const script = document.createElement('script')
+      script.setAttribute('src', 'https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-bundle.min.js')
+      script.setAttribute('id', 'swiper-script')
+      script.setAttribute('integrity', 'sha256-rCACDWCp/VzIh0rsB+ipQCM9XBvO8HNe0fNSOa4sys0=')
+      script.setAttribute('crossorigin', 'anonymous')
+      document.head.appendChild(script)
+    }
+*/
+    setTimeout(() => {
+      const slider = new window.Swiper(this.querySelector('.swiper'), this.splideOptions())
+
+      slider.on('slideChange', () => {
+        this.querySelector('.swiper').classList.add('swiper-is-changing')
+        this.onSlideChange()
+      })
+
+      slider.on('slideChangeTransitionEnd', () => {
+        this.querySelector('.swiper').classList.remove('swiper-is-changing')
+      })
+    }, 500)
+    
+    this.querySelectorAll('.lumin-shoppable-videos-btn-play').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const video = btn.closest('.lumin-shoppable-videos-video-wrapper').querySelector('video')
+        this.onVideoPlay(video)
+      })
+    })
+
+    this.querySelectorAll('video').forEach(video => {
+      video.addEventListener('click', () => {
+        this.onVideoPlay(video)
+      })
+    })
+
+    const lazyVideosObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.play()
+        }
+      })
+    }, { rootMargin: '0px 0px 300px 0px' })
+    
+    this.querySelectorAll('video[data-autoplay="true"]').forEach((el) => {
+      lazyVideosObserver.observe(el)
+    })
+  }
+
+  splideOptions () {
+    const partialSlidesMobile = this.dataset.partialSlidesMobile === 'true' ? 1.2 : 1
+
+    /** @type {SwiperOptions} */
+    const options = {
+      rewind: true,
+      speed: Number(this.dataset.sliderSpeed),
+      breakpoints: {
+        0: { slidesPerView: Number(this.dataset.breakpointXs) * partialSlidesMobile },
+        576: { slidesPerView: Number(this.dataset.breakpointSm) },
+        768: { slidesPerView: Number(this.dataset.breakpointMd) },
+        992: { slidesPerView: Number(this.dataset.breakpointLg) },
+        1200: { slidesPerView: Number(this.dataset.breakpointXl) },
+        1400: { slidesPerView: Number(this.dataset.breakpointXxl) }
+      },
+      navigation: {
+        enabled: this.dataset.sliderNav === 'true',
+        nextEl: this.querySelector('.swiper-button-next'),
+        prevEl: this.querySelector('.swiper-button-prev')
+      },
+      pagination: {
+        enabled: this.dataset.sliderPagination === 'true',
+        type: this.dataset.sliderPaginationType,
+        el: '.swiper-pagination',
+        dynamicBullets: true,
+        dynamicMainBullets: 2,
+        renderFraction: function (currentClass, totalClass) {
+          return `<span class="${currentClass}"></span>/<span class="${totalClass}"></span>`
+        }
+      },
+      scrollbar: {
+        enabled: this.dataset.sliderScrollbar === 'true',
+        el: this.querySelector('.swiper-scrollbar'),
+        draggable: true
+        // hide: true
+      },
+      autoplay: this.dataset.sliderAutoplay !== '0'
+        ? { delay: Number(this.dataset.sliderAutoplay) * 1000 }
+        : undefined,
+      watchSlidesProgress: true, 
+      mousewheel: {
+        enabled: true,
+        forceToAxis: true
+      },
+    }
+    return options
+  }
+
+  onSlideChange () {
+    this.querySelectorAll('.lumin-shoppable-videos-card').forEach(elem => {
+      elem.setAttribute('data-is-playing', 'false')
+      elem.querySelector('video')?.pause()
+    })
+  }
+
+  onVideoPlay (video) {
+    const card = video.closest('.lumin-shoppable-videos-card')
+
+    this.querySelectorAll('.lumin-shoppable-videos-card').forEach(elem => {
+      if (elem.dataset.index !== card.dataset.index) {
+        elem.setAttribute('data-is-playing', 'false')
+        elem.querySelector('video')?.pause()
+      }
+    })
+    
+    if (card.dataset.isPlaying === 'true') {
+      card.setAttribute('data-is-playing', 'false')
+      video.pause()
+    } else {
+      card.setAttribute('data-is-playing', 'true')
+      video.muted = false
+      video.play()
+    }
+  }
+}
+customElements.define('lumin-shoppable-videos', KsShoppableVideos)
+
+{%- endjavascript -%}
+ 
+<lumin-shoppable-videos 
+  id="lumin-shoppable-videos-{{ section.id }}"
+  class="lumin-shoppable-videos color-{{ section.settings.color_scheme }} gradient {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-slider-speed="{{ section.settings.slider_speed }}"
+  data-slider-nav="{{ section.settings.slider_nav }}"
+  data-slider-pagination="{{ section.settings.slider_pagination }}"
+  data-slider-pagination-type="{{ section.settings.slider_pagination_type }}"
+  data-slider-scrollbar="{{ section.settings.slider_scrollbar }}"
+  data-partial-slides-mobile="{{ section.settings.slider_partial_slides_mobile }}"
+  data-slider-autoplay="{{ section.settings.slider_autoplay }}"
+  data-breakpoint-xs="{{ section.settings.breakpoint_xs }}"
+  data-breakpoint-sm="{{ section.settings.breakpoint_sm }}"
+  data-breakpoint-md="{{ section.settings.breakpoint_md }}"
+  data-breakpoint-lg="{{ section.settings.breakpoint_lg }}"
+  data-breakpoint-xl="{{ section.settings.breakpoint_xl }}"
+  data-breakpoint-xxl="{{ section.settings.breakpoint_xxl }}">
+  
+  <div class="section-header page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+    {%- if section.settings.description != blank %}
+      <div class="description rte">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="lumin-shoppable-videos-container {% if section.settings.container %}page-width{% endif %}">
+
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          <div class="swiper-slide" {{ block.shopify_attributes }}>
+            <div 
+              class="lumin-shoppable-videos-card"
+              data-is-playing="false"
+              data-index="{{ forloop.index0 }}">
+              {% if block.settings.video != blank %}
+                <div class="lumin-shoppable-videos-video-wrapper">
+                  {{- 
+                    block.settings.video | video_tag: 
+                      class: '',
+                      image_size: '600x', 
+                      autoplay: false, 
+                      loop: true, 
+                      muted: true, 
+                      controls: false,
+                      loading: 'lazy',
+                      preload: 'none',
+                      data-autoplay: block.settings.video_autoplay
+                  -}}
+                  <button class="lumin-shoppable-videos-btn-play" aria-label="Play video">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                      <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                    </svg>
+                  </button>
+                </div>
+              {% else %}
+                  <div class="lumin-shoppable-videos-card-fake-bg"></div>
+              {% endif %}
+              <div class="lumin-shoppable-videos-card-inner">
+                {% unless block.settings.badge == blank %}
+                  <div 
+                    class="lumin-shoppable-videos-card-badge"
+                    style="color: {{ block.settings.badge_color }}; background-color: {{ block.settings.badge_bg_color }};">
+                    {{ block.settings.badge }}
+                  </div>
+                {% endunless %}
+                {% unless block.settings.views == blank %}
+                  <div 
+                    class="lumin-shoppable-videos-card-views"
+                    style="color: {{ block.settings.views_color }}; background-color: {{ block.settings.views_bg_color | color_modify: 'alpha', 0.65  }};">
+                    {% render 'icon-accordion', icon: block.settings.icon %}
+                    {% comment %}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-label="Views">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    {% endcomment %}
+                    
+                    
+                    {{ block.settings.views }}
+                  </div>
+                {% endunless %}
+                {% unless block.settings.product == blank %}
+                  <a 
+                    class="lumin-shoppable-videos-card-product"
+                    href="{{ block.settings.product.url }}"
+                    style="
+                      background-color: {{ block.settings.product_bg_color | color_modify: 'alpha', 0.75  }};
+                      color: {{ block.settings.product_text_color }};
+                    ">
+                    <img
+                      src="{{ block.settings.product.featured_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                      alt="{{ block.settings.product.featured_image.alt }}"
+                      width="75"
+                      height="75"
+                      loading="lazy">
+                    <div class="lumin-shoppable-videos-card-product-content">
+                      <h3 class="lumin-shoppable-videos-card-product-title">
+                        {{ block.settings.product.title }} <span>→</span>
+                      </h3>
+                      <div class="lumin-shoppable-videos-card-product-price">
+                        {% if block.settings.product.compare_at_price > block.settings.product.price %}
+                          <span class="">
+                            <span class="visually-hidden visually-hidden--inline">
+                              Regular price
+                            </span>
+                            <s>{{ block.settings.product.compare_at_price | money }}</s>
+                          </span>
+                        {% endif %}
+                        <span class="product-item-price-final">
+                            {{ block.settings.product.price | money }}
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                {% endunless %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+
+      <div class="swiper-pagination-wrapper">
+        <div class="swiper-pagination"></div>
+        <div class="swiper-scrollbar"></div>
+      </div>
+
+    </div>
+  </div>
+
+</lumin-shoppable-videos>
+
+{% schema %}
+{
+  "name": "Shoppable videos",
+   "disabled_on": {
+  "groups": ["header", "footer", "custom.popup"]
+   },
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "container",
+      "label": "Wrap in a container",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shoppable Videos"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Optional description for this section</p>",
+      "info": "Leave empty to disable"
+    },
+    {
+      "type": "header",
+      "content": "Slider"
+    },
+    {
+      "type": "range",
+      "id": "slider_speed",
+      "label": "Speed",
+      "default": 300,
+      "min": 0,
+      "max": 2000,
+      "step": 100,
+      "unit": "ms"
+    },
+    {
+      "type": "checkbox",
+      "id": "slider_nav",
+      "label": "Show navigation (arrows)",
+      "info": "NOTE: Will not show on mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "slider_pagination",
+      "label": "Show pagination",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "slider_pagination_type",
+      "label": "Pagination type",
+      "default": "bullets", 
+      "options": [
+        { "value": "bullets", "label": "Bullets" },
+        { "value": "fraction", "label": "Fraction" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "slider_scrollbar",
+      "label": "Show scrollbar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "slider_partial_slides_mobile",
+      "label": "Partial slides on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slider_autoplay",
+      "label": "Autoplay",
+      "min": 0,
+      "max": 10,
+      "default": 0,
+      "unit": "sec",
+      "info": "Selecing \"0\" will disable autoplay."
+    },
+    {
+      "type": "header",
+      "content": "Video card"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap (between items)",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "label": "Badge Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "default": 3,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_box_shadow",
+      "label": "Box shadow",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_equal_height",
+      "label": "Equal-height cards",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Items per slide",
+      "info": "Adjust items per slide based on screen resolution"
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_xs",
+      "label": "Mobile small",
+      "info": "Screen width: less than 576px",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_sm",
+      "label": "Mobile Medium",
+      "info": "Screen width: ≥576px",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_md",
+      "label": "Tablets",
+      "info": "Screen width: ≥768px",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_lg",
+      "label": "Laptops",
+      "info": "Screen width: ≥992px",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_xl",
+      "label": "Desktop",
+      "info": "Screen width: ≥1200px",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "breakpoint_xxl",
+      "label": "Large Screens",
+      "info": "Screen width: ≥1400px",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Get Support",
+      "info": "Please see our [Documentation](https://help.lumintheme.com/lumin-theme-documentation) or get [help](https://lumintheme.com/pages/contact) from our support team."
+    },
+    {
+      "type": "header",
+      "content": "Shopify Themes",
+      "info": "Want to WOW your customers?! Check out our [Shopify Themes](https://lumintheme.com/)."
+    },
+    {
+      "type": "paragraph",
+      "content": "© 2025 lumintheme.com"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "checkbox",
+          "id": "video_autoplay",
+          "label": "Autoplay video",
+          "default": true,
+          "info": "NOTE: Video will autplay muted."
+        },
+        {
+          "type": "header",
+          "content": "Top area"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "info": "NOTE: Leave empty to disable",
+          "default": "NEW"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg_color",
+          "label": "Badge Background Color",
+          "default": "#f6f6f6"
+        },
+        {
+          "type": "color",
+          "id": "badge_color",
+          "label": "Badge Text Color",
+          "default": "#000000"
+        },
+         {
+        "type": "select",
+        "id": "icon",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__1.label"
+          },
+          {
+            "value": "apple",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__2.label"
+          },
+          {
+            "value": "banana",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__3.label"
+          },
+          {
+            "value": "bottle",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__4.label"
+          },
+          {
+            "value": "box",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__5.label"
+          },
+          {
+            "value": "carrot",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__6.label"
+          },
+          {
+            "value": "chat_bubble",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__7.label"
+          },
+          {
+            "value": "check_mark",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__8.label"
+          },
+          {
+            "value": "clipboard",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__9.label"
+          },
+          {
+            "value": "dairy",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__10.label"
+          },
+          {
+            "value": "dairy_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__11.label"
+          },
+          {
+            "value": "dryer",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__12.label"
+          },
+          {
+            "value": "eye",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__13.label"
+          },
+          {
+            "value": "fire",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__14.label"
+          },
+          {
+            "value": "gluten_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__15.label"
+          },
+          {
+            "value": "heart",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__16.label"
+          },
+          {
+            "value": "iron",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__17.label"
+          },
+          {
+            "value": "leaf",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__18.label"
+          },
+          {
+            "value": "leather",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__19.label"
+          },
+          {
+            "value": "lightning_bolt",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__20.label"
+          },
+          {
+            "value": "lipstick",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__21.label"
+          },
+          {
+            "value": "lock",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__22.label"
+          },
+          {
+            "value": "map_pin",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__23.label"
+          },
+          {
+            "value": "nut_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__24.label"
+          },
+          {
+            "value": "pants",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__25.label"
+          },
+          {
+            "value": "paw_print",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__26.label"
+          },
+          {
+            "value": "pepper",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__27.label"
+          },
+          {
+            "value": "perfume",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__28.label"
+          },
+          {
+            "value": "plane",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__29.label"
+          },
+          {
+            "value": "plant",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__30.label"
+          },
+          {
+            "value": "price_tag",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__31.label"
+          },
+          {
+            "value": "question_mark",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__32.label"
+          },
+          {
+            "value": "recycle",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__33.label"
+          },
+          {
+            "value": "return",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__34.label"
+          },
+          {
+            "value": "ruler",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__35.label"
+          },
+          {
+            "value": "serving_dish",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__36.label"
+          },
+          {
+            "value": "shirt",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__37.label"
+          },
+          {
+            "value": "shoe",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__38.label"
+          },
+          {
+            "value": "silhouette",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__39.label"
+          },
+          {
+            "value": "snowflake",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__40.label"
+          },
+          {
+            "value": "star",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__41.label"
+          },
+          {
+            "value": "stopwatch",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__42.label"
+          },
+          {
+            "value": "truck",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__43.label"
+          },
+          {
+            "value": "washing",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__44.label"
+          }
+        ],
+        "default": "eye",
+        "label": "Select Icon"
+      },
+        {
+          "type": "text",
+          "id": "views",
+          "label": "Views",
+          "info": "NOTE: Leave empty to disable",
+          "default": "1.7k"
+        },
+        {
+          "type": "color",
+          "id": "views_bg_color",
+          "label": "Views Background Color",
+          "default": "#FFF7F9"
+        },
+        {
+          "type": "color",
+          "id": "views_color",
+          "label": "Views Text Color",
+          "default": "#D50000"
+        },
+        {
+          "type": "header",
+          "content": "Product"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "color",
+          "id": "product_bg_color",
+          "label": "Background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "product_text_color",
+          "label": "Text color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shoppable videos",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

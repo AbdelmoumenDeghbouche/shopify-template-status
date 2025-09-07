@@ -1,0 +1,286 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu-extended' %}
+{% endcomment %}
+
+<style>
+  .curved-borders{
+    border-radius: 4px;
+  }
+
+  .full-width{
+    height: auto;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .lumin-mega img {
+    max-width:100%; 
+    height: auto;
+  }
+
+
+  
+
+{% if settings.extended-megamenu-columns == '3' %}
+  .featured-grid{
+    grid-template-areas:
+      "link link featured"
+      "link link featured"
+      "link link featured";
+    gap: 1.8rem 1rem;
+  }
+  .featured-grid-2{
+    grid-template-areas:
+      "link link featured2"
+      "link link featured2"
+      "link link featured2";
+    gap: 1.8rem 1rem;
+  }
+  .featured-grid-1-2{
+    grid-template-areas:
+      "link featured featured2"
+      "link featured featured2";
+    gap: 1.8rem 1rem;
+  }
+   {% elsif settings.extended-megamenu-columns == '4' %}
+   .featured-grid{
+    grid-template-areas:
+      "link link link featured"
+      "link link link featured";
+    gap: 1.8rem 1rem;
+  }
+  .featured-grid-2{
+    grid-template-areas:
+      "link link featured featured2"
+      "link link featured featured2";
+    gap: 1.8rem 1rem;
+  }
+   {% elsif settings.extended-megamenu-columns == '5' %}
+     .featured-grid{
+    grid-template-areas:
+      "link link link featured featured"
+      "link link link featured featured";
+    gap: 1.8rem 1rem;
+  }
+  .featured-grid-2{
+    grid-template-areas:
+      "link link link featured featured2"
+      "link link link featured featured2";
+    gap: 1.8rem 1rem;
+  }
+   {% elsif settings.extended-megamenu-columns == '6' %}
+     .featured-grid{
+    grid-template-areas:
+      "link link link link featured featured"
+      "link link link link featured featured";
+    gap: 1.8rem 1rem;
+  }
+  .featured-grid-2{
+    grid-template-areas:
+      "link link link link featured featured2"
+      "link link link link featured featured2";
+    gap: 1.8rem 1rem;
+  }
+   {%  endif %}
+
+  
+   {% if settings.extended-megamenu-columns == 3 %}
+   .mega-menu__list > li {
+  width: 33%;
+  padding-right: 2.4rem;
+   }
+   {% elsif settings.extended-megamenu-columns == 4 %}
+  .mega-menu__list > li {
+  width: 25%;
+  padding-right: 2.4rem;
+}
+   {% elsif settings.extended-megamenu-columns == 5 %}
+   .mega-menu__list > li {
+  width: 20%;
+  padding-right: 2.4rem;
+}
+   {% elsif settings.extended-megamenu-columns == 6 %}
+     .mega-menu__list > li {
+  width: 16%;
+  padding-right: 2.4rem;
+}
+   {%  endif %}
+
+  .featured-mega-item{
+    grid-area: auto;
+  }
+
+ 
+  {% if settings.extended-megamenu-featured-img != blank and settings.extended-megamenu-featured-img-2 == blank %}
+  .featured-item{
+    grid-area: featured;
+  }
+     {% elsif settings.extended-megamenu-featured-img == blank and settings.extended-megamenu-featured-img-2 != blank  %}
+  .featured-item-2{
+    grid-area: featured;
+  }
+    {% elsif settings.extended-megamenu-featured-img != blank and settings.extended-megamenu-featured-img-2 != blank %}
+    .featured-item-2{
+    grid-area: featured featured2;
+  }
+    {% endif %}
+  .mega-menu__list {
+  grid-template-columns: repeat({{ settings.extended-megamenu-columns }}, minmax(0, 1fr));
+}
+</style>
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="featured-mega-item">
+        {%- if link.links != blank -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="header__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="header__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+                {% render 'icon-caret' %}
+              </summary>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                tabindex="-1"
+              >
+                <ul
+                  class="
+                    mega-menu__list page-width {% if settings.extended-megamenu-featured-img != blank and settings.extended-megamenu-featured-img-2 == blank %}
+                    featured-grid
+                    {% elsif settings.extended-megamenu-featured-img == blank and settings.extended-megamenu-featured-img-2 != blank %}
+                    featured-grid-2
+                    {% elsif settings.extended-megamenu-featured-img != blank and settings.extended-megamenu-featured-img-2 != blank %}
+                    featured-grid-1-2
+                    {% endif %}
+                  "
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                    <li class="featured-mega-item lumin-mega">
+                      {% comment %} Put a Featured Image Here {% endcomment %}
+                      {% if settings['extended-megamenu-show-imgs'] == 'yes' %}
+                        <a href="{{ childlink.url }}">
+                          {% if childlink.object.featured_image %}
+                            {{
+                              childlink.object.featured_image
+                              | image_url: width: 350, height: auto
+                              | image_tag: class: 'curved-borders'
+                            }}
+                          {% elsif childlink.object.image %}
+                            {{
+                              childlink.object.image
+                              | image_url: width:350, height: auto
+                              | image_tag: class: 'curved-borders'
+                            }}
+                          {% endif %}
+                        </a>
+                      {% endif %}
+
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                  {% if settings['extended-megamenu-featured-img'] %}
+                    <li class="featured-item">
+                      {% if settings['extended-megamenu-url'] %}
+                        <a href="{{ settings.extended-megamenu-url }}">
+                          {{
+                            settings['extended-megamenu-featured-img']
+                            | image_url: width: 350, height: auto
+                            | image_tag: class: 'curved-borders full-width'
+                          }}
+                        </a>
+                      {% else %}
+                        {{
+                          settings['extended-megamenu-featured-img']
+                          | image_url: width: 350, height: auto
+                          | image_tag: class: 'curved-borders full-width'
+                        }}
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                  {% if settings['extended-megamenu-featured-img-2'] %}
+                    <li class="featured-item-2">
+                      {% if settings['extended-megamenu-url-2'] %}
+                        <a href="{{ settings.extended-megamenu-url-2 }}">
+                          {{
+                            settings['extended-megamenu-featured-img-2']
+                            | image_url: width: 350, height: auto
+                            | image_tag: class: 'curved-borders full-width'
+                          }}
+                        </a>
+                      {% else %}
+                        {{
+                          settings['extended-megamenu-featured-img-2']
+                          | image_url: width: 350, height: auto
+                          | image_tag: class: 'curved-borders full-width'
+                        }}
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

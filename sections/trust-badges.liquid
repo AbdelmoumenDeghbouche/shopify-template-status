@@ -1,0 +1,643 @@
+
+{% style %}
+
+  .section-{{ section.id }} {
+    border-top: solid {{ section.settings.border_color }} {{ section.settings.border_thickness }}px;
+    border-bottom: solid {{ section.settings.border_color }} {{ section.settings.border_thickness }}px;
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+  
+  .section-{{ section.id }}-settings {
+    margin: 0 auto;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    padding-left: {{ section.settings.padding_horizontal_mobile }}rem;
+    padding-right: {{ section.settings.padding_horizontal_mobile }}rem;
+  }
+
+  .feature-{{ section.id }} .box__title {
+    margin: 0px;
+    font-size: {{ section.settings.feature_heading_size_mobile }}px;
+    color: {{ section.settings.feature_heading_color }};
+    line-height: {{ section.settings.feature_heading_height }}%;
+    text-transform: unset;
+    margin-top: {{section.settings.feature_heading_mt}}px;
+  }
+  
+  .feature-{{ section.id }} .box__description {
+    margin-top: {{ section.settings.feature_text_mt | times: 0.75 | round: 0 }}px;
+  }
+
+  .feature-{{ section.id }} .box__description * {
+    margin: 0px;
+    font-size: {{ section.settings.feature_text_size_mobile }}px;
+    color: {{ section.settings.feature_text_color }};
+    line-height: {{ section.settings.feature_text_height }}%;
+    text-transform: unset;
+  }
+
+  .feature-{{ section.id }} .wrapper-box {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.feature_row_mobile}}, 1fr);
+    background-color: {{ section.settings.feature_bg }}; 
+    border: {{ section.settings.feature_border_thickness }}px solid {{ section.settings.feature_border_color }};
+    border-radius: {{ section.settings.feature_radius }}px;
+    padding: {{ section.settings.feature_padding_vertical | times: 0.75 | round: 0 }}px {{ section.settings.feature_padding_horizontal | times: 0.75 | round: 0 }}px;
+    gap: {{ section.settings.feature_gap_mobile }}px;
+  }
+  
+  .feature-{{ section.id }} .box:not(:nth-child(2)) .box__content-wrapper {
+    padding-right: 10px;
+  }
+  
+  .feature-{{ section.id }} .box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    gap: 5px;
+  }
+  
+  .feature-{{ section.id }} .box__image {
+    display:flex;
+    margin-right: 10px;
+    flex: 0 0 {{ section.settings.feature_icon_size_mobile }}px;
+    height: {{ section.settings.feature_icon_size_mobile }}px;
+  }
+
+  .feature-{{ section.id }} .box__image img,
+  .feature-{{ section.id }} .box__image svg {
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .feature-{{ section.id }} .box__image svg path {
+    fill: {{ section.settings.feature_icon_color }};
+  }
+
+  @media(min-width: 768px) {
+
+    .section-{{ section.id }} {
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+    
+    .section-{{ section.id }}-settings {
+      padding: 0 5rem;
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.padding_horizontal }}rem;
+      padding-right: {{ section.settings.padding_horizontal }}rem;
+    }
+
+    .feature-{{ section.id }} .wrapper-box {
+      grid-template-columns: repeat({{ section.settings.feature_row }}, 1fr);
+      padding: {{ section.settings.feature_padding_vertical }}px {{ section.settings.feature_padding_horizontal }}px;
+      gap: {{ section.settings.feature_gap }}px;
+    }
+
+    .feature-{{ section.id }} .box {
+      flex: 1 0 auto;
+    }
+    
+    .feature-{{ section.id }} .box__title {
+      font-size: {{ section.settings.feature_heading_size }}px;
+    }
+
+    .feature-{{ section.id }} .box__description {
+      margin-top: {{ section.settings.feature_text_mt }}px;
+    }
+
+    .feature-{{ section.id }} .box__description * {
+      font-size: {{ section.settings.feature_text_size }}px;
+    }
+
+    .section-{{ section.id }}-settings .box__image {
+      flex: 0 0 {{ section.settings.feature_icon_size }}px;
+      height: {{ section.settings.feature_icon_size }}px;
+    }
+  }
+{% endstyle %}
+
+
+
+{% unless section.settings.full_width %}
+  <style>
+    .section-{{ section.id }}-settings {
+      max-width: {{ section.settings.content_width }}rem;
+    }
+  </style>
+{% endunless %}
+
+{% if feature_shadow %}
+  <style>
+    .feature-{{ section.id }} .wrapper-box {
+       box-shadow: 4px 4px 20px {{ section.settings.feature_shadow_color | hex_to_rgba: 0.2 }};
+    }
+  </style>
+{% endif %}
+
+{% capture svg_example_1 %}
+ <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" version="1.1"><path d="M29.871 6.026l-13.871-5.1-14.394 5.283v19.642l14.394 5.222 14.394-5.222v-19.634l-0.524-0.192zM15.467 29.746l-12.795-4.642v-17.747l12.795 4.642v17.747zM16 11.058l-12.326-4.472 12.326-4.524 12.315 4.528-12.315 4.468zM29.328 25.104l-12.795 4.642v-17.747l12.795-4.623v17.728z" fill="#000000"></path></svg>
+  {% endcapture %}
+{% capture svg_example_2 %}
+  <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 1024 1024"><path d="M197.37 181.34c0-11.09-8.99-20.08-20.08-20.08s-20.08 8.99-20.08 20.08v125.49c.012.896.088 1.764.223 2.612l-.013-.102c-60.245 9.912-105.642 61.606-105.642 123.902 0 62.222 45.288 113.866 104.699 123.767l.733.101v293.45c0 11.09 8.99 20.08 20.08 20.08s20.08-8.99 20.08-20.08V557.21c60.122-10.027 105.384-61.662 105.384-123.869 0-62.278-45.366-113.96-104.854-123.801l-.73-.1c.11-.739.182-1.607.2-2.488v-.022zm65.26 252c0 47.132-38.208 85.34-85.34 85.34s-85.34-38.208-85.34-85.34c0-47.132 38.208-85.34 85.34-85.34 47.117.028 85.306 38.214 85.34 85.327v.003zM511.9 161.26c11.085.023 20.066 8.997 20.1 20.077V474.19a20.1 20.1 0 01-.213 2.618l.013-.108c60.228 9.928 105.606 61.613 105.606 123.896 0 62.212-45.275 113.85-104.673 123.763l-.733.101v126.1c0 11.09-8.99 20.08-20.08 20.08s-20.08-8.99-20.08-20.08v-126.2c-60.141-10.005-105.426-61.648-105.426-123.867 0-62.276 45.368-113.957 104.856-123.793l.729-.1a20.478 20.478 0 01-.2-2.487V181.34c.034-11.083 9.015-20.057 20.098-20.08h.002zm0 524.65c47.126 0 85.33-38.204 85.33-85.33s-38.204-85.33-85.33-85.33-85.33 38.204-85.33 85.33c.034 47.113 38.217 85.296 85.327 85.33h.003zm460.3-212.43v-.033c0-62.277-45.39-113.952-104.892-123.748l-.728-.099a18.69 18.69 0 00.21-2.492V181.44c0-11.09-8.99-20.08-20.08-20.08s-20.08 8.99-20.08 20.08v165.65c.014.899.086 1.767.213 2.618l-.013-.108c-60.218 9.942-105.584 61.623-105.584 123.901 0 62.206 45.262 113.841 104.65 123.768l.734.101v253.29c0 11.09 8.99 20.08 20.08 20.08s20.08-8.99 20.08-20.08V597.37c60.135-10.021 105.41-61.664 105.41-123.882v-.009zm-125.49 85.34h-.05c-47.132 0-85.34-38.208-85.34-85.34s38.208-85.34 85.34-85.34c47.132 0 85.34 38.208 85.34 85.34-.028 47.103-38.191 85.283-85.285 85.34h-.005z"/></svg>
+  {% endcapture %}
+{% capture svg_example_3 %}
+  <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 1024 1024"><path d="M249.6 627.879c51.252 0 94.075-36.59 101.642-86.128a20.476 20.476 0 0110.015-14.649l1.403-.809a20.49 20.49 0 019.246-2.715c129.082-6.21 228.845-90.344 228.845-189.924 0-103.944-108.374-190.29-244.06-190.29-135.677 0-244.05 86.347-244.05 190.29 0 72.301 52.772 138.239 135.615 170.444l5.211 2.355a20.48 20.48 0 0111.924 18.607c0 38.067-14.927 73.572-40.338 99.877a103.256 103.256 0 0024.548 2.942zm0 40.96c-25.799 0-50.657-6.823-72.477-19.569-4.011-2.04-6.981-4.659-9.087-8.124-5.873-9.666-2.798-22.264 6.868-28.137 26.777-16.27 44.692-43.707 48.682-74.745.558-4.338.844-8.746.844-13.204h20.48l-8.556 18.607-4.076-1.874 8.556-18.607-7.42 19.088a325.149 325.149 0 01-9.828-4.011c-92.051-39.385-151.907-117.145-151.907-204.61 0-128.871 128.495-231.25 285.01-231.25 156.524 0 285.02 102.378 285.02 231.25 0 119.569-110.956 217.066-253.246 229.833-4.828.433-9.693.769-14.591 1.004l-.984-20.456 10.231 17.742-11.633-16.933 20.245 3.092a142.676 142.676 0 01-3.268 15.551c-16.566 61.545-72.858 105.353-138.864 105.353zm145.821-33.679c-3.138-10.867 3.128-22.22 13.994-25.358s22.22 3.128 25.358 13.994c23.262 80.558 112.798 141.479 220.731 146.68a20.486 20.486 0 019.26 2.723l1.382.799a20.48 20.48 0 019.999 14.64c7.485 48.997 49.848 85.197 100.546 85.197 18.284 0 35.823-4.817 51.25-13.832 9.766-5.707 22.308-2.416 28.015 7.349s2.416 22.308-7.349 28.015c-21.654 12.654-46.318 19.428-71.916 19.428-65.45 0-121.279-43.416-137.76-104.418-117.957-10.664-216.152-80.475-243.511-175.218z"/><path d="M850.81 859.119c9.666 5.874 12.74 18.472 6.865 28.138s-18.472 12.74-28.138 6.865c-42.287-25.699-68.673-71.583-68.673-122.001a20.48 20.48 0 0111.931-18.61l4.035-1.853 1.128-.478c82.025-31.89 134.274-97.174 134.274-168.734 0-93.259-88.667-173.58-208.08-186.57-11.244-1.223-19.368-11.33-18.145-22.575s11.33-19.368 22.575-18.145c138.63 15.08 244.61 111.085 244.61 227.29 0 86.708-59.309 163.8-150.515 202.876 3.983 30.645 21.688 57.725 48.133 73.797z"/></svg>
+  {% endcapture %}
+{% capture svg_example_4 %}
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M14.65 8.93274L12.4852 4.30901C12.2923 3.89699 11.7077 3.897 11.5148 4.30902L9.35002 8.93274L4.45559 9.68243C4.02435 9.74848 3.84827 10.2758 4.15292 10.5888L7.71225 14.2461L6.87774 19.3749C6.80571 19.8176 7.27445 20.1487 7.66601 19.9317L12 17.5299L16.334 19.9317C16.7256 20.1487 17.1943 19.8176 17.1223 19.3749L16.2878 14.2461L19.8471 10.5888C20.1517 10.2758 19.9756 9.74848 19.5444 9.68243L14.65 8.93274Z" stroke="{{ section.settings.feature_icon_color }}" stroke-linecap="round" stroke-linejoin="round" style="fill:none;"/></svg>{% endcapture %}
+
+<div class="section-{{ section.id }} feature-{{ section.id }}" style="background-color:{{ section.settings.background_color }}; background-image: {{ section.settings.background_gradient }};">
+    <div class="section-{{ section.id }}-settings ">
+      <div class="wrapper-box">
+          {%- for block in section.blocks -%}
+              <{% if block.settings.feature_url != blank %}a href="{{ block.settings.feature_url }}"{% else %}div{% endif %} class="box">
+                  {% unless block.settings.hide_image %}
+                  <div class="box__image">
+                      {%- if block.settings.feature_image != blank -%}
+                        <img src="{{ block.settings.feature_image | image_url }}" alt="feature-item-{{ forloop.index }}" {% if lazy %}loading="lazy"{% endif %}>
+                      {%- else -%}
+                       {% case forloop.index %}
+                        {% when 1 %}
+                          {{ svg_example_1 }}
+                        {% when 2 %}
+                          {{ svg_example_2 }}
+                        {% when 3 %}
+                          {{ svg_example_3 }}
+                        {% when 4 %}
+                          {{ svg_example_4 }}
+                        {% else %}
+                          {{ svg_example_1 }}
+                        {% endcase %}
+                      {%- endif -%}
+                  </div>
+                  {% endunless %}
+                  <div class="box__content-wrapper">
+                      <div class="box__title">{{ block.settings.feature_title }}</div>
+                      <div class="box__description">{{ block.settings.feature_text }}</div>
+                  </div>
+              </{% if block.settings.feature_url != blank %}a{% else %}div{% endif %}>
+          {%- endfor -%}
+      </div>
+  </div>
+</div>
+
+{% schema %}
+{
+    "name":"Feature Blocks",
+    "tag":"section",
+    "disabled_on": {
+    "groups": ["header", "custom.popup"]
+   },
+    "class":"feature-type1",
+    "settings": [
+      {
+        "type":"header",
+        "content":"Feature wrapper settings"
+      },
+      {
+        "type": "range",
+        "id": "feature_row",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "label": "Feature per row",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "feature_row_mobile",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "label": "Feature per row - mobile",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "feature_gap",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "Gap",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "feature_gap_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "Gap - mobile",
+        "default": 20
+      },
+      {
+         "type": "range",
+         "id": "feature_padding_horizontal",
+         "min": 0,
+         "max": 100,
+         "step": 2,
+         "unit": "px",
+         "label": "Padding horizontal",
+         "default": 0
+      },
+      {
+        "type": "range",
+        "id": "feature_padding_vertical",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "Padding vertical",
+        "default": 0
+      },
+      {
+         "type": "range",
+         "id": "feature_radius",
+         "min": 0,
+         "max": 100,
+         "step": 2,
+         "unit": "px",
+         "label": "Roundness",
+         "default": 16
+      },
+      {
+         "type": "range",
+         "id": "feature_border_thickness",
+         "min": 0,
+         "max": 10,
+         "step": 1,
+         "unit": "px",
+         "label": "Border thickness",
+         "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "feature_shadow",
+        "label": "Use shadow",
+        "default": false
+      },
+      {
+        "type":"header",
+        "content":"Feature heading settings"
+      },
+      {
+        "type": "range",
+        "id": "feature_heading_size",
+        "min": 0,
+        "max": 72,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "feature_heading_size_mobile",
+        "min": 0,
+        "max": 72,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size - mobile",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "feature_heading_height",
+        "min": 50,
+        "max": 200,
+        "step": 10,
+        "unit": "%",
+        "label": "Line height",
+        "default": 130
+      },
+      {
+        "type": "range",
+        "id": "feature_heading_mt",
+        "min": 0,
+        "max": 50,
+        "step": 2,
+        "unit": "px",
+        "label": "Margin top",
+        "default": 8
+      },
+      {
+        "type":"header",
+        "content":"Feature text settings"
+      },
+      {
+        "type": "range",
+        "id": "feature_text_size",
+        "min": 0,
+        "max": 72,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "feature_text_size_mobile",
+        "min": 0,
+        "max": 72,
+        "step": 2,
+        "unit": "px",
+        "label": "Font size - mobile",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "feature_text_height",
+        "min": 50,
+        "max": 200,
+        "step": 10,
+        "unit": "%",
+        "label": "Line height",
+        "default": 130
+      },
+      {
+        "type": "range",
+        "id": "feature_text_mt",
+        "min": 0,
+        "max": 50,
+        "step": 2,
+        "unit": "px",
+        "label": "Margin top",
+        "default": 4
+      },
+      {
+        "type":"header",
+        "content":"Feature icon settings"
+      },
+      {
+        "type": "range",
+        "id": "feature_icon_size",
+        "min": 10,
+        "max": 200,
+        "step": 2,
+        "unit": "px",
+        "label": "Size",
+        "default": 42
+      },
+      {
+        "type": "range",
+        "id": "feature_icon_size_mobile",
+        "min": 10,
+        "max": 200,
+        "step": 2,
+        "unit": "px",
+        "label": "Size - mobile",
+        "default": 42
+      },
+      {
+        "type":"header",
+        "content":"Feature wrapper colors"
+      },
+      {
+        "type":"color",
+        "id":"feature_bg",
+        "label":"Background color",
+        "default":"#FFFFFF"
+      },
+      {
+        "type":"color",
+        "id":"feature_border_color",
+        "label":"Border color",
+        "default":"#000000"
+      },
+      {
+        "type":"color",
+        "id":"feature_shadow_color",
+        "label":"Shadow color",
+        "default":"#000000"
+      },
+      {
+        "type":"header",
+        "content":"Feature content colors"
+      },
+      {
+        "type":"color",
+        "id":"feature_heading_color",
+        "label":"Heading color",
+        "default":"#000000"
+      },
+      {
+        "type":"color",
+        "id":"feature_text_color",
+        "label":"Text color",
+        "default":"#000000"
+      },
+      {
+        "type":"color",
+        "id":"feature_icon_color",
+        "label":"Icon color",
+        "default":"#000000"
+      },
+      {
+        "type":"header",
+        "content":"Section colors"
+      },
+      {
+        "type": "color",
+        "label": "Background color",
+        "id": "background_color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color_background",
+        "id": "background_gradient",
+        "label": "Background gradient"
+      },
+      {
+        "type": "color",
+        "label": "Border",
+        "id": "border_color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section margin (outside)"
+      },
+      {
+        "type": "range",
+        "id": "margin_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Margin top",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "margin_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Margin bottom",
+        "default": 24
+      },
+      {
+        "type": "header",
+        "content": "Section padding (inside)"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 16
+      },
+      {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 100,
+         "step": 4,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 16
+      },
+      {
+        "type": "range",
+        "id": "padding_horizontal",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "rem",
+        "label": "Padding sides",
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "padding_horizontal_mobile",
+        "min": 0,
+        "max": 15,
+        "step": 0.5,
+        "unit": "rem",
+        "label": "Padding sides mobile",
+        "default": 1.5
+      },
+      {
+        "type": "header",
+        "content": "Section settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full width",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "content_width",
+        "min": 0,
+        "max": 400,
+        "step": 10,
+        "unit": "rem",
+        "label": "Section content width",
+        "default": 120
+      },
+      {
+        "type": "range",
+        "id": "border_thickness",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Border thickness",
+        "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "lazy",
+        "label": "Lazy load",
+        "info": "Lazy load images for speed optimisation",
+        "default": true
+      }
+    ],
+    "blocks":[
+       {
+          "type":"image",
+          "name":"Feature",
+          "settings":[
+             {
+                "type":"inline_richtext",
+                "id":"feature_title",
+                "label":"Item title text",
+                "default":"Item title"
+             },
+             {
+                "type":"richtext",
+                "id":"feature_text",
+                "label":"Item text (richtext)",
+                "default":"<p>Item text</p>"
+             },
+             {
+                "type":"image_picker",
+                "id":"feature_image",
+                "label":"Icon"
+             },
+             {
+                "type":"url",
+                "id":"feature_url",
+                "label":"Item URL"
+             },
+             {
+                "type":"checkbox",
+                "id":"hide_image",
+                "default": false,
+                "label":"Hide Image"
+             }
+          ]
+       }
+    ],
+    "presets":[
+       {
+          "name":"Feature Blocks",
+          "blocks":[
+             {
+                "type":"image",
+                "settings":{
+                   "feature_title":"<strong>Fast Shipping</strong>",
+                   "feature_text":"<p>Doorstep delivery to most of the US.</p>"
+                }
+             },
+             {
+                "type":"image",
+                "settings":{
+                   "feature_title": "<strong>Price-match guarantee</strong>",
+                   "feature_text": "<p>Safe money when ordering with us</p>"
+                }
+             },
+             {
+                "type":"image",
+                "settings":{
+                   "feature_title": "<strong>Hassle-free exchange</strong>",
+                   "feature_text": "<p>No questions ask</p>"
+				}
+             },
+             {
+                "type": "image",
+                "settings": {
+                    "feature_title": "<strong>5 Star Reviews</strong>",
+                    "feature_text": "<p>Customer satisfaction No.1 priority</p>"
+                }
+             }
+          ]
+       }
+    ]
+ }
+{% endschema %}

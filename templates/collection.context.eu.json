@@ -1,0 +1,7 @@
+{
+  "parent": "collection.json",
+  "context": {
+    "market": "eu"
+  },
+  "sections": {}
+}

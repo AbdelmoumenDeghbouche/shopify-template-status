@@ -1,0 +1,60 @@
+<!-- back-to-top.liquid -->
+<div id="back-to-top" class="back-to-top hidden">
+  <button aria-label="Back to Top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 32 32" id="Lager_31" data-name="Lager 31">
+  <g id="Group_10" data-name="Group 10">
+    <path id="Path_37" data-name="Path 37" d="M11.413,17.387,14,14.754V22.02A1.979,1.979,0,0,0,15.98,24h.04A1.979,1.979,0,0,0,18,22.02V15.057l.26.042,2.248,2.227a2.091,2.091,0,0,0,2.657.293A1.973,1.973,0,0,0,23.42,14.6L17.346,8.581a2.017,2.017,0,0,0-2.833,0l-5.934,6a1.97,1.97,0,0,0,0,2.806A2.016,2.016,0,0,0,11.413,17.387Z" fill="#040405"/>
+    <path id="Path_38" data-name="Path 38" d="M16,32A16,16,0,1,0,0,16,16,16,0,0,0,16,32ZM16,4A12,12,0,1,1,4,16,12.013,12.013,0,0,1,16,4Z" fill="#040405"/>
+  </g>
+</svg>
+  </button>
+</div>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    bottom: 8rem;
+    right: 2rem;
+    color: #fff;
+    height: 24px;
+    border-radius: 50%;
+   /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .back-to-top.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .back-to-top button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .back-to-top svg {
+    width: 24px;
+    height: 24px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const backToTop = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 4000) {
+        backToTop.classList.remove('hidden');
+      } else {
+        backToTop.classList.add('hidden');
+      }
+    });
+
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>

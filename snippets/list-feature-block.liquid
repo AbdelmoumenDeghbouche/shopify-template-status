@@ -1,0 +1,47 @@
+<style>
+  .qa-feature-{{ block.id }} {
+      display: flex;
+      align-items: center;
+  }
+  .qa-feature-{{ block.id }} h4 {
+        font-size: {{block.settings.heading_size_alt}}px;
+        margin: 0px;
+    }
+  .qa-feature-{{ block.id }} p {
+        margin: 0px;
+    }
+  .qa-feature-{{ block.id }} img {
+        width: {{block.settings.icon_size}}px !important;
+        height: auto;
+        margin-right: 20px;
+        border: none;
+    }
+            .qa-feature-{{ block.id }} svg {
+        width: {{block.settings.icon_size}}px !important;
+        height: auto;
+        margin-right: 20px;
+        border: none;
+    }
+</style>
+<div class="qa-feature-{{ block.id }} rte" {{ block.shopify_attributes }}>
+  {%- if block.settings.icon != blank -%}
+    <img src="{{ block.settings.icon | img_url: '100x' }}">
+  {%- else -%}
+    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="m12 22.75c-5.93 0-10.75-4.82-10.75-10.75s4.82-10.75 10.75-10.75 10.75 4.82 10.75 10.75-4.82 10.75-10.75 10.75zm0-20c-5.1 0-9.25 4.15-9.25 9.25s4.15 9.25 9.25 9.25 9.25-4.15 9.25-9.25-4.15-9.25-9.25-9.25z" style="fill: currentColor;"></path>
+      <path d="m10.58 15.58c-0.2 0-0.39-0.08-0.53-0.22l-2.83-2.83c-0.29-0.29-0.29-0.77 0-1.06s0.77-0.29 1.06 0l2.3 2.3 5.14-5.14c0.29-0.29 0.77-0.29 1.06 0s0.29 0.77 0 1.06l-5.67 5.67c-0.14 0.14-0.33 0.22-0.53 0.22z" style="fill: currentColor;"></path>
+    </svg>
+  {%- endif -%}
+  <div style="width: calc(100% - {{block.settings.icon_size}}px + 20px);">
+    <h4>
+      {{
+        block.settings.heading
+        | replace: '[', '<span class="lumin-text__fancy1">'
+        | replace: ']', '</span>'
+        | replace: '((', '<span class="lumin-text__fancy2">'
+        | replace: '))', '</span>'
+      }}
+    </h4>
+    {{ block.settings.text }}
+  </div>
+</div>

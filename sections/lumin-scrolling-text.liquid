@@ -1,0 +1,654 @@
+{%- style -%}
+   .section-{{ section.id }}-padding {
+     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+     {% if section.settings.fade %}
+     -webkit-mask-box-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+     mask-image: linear-gradient(to right, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
+  {% endif %}
+       }
+
+   @media screen and (min-width: 750px) {
+     .section-{{ section.id }}-padding {
+       padding-top: {{ section.settings.padding_top }}px;
+       padding-bottom: {{ section.settings.padding_bottom }}px;
+     }
+   }
+{%- endstyle -%}
+<div class="section-{{ section.id }}-padding">
+  <div
+    class="announcement-bar--inner-{{ section.id }} {% if section.settings.reverse %} direction-right{% else %} direction-left{% endif %} color-{{ section.settings.color_scheme }} gradient"
+    style="--marquee-speed: {{ section.settings.scroll_speed }}s"
+  >
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="display: flex;">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'image' %}
+              {% render 'scroll-image-block', block: block, section: section %}
+            {% when 'announcement' %}
+              {% render 'scroll-text-block', block: block, section: section %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<style data-shopify>
+    .scroll {
+      display: flex;
+      width: 100%;
+      text-decoration: none;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+           .announcement-bar--inner-{{ section.id }}{
+      max-width:1440px;
+      margin-left:auto;
+      margin-right:auto;
+      z-index: -1;
+      position: relative;
+  }
+    @media only screen and (min-width: 768px){
+      .announcement-bar--inner-{{ section.id }}{
+        padding: {{section.settings.padding_desktop}}px 20px;
+      }
+    }
+              @media only screen and (max-width: 767px){
+      .announcement-bar--inner-{{ section.id }}{
+        padding: {{section.settings.padding_mobile}}px 20px;
+      }
+    }
+    .announcement-bar-section{
+      position:relative;
+      z-index:4
+    }
+    .announcement-bar--wrap{
+      line-height:1;
+    }
+    .announcement-bar--inner-{{ section.id }}{
+      height:100%;
+      display:flex;
+      align-items:center;
+      max-width:none;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .announcement-bar--inner-{{ section.id }}.direction-left>div{
+      animation:marquee-left var(--marquee-speed) linear infinite;
+    }
+    .announcement-bar--inner-{{ section.id }}.direction-right>div{
+      animation:marquee-right var(--marquee-speed) linear infinite;
+    }
+    .announcement-bar--inner-{{ section.id }}>div{
+      display:flex;
+      align-items:center;
+      flex-shrink:0;
+      will-change:transform;
+    }
+    .announcement-bar--inner-{{ section.id }}:hover>div{
+      animation-play-state:paused;
+    }
+    .announcement-bar-{{ section.id }}{
+      display:inline-flex;
+      align-items:center;
+      padding:0 {{section.settings.padding_item_desktop}}px;
+    }
+               @media only screen and (max-width: 767px){
+      .announcement-bar{
+      padding:0 {{section.settings.padding_item_mobile}}px;
+    }
+               }
+    .announcement-bar-{{ section.id }} p{
+      margin:0;
+    }
+             .announcement-bar__message {
+        min-height: 1.8rem;
+    }
+    .announcement-bar-{{ section.id }} svg{
+      margin-right:12px;
+     /* fill:rgb(var(--color-foreground));*/
+    }
+    .announcement-bar-{{ section.id }} p{
+      padding:0;
+    }
+
+    .announcement-bar-{{ section.id }} .announcement-bar-{{ section.id }}__link{
+      color:rgb(var(--color-foreground));
+      display: flex;
+      padding: 0;
+    }
+    .announcement-bar-{{ section.id }}--item:empty{
+      display:none
+    }
+            @keyframes marquee-left{
+      0%{
+        transform:translate(0)
+      }
+      to{
+        transform:translate(-100%)
+      }
+    }
+    @keyframes marquee-right {
+      0%{
+        transform:translate(-100%)
+      }
+      to{
+        transform:translate(0)
+      }
+    }
+
+    .announcement-bar-static{
+      display: block;
+    }
+    .announcement-bar-static>div{
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+</style>
+
+{% schema %}
+{
+  "name": "Scrolling text",
+   "disabled_on": {
+    "groups": ["custom.popup"]
+   },
+  "settings": [
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "s",
+      "label": "Scrolling Speed",
+      "default": 15
+    },
+     {
+            "type": "checkbox",
+            "id": "reverse",
+            "label": "Reverse",
+            "default": false
+          },
+    {
+            "type": "checkbox",
+            "id": "fade",
+            "label": "Fade on the edges",
+            "default": false
+          },
+    {
+    "type": "color_scheme",
+    "id": "color_scheme",
+    "label": "t:sections.all.colors.label",
+    "default": "background-1"
+  },
+     {
+    "type": "range",
+    "id": "padding_desktop",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Bar Height",
+    "default": 16
+  },
+  {
+    "type": "range",
+    "id": "padding_mobile",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Bar Height Mobile",
+    "default": 8
+  },
+    {
+    "type": "range",
+    "id": "padding_item_desktop",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Item Gap",
+    "default": 16
+  },
+  {
+    "type": "range",
+    "id": "padding_item_mobile",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Item Gap Mobile",
+    "default": 8
+  },
+
+    {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_top",
+    "default": 0
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "t:sections.all.padding.padding_bottom",
+    "default": 0
+  }
+  ],
+  "blocks": [
+    {
+    "type": "image",
+    "name": "Image",
+    "settings": [
+      {
+    "type": "image_picker",
+    "id": "logo_image",
+    "label": "Image"
+     },
+       {
+    "type": "range",
+    "id": "logo_image_width",
+    "min": 20,
+    "max": 200,
+    "step": 2,
+    "unit": "px",
+    "label": "Image Height",
+    "default": 34
+  }
+    ]
+    },
+    {
+    "type": "announcement",
+    "name": "Announcement",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "Announcement",
+        "default": "<p>Take 20% Off With Code SAVE20</p>",
+        "label": "Announcement- ✨ Fancy enabled",
+        "info": "Your Announcement Text"
+      },
+       {
+          "type": "range",
+          "id": "announcement_size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Announcement Size",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "announcement_size_m",
+          "min": 8,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Announcement Size Mobile",
+          "default": 16
+        },
+         {
+            "type": "range",
+            "id": "text_spacing",
+            "min": -1,
+            "max": 3,
+            "step": 0.5,
+            "unit": "px",
+            "label": "Letter Spacing",
+            "default": 0
+          },
+          {
+              "type": "select",
+              "id": "text_transform",
+              "options": [
+                {
+                  "value": "none",
+                  "label": "None"
+                },
+                {
+                  "value": "uppercase",
+                  "label": "Uppercase"
+                },
+                {
+                  "value": "lowercase",
+                  "label": "Lowercase"
+                }
+              ],
+              "default": "none",
+              "label": "Text transform"
+          },
+        {
+          "type": "color",
+          "id": "announcement_color",
+          "label": "Announcement Color",
+          "default": "#212121"
+        },
+       {
+        "type": "select",
+        "id": "icon",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__1.label"
+          },
+          {
+            "value": "apple",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__2.label"
+          },
+          {
+            "value": "banana",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__3.label"
+          },
+          {
+            "value": "bottle",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__4.label"
+          },
+          {
+            "value": "box",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__5.label"
+          },
+          {
+            "value": "carrot",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__6.label"
+          },
+          {
+            "value": "chat_bubble",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__7.label"
+          },
+          {
+            "value": "check_mark",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__8.label"
+          },
+          {
+            "value": "clipboard",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__9.label"
+          },
+          {
+            "value": "dairy",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__10.label"
+          },
+          {
+            "value": "dairy_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__11.label"
+          },
+          {
+            "value": "dryer",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__12.label"
+          },
+          {
+            "value": "eye",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__13.label"
+          },
+          {
+            "value": "fire",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__14.label"
+          },
+          {
+            "value": "gluten_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__15.label"
+          },
+          {
+            "value": "heart",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__16.label"
+          },
+          {
+            "value": "iron",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__17.label"
+          },
+          {
+            "value": "leaf",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__18.label"
+          },
+          {
+            "value": "leather",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__19.label"
+          },
+          {
+            "value": "lightning_bolt",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__20.label"
+          },
+          {
+            "value": "lipstick",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__21.label"
+          },
+          {
+            "value": "lock",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__22.label"
+          },
+          {
+            "value": "map_pin",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__23.label"
+          },
+          {
+            "value": "nut_free",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__24.label"
+          },
+          {
+            "value": "pants",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__25.label"
+          },
+          {
+            "value": "paw_print",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__26.label"
+          },
+          {
+            "value": "pepper",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__27.label"
+          },
+          {
+            "value": "perfume",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__28.label"
+          },
+          {
+            "value": "plane",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__29.label"
+          },
+          {
+            "value": "plant",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__30.label"
+          },
+          {
+            "value": "price_tag",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__31.label"
+          },
+          {
+            "value": "question_mark",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__32.label"
+          },
+          {
+            "value": "recycle",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__33.label"
+          },
+          {
+            "value": "return",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__34.label"
+          },
+          {
+            "value": "ruler",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__35.label"
+          },
+          {
+            "value": "serving_dish",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__36.label"
+          },
+          {
+            "value": "shirt",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__37.label"
+          },
+          {
+            "value": "shoe",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__38.label"
+          },
+          {
+            "value": "silhouette",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__39.label"
+          },
+          {
+            "value": "snowflake",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__40.label"
+          },
+          {
+            "value": "star",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__41.label"
+          },
+          {
+            "value": "stopwatch",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__42.label"
+          },
+          {
+            "value": "truck",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__43.label"
+          },
+          {
+            "value": "washing",
+            "label": "t:sections.collapsible_content.blocks.collapsible_row.settings.icon.options__44.label"
+          }
+        ],
+        "default": "check_mark",
+        "label": "Select Icon"
+      },
+     {
+        "type": "url",
+        "id": "text_link",
+        "label": "Link"
+      }
+  ]
+    }
+  ],
+    "presets": [
+  {
+  "name": "Scrolling text",
+  "category": "Lumin Section",
+  "settings": {
+  },
+  "blocks": [
+    {
+      "type": "announcement"
+    },
+    {
+      "type": "announcement"
+    }
+  ]
+}
+]
+}
+{% endschema %}

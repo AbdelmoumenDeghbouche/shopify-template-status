@@ -1,0 +1,11 @@
+<img id="Image-{{ image.id }}-{{ responsive_image_counter }}"
+  class="blur-up responsive-image__image lazyload {{ image_class }}"
+  src="{{ image | img_url: '1x'}}"
+  data-src="{{ image | img_url: '100x' }}"
+  data-widths="[{{ image_widths }}]"
+  data-aspectratio="{{ image.aspect_ratio }}"
+  data-sizes="auto"
+  tabindex="-1"
+  alt="{{ image.alt | escape }}"
+  {{ image_attributes }}
+>
