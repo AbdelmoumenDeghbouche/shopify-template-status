@@ -23,8 +23,8 @@
         "image_xMgRGk": {
           "type": "image",
           "settings": {
-            "feature_title": "<strong>Fast Shipping<\/strong>",
-            "feature_text": "<p>Doorstep delivery to most of the US.<\/p>",
+            "feature_title": "NEW_TRUST_BADGE_1_TITLE_GENERATED",
+            "feature_text": "NEW_TRUST_BADGE_1_TEXT_GENERATED",
             "feature_url": "",
             "hide_image": false
           }
@@ -32,8 +32,8 @@
         "image_RgRA8N": {
           "type": "image",
           "settings": {
-            "feature_title": "<strong>Price-match guarantee<\/strong>",
-            "feature_text": "<p>Safe money when ordering with us<\/p>",
+            "feature_title": "NEW_TRUST_BADGE_2_TITLE_GENERATED",
+            "feature_text": "NEW_TRUST_BADGE_2_TEXT_GENERATED",
             "feature_url": "",
             "hide_image": false
           }
@@ -41,8 +41,8 @@
         "image_kh6e7A": {
           "type": "image",
           "settings": {
-            "feature_title": "<strong>Hassle-free exchange<\/strong>",
-            "feature_text": "<p>No questions ask<\/p>",
+            "feature_title": "NEW_TRUST_BADGE_3_TITLE_GENERATED",
+            "feature_text": "NEW_TRUST_BADGE_3_TEXT_GENERATED",
             "feature_url": "",
             "hide_image": false
           }
@@ -50,8 +50,8 @@
         "image_Jpgbqc": {
           "type": "image",
           "settings": {
-            "feature_title": "<strong>5 Star Reviews<\/strong>",
-            "feature_text": "<p>Customer satisfaction No.1 priority<\/p>",
+            "feature_title": "NEW_TRUST_BADGE_4_TITLE_GENERATED",
+            "feature_text": "NEW_TRUST_BADGE_4_TEXT_GENERATED",
             "feature_url": "",
             "hide_image": false
           }
@@ -110,11 +110,11 @@
         "text_KAXFmg": {
           "type": "text",
           "settings": {
-            "text": "<strong>Free Shipping<\/strong>",
+            "text": "NEW_SCROLL_FOOTER_TEXT_1_GENERATED",
             "url": "",
             "icon": "none",
             "outline_all": false,
-            "outline_text": "Shipping",
+            "outline_text": "NEW_SCROLL_FOOTER_OUTLINE_1_GENERATED",
             "text_color": "#212121",
             "text_size": 50,
             "text_size_mobile": 32,
@@ -126,11 +126,11 @@
         "text_FEgxPc": {
           "type": "text",
           "settings": {
-            "text": "<strong>Best Price<\/strong>",
+            "text": "NEW_SCROLL_FOOTER_TEXT_2_GENERATED",
             "url": "",
             "icon": "none",
             "outline_all": false,
-            "outline_text": "Price",
+            "outline_text": "NEW_SCROLL_FOOTER_OUTLINE_2_GENERATED",
             "text_color": "#212121",
             "text_size": 50,
             "text_size_mobile": 32,
@@ -142,11 +142,11 @@
         "text_Fmk9gC": {
           "type": "text",
           "settings": {
-            "text": "<strong>24\/7 Customer Support<\/strong>",
+            "text": "NEW_SCROLL_FOOTER_TEXT_3_GENERATED",
             "url": "",
             "icon": "none",
             "outline_all": false,
-            "outline_text": "Customer",
+            "outline_text": "NEW_SCROLL_FOOTER_OUTLINE_3_GENERATED",
             "text_color": "#212121",
             "text_size": 50,
             "text_size_mobile": 32,
@@ -190,14 +190,14 @@
         "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-heading-1": {
           "type": "heading",
           "settings": {
-            "heading": "Want the chance to trial our new products?",
+            "heading": "NEW_NEWSLETTER_HEADING_GENERATED",
             "heading_size": "h2"
           }
         },
         "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-paragraph-1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>Be the first to know about new collections and exclusive offers.<\/p>"
+            "text": "NEW_NEWSLETTER_TEXT_GENERATED"
           }
         },
         "sections--15124688797779__420dbb1b-f872-4861-99ec-c6ce83df4831-email_form-1": {
@@ -216,7 +216,7 @@
         "text_align": "center",
         "news_alignment": "horizontal",
         "show_small_text": true,
-        "small_text": "* We Promise not to use your email for Spam! You can unsubscribe at any time.",
+        "small_text": "NEW_NEWSLETTER_SMALL_TEXT_TRANSLATED",
         "padding_top": 40,
         "padding_bottom": 76,
         "margin_top": 0,
@@ -245,22 +245,22 @@
         "link_list_YkcPW4": {
           "type": "link_list",
           "settings": {
-            "heading": "Information",
+            "heading": "NEW_FOOTER_INFO_HEADING_TRANSLATED",
             "menu": "footer"
           }
         },
         "0dfe9e9f-d96e-442f-be6e-881afaba1771": {
           "type": "link_list",
           "settings": {
-            "heading": "Shop",
+            "heading": "NEW_FOOTER_SHOP_HEADING_TRANSLATED",
             "menu": "main-menu"
           }
         },
         "text_y3qDPH": {
           "type": "text",
           "settings": {
-            "heading": "Need to Get in Touch?",
-            "subtext": "<p><strong>hello@yourdomain.com<\/strong><\/p><p>Call: <strong>+1 (917) 642-8765<\/strong><\/p><p>Live chat available - Monday - Friday 9am - 5pm CET<\/p>"
+            "heading": "NEW_FOOTER_CONTACT_HEADING_GENERATED",
+            "subtext": "NEW_FOOTER_CONTACT_SUBTEXT_GENERATED"
           }
         }
       },
@@ -276,7 +276,7 @@
         "show_border": false,
         "show_body_font": "body",
         "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
+        "newsletter_heading": "NEW_FOOTER_NEWSLETTER_HEADING_TRANSLATED",
         "enable_follow_on_shop": false,
         "show_social": true,
         "enable_country_selector": false,
