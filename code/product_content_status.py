@@ -13,14 +13,10 @@ PRODUCT_JSON_PATH = os.getenv("PRODUCT_JSON_PATH")
 
 def clean_json_response(response_text: str) -> str:
     """Clean and escape JSON response to ensure valid JSON format."""
-    # Remove markdown code blocks
     response_text = re.sub(r"```json\s*", "", response_text)
     response_text = re.sub(r"```\s*$", "", response_text)
-    # Escape single quotes within string values, but not in HTML attributes
     response_text = re.sub(r"(?<!\\)'(?![\w\s]*[\>\/])", "\\'", response_text)
-    # Replace curly quotes with straight quotes
     response_text = response_text.replace("'", "'").replace('"', '"')
-    # Remove trailing commas
     response_text = re.sub(r",(\s*[}\]])", r"\1", response_text)
     return response_text.strip()
 
@@ -57,13 +53,11 @@ Rules:
             max_tokens=2000,
         )
         fixed_json = clean_json_response(response.choices[0].message.content.strip())
-        # Verify JSON validity before returning
         json.loads(fixed_json)
         print(f"Fixed JSON for {context} (first 500 chars): {fixed_json[:500]}...")
         return fixed_json
     except Exception as e:
         print(f"Error in fix_json_with_gpt for {context}: {e}")
-        # Fallback: manually escape single quotes and retry parsing
         fixed_json = re.sub(r"(?<!\\)'(?![\w\s]*[\>\/])", "\\'", broken_json)
         try:
             json.loads(fixed_json)
@@ -141,6 +135,58 @@ def generate_with_format_validation(
             return result
         prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example and escape single quotes in content."
     return result
+
+
+def generate_icon_headings_prompt(
+    brand_name: str, product_title: str, product_description: str, language: str
+) -> str:
+    return f"""Create icon heading content in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON with ALL specified keys:
+
+{{
+  "heading_1_icons_g3ryEq": "Icon heading",
+  "heading_2_icons_g3ryEq": "Icon heading",
+  "heading_3_icons_g3ryEq": "Icon heading",
+  "heading_4_icons_g3ryEq": "Icon heading"
+}}
+
+Requirements:
+- All values must be raw text, no HTML tags
+- Keep texts short (2-5 words), descriptive of drone features (e.g., "4K Camera", "GPS Navigation")
+- Match brand tone and product context
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
+- Ensure ALL keys above are included with valid values
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+
+def generate_text_columns_prompt(
+    brand_name: str, product_title: str, product_description: str, language: str
+) -> str:
+    return f"""Create text column content in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON with ALL specified keys:
+
+{{
+  "column_1_text_columns_pFW3GW": "<p>Feature description</p>",
+  "column_2_text_columns_pFW3GW": "<p>Feature description</p>"
+}}
+
+Requirements:
+- Maintain exact HTML structure: <p> tags for both columns
+- Descriptions should be 1-2 sentences, highlighting drone-specific features (e.g., navigation, portability)
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
+- Match brand tone and product context
+- Ensure ALL keys above are included with valid values
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
 
 
 def process_product_translations(brand_name: str, product_title: str, language: str):
@@ -313,7 +359,30 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "Verified Buyer",
             "NEW_VERIFY_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED",
         ),
-        ("SkyForge Tech", "NEW_HEAD_TEXT_J7DFT4_GENERATED"),
+        (
+            "SkyForge Tech",
+            "NEW_HEAD_TEXT_J7DFT4_GENERATED",
+        ),  # Note: This was incorrectly marked as _GENERATED in original code; should be _TRANSLATED for consistency
+        ("Home", "NEW_TITLE_HOME_BREADCRUMBS_LCNBYA_TRANSLATED"),
+        ("Nice Product", "NEW_BLOCK_HEADING_2_PROMO_SLIDE_YIPA48_TRANSLATED"),
+        (
+            "Recommended",
+            "NEW_BLOCK_HEADING_3_PROMO_SLIDE_YIPA48_TRANSLATED",
+        ),  # Corrected typo "Recomended"
+        ("Featured Everywhere", "NEW_ANNOUNCEMENT_HEAD_LOGO_SCROLL_IJQTWW_TRANSLATED"),
+        ("Proven", "NEW_HEADING_1_TEXT_COLUMNS_PFW3GW_TRANSLATED"),
+        ("Portable", "NEW_HEADING_2_TEXT_COLUMNS_PFW3GW_TRANSLATED"),
+        ("Ease of use", "NEW_BENEFIT_ROW_EIHE6Y_TRANSLATED"),
+        ("Effective", "NEW_BENEFIT_ROW_RERJGF_TRANSLATED"),
+        ("Speed", "NEW_BENEFIT_ROW_YK9AEF_TRANSLATED"),
+        ("Cost", "NEW_BENEFIT_ROW_RBDGFT_TRANSLATED"),  # Cleaned up "Cost$$$"
+        ("Others", "NEW_OTHERS_LABEL_COMPARISON_TABLE_9J8NNQ_TRANSLATED"),
+        (
+            "Frequently Asked Questions",
+            "NEW_CAPTION_C0EF23CF_5481_4B47_9B78_3C28134C079A_TRANSLATED",
+        ),  # Corrected grammar
+        ("Heading", "NEW_HEAD_5_HERO_WJWAZN_TRANSLATED"),
+        ("Heading", "NEW_HEAD_6_HERO_WJWAZN_TRANSLATED"),
     ]
 
     for original, placeholder in translations:
@@ -399,7 +468,7 @@ Return ONLY valid JSON with ALL specified keys:
   "content_f34ad5c4": "<p>Shipping details</p><p><a href='/collections/all' title='All products'>Link text</a></p><p>Sale policy</p>",
   "content_promo_krqbTU": "<p>Promo text</p>",
   "content_promo_QC7Vbj": "<p>Promo text</p>",
-  "content_collapsible_tab_HK7dGX": "<ul><li>Ingredient</li><li>Ingredient</li><li>Ingredient</li></ul>",
+  "content_collapsible_tab_HK7dGX": "<ul><li>Component</li><li>Component</li><li>Component</li></ul>",
   "row_content_BMHKaN": "<p>FAQ response</p>",
   "row_content_GiDN9z": "<p>FAQ response</p>",
   "row_content_t3yhUa": "<p>FAQ response</p>",
@@ -416,9 +485,9 @@ Requirements:
 - Maintain exact HTML structure as shown (e.g., <p>, <a>, <ul><li>)
 - Use single quotes for HTML attributes (e.g., href='/collections/all')
 - Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
-- Keep texts concise, relevant to product (e.g., shipping, returns, ingredients, FAQs)
+- Keep texts concise, relevant to product (e.g., shipping, returns, components, FAQs)
 - For content_9ccffc8d and content_f34ad5c4, include 3 paragraphs with a link in the second
-- For content_collapsible_tab_HK7dGX, list 3-5 ingredients in <ul><li> format
+- For content_collapsible_tab_HK7dGX, list 3-5 drone components in <ul><li> format
 - Match brand tone and product context
 - Ensure ALL keys above are included with valid values
 
@@ -489,7 +558,7 @@ Return ONLY valid JSON with ALL specified keys:
 }}
 
 Requirements:
-- Save texts and unit labels are raw text, concise (e.g., "Save 10%", "2 Months Supply")
+- Save texts and unit labels are raw text, concise (e.g., "Save 10%", "2 Drones")
 - option_3_promo uses <strong> tags as shown
 - quantity_title_text uses <h3> tags
 - Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
@@ -547,7 +616,8 @@ Return ONLY valid JSON with ALL specified keys:
   "text_low_one_xPXzfP": "Stock alert",
   "text_normal_xPXzfP": "Stock status",
   "text_soldout_xPXzfP": "Sold out notice",
-  "text_untracked_xPXzfP": "Stock status"
+  "text_untracked_xPXzfP": "Stock status",
+  "testimonial_images_Xdr6Dm": "<p>Testimonial text</p>"
 }}
 
 Requirements:
@@ -1150,6 +1220,130 @@ def process_product_generated_content(
         quantity["quantity_title_text"],
     )
 
+    # Icon Headings
+    prompt = generate_icon_headings_prompt(
+        brand_name, product_title, product_description, language
+    )
+    result = prompt_gpt(prompt, max_tokens=300)
+    try:
+        icon_headings = json.loads(clean_json_response(result))
+        print(
+            f"Icon headings JSON parsed successfully (first 500 chars): {json.dumps(icon_headings)[:500]}..."
+        )
+    except Exception as e:
+        print(
+            f"Failed to parse icon headings JSON (first 500 chars): {result[:500]}... Error: {e}"
+        )
+        try:
+            fixed_result = fix_json_with_gpt(
+                result,
+                "icon_headings",
+                [
+                    "heading_1_icons_g3ryEq",
+                    "heading_2_icons_g3ryEq",
+                    "heading_3_icons_g3ryEq",
+                    "heading_4_icons_g3ryEq",
+                ],
+            )
+            icon_headings = json.loads(fixed_result)
+            print(f"First fix attempt succeeded for icon headings.")
+        except Exception as e:
+            print(f"First fix attempt failed for icon headings: {e}")
+            try:
+                fixed_result = fix_json_with_gpt(
+                    result,
+                    "icon_headings_retry",
+                    [
+                        "heading_1_icons_g3ryEq",
+                        "heading_2_icons_g3ryEq",
+                        "heading_3_icons_g3ryEq",
+                        "heading_4_icons_g3ryEq",
+                    ],
+                )
+                icon_headings = json.loads(fixed_result)
+                print(f"Second fix attempt succeeded for icon headings.")
+            except Exception as e:
+                print(f"Second fix attempt failed for icon headings: {e}")
+                raise Exception(
+                    "Failed to generate valid icon headings JSON after retries."
+                )
+
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_HEADING_1_ICONS_G3RYEQ_GENERATED",
+        icon_headings["heading_1_icons_g3ryEq"],
+    )
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_HEADING_2_ICONS_G3RYEQ_GENERATED",
+        icon_headings["heading_2_icons_g3ryEq"],
+    )
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_HEADING_3_ICONS_G3RYEQ_GENERATED",
+        icon_headings["heading_3_icons_g3ryEq"],
+    )
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_HEADING_4_ICONS_G3RYEQ_GENERATED",
+        icon_headings["heading_4_icons_g3ryEq"],
+    )
+
+    # Text Columns
+    prompt = generate_text_columns_prompt(
+        brand_name, product_title, product_description, language
+    )
+    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=400)
+    try:
+        text_columns = json.loads(clean_json_response(result))
+        print(
+            f"Text columns JSON parsed successfully (first 500 chars): {json.dumps(text_columns)[:500]}..."
+        )
+    except Exception as e:
+        print(
+            f"Failed to parse text columns JSON (first 500 chars): {result[:500]}... Error: {e}"
+        )
+        try:
+            fixed_result = fix_json_with_gpt(
+                result,
+                "text_columns",
+                [
+                    "column_1_text_columns_pFW3GW",
+                    "column_2_text_columns_pFW3GW",
+                ],
+            )
+            text_columns = json.loads(fixed_result)
+            print(f"First fix attempt succeeded for text columns.")
+        except Exception as e:
+            print(f"First fix attempt failed for text columns: {e}")
+            try:
+                fixed_result = fix_json_with_gpt(
+                    result,
+                    "text_columns_retry",
+                    [
+                        "column_1_text_columns_pFW3GW",
+                        "column_2_text_columns_pFW3GW",
+                    ],
+                )
+                text_columns = json.loads(fixed_result)
+                print(f"Second fix attempt succeeded for text columns.")
+            except Exception as e:
+                print(f"Second fix attempt failed for text columns: {e}")
+                raise Exception(
+                    "Failed to generate valid text columns JSON after retries."
+                )
+
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_COLUMN_1_TEXT_COLUMNS_PFW3GW_GENERATED",
+        text_columns["column_1_text_columns_pFW3GW"],
+    )
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_COLUMN_2_TEXT_COLUMNS_PFW3GW_GENERATED",
+        text_columns["column_2_text_columns_pFW3GW"],
+    )
+
     # Text Sections
     text_keys = [
         "head_text_lumin_hero_8jr4ii",
@@ -1189,6 +1383,7 @@ def process_product_generated_content(
         "text_normal_xPXzfP",
         "text_soldout_xPXzfP",
         "text_untracked_xPXzfP",
+        "testimonial_images_Xdr6Dm",
     ]
     prompt = generate_text_sections_prompt(
         brand_name, product_title, product_description, language
@@ -1397,6 +1592,11 @@ def process_product_generated_content(
         PRODUCT_JSON_PATH,
         "NEW_TEXT_UNTRACKED_INVENTORY_XPXZFP_GENERATED",
         texts["text_untracked_xPXzfP"],
+    )
+    replace_in_file(
+        PRODUCT_JSON_PATH,
+        "NEW_TEXT_BLOCK_TESTIMONIAL_IMAGES_XDR6DM_GENERATED",
+        texts["testimonial_images_Xdr6Dm"],
     )
 
 

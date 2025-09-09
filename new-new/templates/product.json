@@ -6,7 +6,7 @@
         "breadcrumbs_LcnbYa": {
           "type": "breadcrumbs",
           "settings": {
-            "title_home": "Home",
+            "title_home": "NEW_TITLE_HOME_BREADCRUMBS_LCNBYA_TRANSLATED",
             "padding_top": 0,
             "padding_top_mb": 0,
             "padding_bottom": 0,
@@ -310,7 +310,7 @@
             "hide_img_3": false,
             "hide_img_4": true,
             "hide_img_5": true,
-            "text_block": "<p><strong>50+ Board Certified Dermatologists  </strong>recommended Status to their patients. <em>See More</em></p>",
+            "text_block": "NEW_TEXT_BLOCK_TESTIMONIAL_IMAGES_XDR6DM_GENERATED",
             "text_size": 10,
             "text_style": "body"
           }
@@ -416,10 +416,10 @@
             "block_heading": "",
             "text_1": "NEW_TEXT_1_PROMO_SLIDE_YIPA48_GENERATED",
             "show_slide_2": false,
-            "block_heading_2": "Nice Product",
+            "block_heading_2": "NEW_BLOCK_HEADING_2_PROMO_SLIDE_YIPA48_TRANSLATED",
             "text_2": "NEW_TEXT_2_PROMO_SLIDE_YIPA48_GENERATED",
             "show_slide_3": false,
-            "block_heading_3": "Recomended",
+            "block_heading_3": "NEW_BLOCK_HEADING_3_PROMO_SLIDE_YIPA48_TRANSLATED",
             "text_3": "NEW_TEXT_3_PROMO_SLIDE_YIPA48_GENERATED",
             "color_scheme": "accent-1",
             "slide_padding": 20,
@@ -616,7 +616,7 @@
         "scroll_speed": 15,
         "fade": false,
         "color_scheme": "accent-1",
-        "announcement_head": "Featured Everywhere",
+        "announcement_head": "NEW_ANNOUNCEMENT_HEAD_LOGO_SCROLL_IJQTWW_TRANSLATED",
         "announcement_head_d": 18,
         "announcement_head_m": 15,
         "announcement_color": "#212121",
@@ -659,19 +659,19 @@
             "mobile_icon_width": 50,
             "mobile_icon_layout": "left",
             "icon_old_1": "truck",
-            "heading_1": "Face Mask",
+            "heading_1": "NEW_HEADING_1_ICONS_G3RYEQ_GENERATED",
             "text_1": "",
             "link_1": "",
             "icon_old_2": "plant",
-            "heading_2": "Beauty Cream",
+            "heading_2": "NEW_HEADING_2_ICONS_G3RYEQ_GENERATED",
             "text_2": "",
             "link_2": "",
             "icon_old_3": "star",
-            "heading_3": "Daily Cream",
+            "heading_3": "NEW_HEADING_3_ICONS_G3RYEQ_GENERATED",
             "text_3": "",
             "link_3": "",
             "icon_old_4": "stopwatch",
-            "heading_4": "Skincare Serum",
+            "heading_4": "NEW_HEADING_4_ICONS_G3RYEQ_GENERATED",
             "text_4": "",
             "link_4": "",
             "icon_old_5": "none",
@@ -798,10 +798,10 @@
           "settings": {
             "gap": 15,
             "text_alignment": "left",
-            "heading_1": "Proven",
-            "column_1": "<p><strong>Clinically proven</strong> safely penetrate deep into the skin, activating natural cellular responses that <strong>address skin concerns from within</strong>—<em>delivering both immediate results.</em></p>",
-            "heading_2": "Portable",
-            "column_2": "<p>A portable, <strong>FDA-cleared </strong>LED light therapy device, scientifically proven to transform your skin—and uplift your confidence—all from the comfort of home.</p>"
+            "heading_1": "NEW_HEADING_1_TEXT_COLUMNS_PFW3GW_TRANSLATED",
+            "column_1": "NEW_COLUMN_1_TEXT_COLUMNS_PFW3GW_GENERATED",
+            "heading_2": "NEW_HEADING_2_TEXT_COLUMNS_PFW3GW_TRANSLATED",
+            "column_2": "NEW_COLUMN_2_TEXT_COLUMNS_PFW3GW_GENERATED"
           }
         }
       },
@@ -899,7 +899,7 @@
         "row_EiHe6y": {
           "type": "row",
           "settings": {
-            "benefit": "Ease of use",
+            "benefit": "NEW_BENEFIT_ROW_EIHE6Y_TRANSLATED",
             "us": true,
             "others": false
           }
@@ -907,7 +907,7 @@
         "row_rERJgf": {
           "type": "row",
           "settings": {
-            "benefit": "Effective",
+            "benefit": "NEW_BENEFIT_ROW_RERJGF_TRANSLATED",
             "us": true,
             "others": false
           }
@@ -915,7 +915,7 @@
         "row_yK9Aef": {
           "type": "row",
           "settings": {
-            "benefit": "Speed",
+            "benefit": "NEW_BENEFIT_ROW_YK9AEF_TRANSLATED",
             "us": true,
             "others": false
           }
@@ -923,7 +923,7 @@
         "row_rbDgfT": {
           "type": "row",
           "settings": {
-            "benefit": "Cost$$$",
+            "benefit": "NEW_BENEFIT_ROW_RBDGFT_TRANSLATED",
             "us": true,
             "others": true
           }
@@ -947,7 +947,7 @@
         "logo_width": 90,
         "mobile_logo_width": 60,
         "us_label": "",
-        "others_label": "Others",
+        "others_label": "NEW_OTHERS_LABEL_COMPARISON_TABLE_9J8NNQ_TRANSLATED",
         "benefit_color_scheme": "scheme-fdfdcaaf-e2a4-4d25-9bf4-98cdca1b4883",
         "icon_cells_color_scheme": "background-1",
         "checkmark_color": "#008763",
@@ -989,10 +989,10 @@
             "head_4": "",
             "text_4": "NEW_TEXT_4_HERO_WJWAZN_GENERATED",
             "show_5": false,
-            "head_5": "Heading",
+            "head_5": "NEW_HEAD_5_HERO_WJWAZN_TRANSLATED",
             "text_5": "NEW_TEXT_5_HERO_WJWAZN_GENERATED",
             "show_6": false,
-            "head_6": "Heading",
+            "head_6": "NEW_HEAD_6_HERO_WJWAZN_TRANSLATED",
             "text_6": "NEW_TEXT_6_HERO_WJWAZN_GENERATED"
           }
         }
@@ -1291,7 +1291,7 @@
         "collapsible_row_GiDN9z"
       ],
       "settings": {
-        "caption": "Frequently Ask Questions",
+        "caption": "NEW_CAPTION_C0EF23CF_5481_4B47_9B78_3C28134C079A_TRANSLATED",
         "heading": "NEW_HEADING_C0EF23CF_5481_4B47_9B78_3C28134C079A_TRANSLATED",
         "heading_size": "h0",
         "heading_alignment": "center",

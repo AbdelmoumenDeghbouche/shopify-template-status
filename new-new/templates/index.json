@@ -390,6 +390,7 @@
                     "type": "video",
                     "settings": {
                         "large_up_hide": false,
+                        "video": "NEW_THEME_PRODUCT_VIDEO",
                         "grid_width_desktop": "25",
                         "medium_hide": false,
                         "grid_width_tablet": "33.3333333",
@@ -538,6 +539,7 @@
             "settings": {
                 "layout": "full_bleed",
                 "video_border": 6,
+                "video": "NEW_THEME_PRODUCT_VIDEO",
                 "video_height": "medium",
                 "image_overlay_opacity": 0,
                 "desktop_content_position": "middle-center",
