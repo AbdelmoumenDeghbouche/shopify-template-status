@@ -6,7 +6,7 @@ import uuid
 import os
 import argparse
 
-# Constants (define these as needed)
+# Constants
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 PRODUCT_JSON_PATH = os.getenv("PRODUCT_JSON_PATH")
 
@@ -15,6 +15,9 @@ def clean_json_response(response_text: str) -> str:
     response_text = re.sub(r"```json\s*", "", response_text)
     response_text = re.sub(r"```\s*$", "", response_text)
     response_text = response_text.replace('"', '"').replace('"', '"')
+    response_text = re.sub(
+        r"(?<!\\)'(?=([^']*'[^']*')*[^']*$)", "\\'", response_text
+    )  # Escape single quotes
     response_text = response_text.replace(""", "'").replace(""", "'")
     return response_text.strip()
 
@@ -30,11 +33,14 @@ Broken JSON: {broken_json}
 Rules:
 - All keys must have double quotes
 - All string values must have double quotes
+- For HTML attributes (e.g., href, title), use single quotes (e.g., href='/path')
 - Escape quotes inside strings with backslashes
 - Ensure proper string termination to avoid unterminated string errors
 - No trailing commas
 - Ensure ALL the following keys are included: {', '.join(expected_keys) if expected_keys else 'None specified'}
-- If a key is missing, provide a default value relevant to the context (e.g., '<p>Contenu par défaut</p>' for HTML fields or 'Texte par défaut' for raw text)
+- If a key is missing, provide a default value relevant to the context:
+  - For HTML fields, use '<p>Contenu par défaut</p>'
+  - For raw text fields (e.g., head_text_lumin_hero_8jr4ii, text_264e37ac, text_74e17b96, text_popup_DVDmRD, stock-related texts, button texts), use 'Texte par défaut'
 - Return only the fixed JSON"""
 
     try:
@@ -45,7 +51,7 @@ Rules:
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": fix_prompt}],
             temperature=0.1,
-            max_tokens=2000,  # Increased from 1500
+            max_tokens=2000,
         )
         fixed_json = clean_json_response(response.choices[0].message.content.strip())
         print(f"Fixed JSON for {context} (first 500 chars): {fixed_json[:500]}...")
@@ -64,8 +70,7 @@ def prompt_gpt(prompt: str, max_retries: int = 3, max_tokens: int = 300) -> str:
                 temperature=0.7,
                 max_tokens=max_tokens,
             )
-            result = response.choices[0].message.content.strip()
-            return result
+            return response.choices[0].message.content.strip()
         except Exception as e:
             if attempt == max_retries - 1:
                 raise e
@@ -90,15 +95,20 @@ def replace_in_file(file_path: str, placeholder: str, content: str):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             data = f.read()
-        data = data.replace(placeholder, content)
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(data)
+        if placeholder in data:
+            data = data.replace(placeholder, content)
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(data)
+            print(
+                f"Replaced {placeholder} with content (first 100 chars): {content[:100]}..."
+            )
+        else:
+            print(f"Warning: Placeholder {placeholder} not found in {file_path}")
     except Exception as e:
         print(f"Error replacing {placeholder} in {file_path}: {e}")
 
 
 def validate_html_format(text: str, expected_format: str = None) -> bool:
-    """Validate if generated text maintains HTML format"""
     if expected_format and "<" in expected_format:
         original_tags = re.findall(r"<[^>]+>", expected_format)
         result_tags = re.findall(r"<[^>]+>", text)
@@ -109,24 +119,17 @@ def validate_html_format(text: str, expected_format: str = None) -> bool:
 def generate_with_format_validation(
     prompt: str, expected_format: str = None, max_tokens: int = 300
 ) -> str:
-    """Generate content and validate HTML format"""
     if expected_format and "<" in expected_format:
         prompt += f"\n\nIMPORTANT: Maintain the exact HTML structure from this example: {expected_format}"
-
     for attempt in range(3):
         result = prompt_gpt(prompt, max_tokens=max_tokens)
         if validate_html_format(result, expected_format):
             return result
         prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example."
-
     return result
 
 
-# ===== TRANSLATION FUNCTION =====
-
-
 def process_product_translations(brand_name: str, product_title: str, language: str):
-    """Process translations for product JSON placeholders"""
     translations = [
         (
             "Pairs well with",
@@ -148,7 +151,7 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "NEW_FOMO_TEXT_BEFORE_4EC31670_952B_4ED4_8799_249844A8F39B_TRANSLATED",
         ),
         (
-            "Rated the #1 clean beauty skincare brand in 2023.",
+            "Rated the #1 drone technology in 2025.",
             "NEW_HEADER_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED",
         ),
         (
@@ -169,15 +172,15 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "NEW_HEADING_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_TRANSLATED",
         ),
         (
-            "<strong>Reveal Your Radiance with the Status Gua Sha & Roller Set</strong> ✨💖",
+            "<strong>Experience Stealth with AeroShadow X1</strong>",
             "NEW_HEADING_HEADING_8E7QYA_TRANSLATED",
         ),
         (
-            "<strong>Because Your Skin Deserves the Best</strong>",
+            "<strong>Precision Drone Technology</strong>",
             "NEW_HEADING_HEADING_AJMG6N_TRANSLATED",
         ),
         (
-            "<strong>Glow Beyond Skin Deep.</strong> ✨",
+            "<strong>Fly Beyond Limits.</strong>",
             "NEW_HEADING_HEADING_JHTCQY_TRANSLATED",
         ),
         ("You may also like", "NEW_HEADING_RELATED-PRODUCTS_TRANSLATED"),
@@ -186,7 +189,7 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_1_TRANSLATED",
         ),
         (
-            "Guarentee?",
+            "Guarantee?",
             "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_2_TRANSLATED",
         ),
         (
@@ -214,7 +217,7 @@ def process_product_translations(brand_name: str, product_title: str, language: 
         ("Johan D.", "NEW_NAME_TEXT_REVIEW_FWXHPQ_TRANSLATED"),
         ("Johan D.", "NEW_NAME_TEXT_REVIEW_KAGTR4_TRANSLATED"),
         ("Most Popular", "NEW_OPTION_1_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
-        ("1 Pack", "NEW_OPTION_1_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("1 Drone", "NEW_OPTION_1_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
         (
             "SPECIAL OFFER - Limited Time",
             "NEW_OPTION_2_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
@@ -226,17 +229,17 @@ def process_product_translations(brand_name: str, product_title: str, language: 
         ),
         ("Buy 3, Get 2 FREE", "NEW_OPTION_3_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
         ("Most Popular", "NEW_OPTION_4_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
-        ("4 Pack", "NEW_OPTION_4_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("4 Drones", "NEW_OPTION_4_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
         ("Most Popular", "NEW_OPTION_5_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
-        ("5 Pack", "NEW_OPTION_5_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("5 Drones", "NEW_OPTION_5_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
         ("Most Popular", "NEW_OPTION_6_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
-        ("6 Pack", "NEW_OPTION_6_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("6 Drones", "NEW_OPTION_6_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
         (
             "Nice Product",
             "NEW_REVIEW_HEAD_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED",
         ),
         (
-            "Works well for sensitive skin!",
+            "Works well for advanced flights!",
             "NEW_REVIEW_HEAD_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED",
         ),
         (
@@ -244,7 +247,7 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "NEW_REVIEW_HEAD_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED",
         ),
         (
-            "The Only Product That Has Worked For Me",
+            "The Only Drone That Has Worked For Me",
             "NEW_REVIEW_HEAD_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED",
         ),
         (
@@ -272,19 +275,19 @@ def process_product_translations(brand_name: str, product_title: str, language: 
         ),
         ("💖 <strong>Worth Every Penny</strong>", "NEW_TITLE_COLUMN_HTTYFJ_TRANSLATED"),
         (
-            "🌿 <strong>Luxury Skincare That Works</strong>",
+            "🌿 <strong>Advanced Drone Technology</strong>",
             "NEW_TITLE_COLUMN_XLTNH7_TRANSLATED",
         ),
         (
-            "What makes Staus right for you?",
+            "What makes AeroShadow right for you?",
             "NEW_TITLE_COMPARISON_TABLE_9J8NNQ_TRANSLATED",
         ),
         (
-            "Why Status are <strong>Better</strong>",
+            "Why AeroShadow is <strong>Better</strong>",
             "NEW_TITLE_LUMIN_HERO_8JR4II_TRANSLATED",
         ),
         (
-            "Beauty Tech for the Best Skin Yet",
+            "Drone Tech for the Best Flights Yet",
             "NEW_TITLE_MULTICOLUMN_XDHHWC_TRANSLATED",
         ),
         (
@@ -296,14 +299,12 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "Verified Buyer",
             "NEW_VERIFY_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED",
         ),
+        ("SkyForge Tech", "NEW_HEAD_TEXT_J7DFT4_GENERATED"),
     ]
 
     for original, placeholder in translations:
         translated = translate_text(original, language)
         replace_in_file(PRODUCT_JSON_PATH, placeholder, translated)
-
-
-# ===== CONTENT GENERATION PROMPTS =====
 
 
 def generate_announcements_prompt(
@@ -378,8 +379,8 @@ PRODUCT: {product_description}
 Return ONLY valid JSON with ALL specified keys:
 
 {{
-  "content_9ccffc8d": "<p>Shipping details</p><p><a href=\"/collections/all\" title=\"All products\">Link text</a></p><p>Sale policy</p>",
-  "content_f34ad5c4": "<p>Shipping details</p><p><a href=\"/collections/all\" title=\"All products\">Link text</a></p><p>Sale policy</p>",
+  "content_9ccffc8d": "<p>Shipping details</p><p><a href='/collections/all' title='All products'>Link text</a></p><p>Sale policy</p>",
+  "content_f34ad5c4": "<p>Shipping details</p><p><a href='/collections/all' title='All products'>Link text</a></p><p>Sale policy</p>",
   "content_promo_krqbTU": "<p>Promo text</p>",
   "content_promo_QC7Vbj": "<p>Promo text</p>",
   "content_collapsible_tab_HK7dGX": "<ul><li>Ingredient</li><li>Ingredient</li><li>Ingredient</li></ul>",
@@ -397,6 +398,7 @@ Return ONLY valid JSON with ALL specified keys:
 
 Requirements:
 - Maintain exact HTML structure as shown (e.g., <p>, <a>, <ul><li>)
+- Use single quotes for HTML attributes (e.g., href='/collections/all')
 - Keep texts concise, relevant to product (e.g., shipping, returns, ingredients, FAQs)
 - For content_9ccffc8d and content_f34ad5c4, include 3 paragraphs with a link in the second
 - For content_collapsible_tab_HK7dGX, list 3-5 ingredients in <ul><li> format
@@ -427,7 +429,7 @@ Return ONLY valid JSON with ALL specified keys:
   "review_text_ArWHqK": "<p>Review text</p>",
   "review_text_fwxHPq": "<p>Review text</p>",
   "review_text_kAgTR4": "<p>Review text</p>",
-  "rating_count_3475a8f9": "<strong>Number</strong> Real reviews, real results from<strong> people just like you.</strong>",
+  "rating_count_3475a8f9": "<strong>Number</strong> Real reviews, real results from <strong>people just like you.</strong>",
   "lrw_text_7f391028": "Rating | Reviews"
 }}
 
@@ -490,7 +492,7 @@ PRODUCT: {product_description}
 Return ONLY valid JSON with ALL specified keys:
 
 {{
-  "head_text_lumin_hero_8jr4ii": "<p>Text with <strong>highlight</strong></p>",
+  "head_text_lumin_hero_8jr4ii": "Hero headline text",
   "subtitle_text_j7Dft4": "<p><strong>Number FOLLOWERS</strong></p>",
   "text_1_hero_Wjwazn": "Descriptive text",
   "text_2_hero_Wjwazn": "Descriptive text",
@@ -498,7 +500,7 @@ Return ONLY valid JSON with ALL specified keys:
   "text_4_hero_Wjwazn": "Descriptive text",
   "text_5_hero_Wjwazn": "Descriptive text",
   "text_6_hero_Wjwazn": "Descriptive text",
-  "text_264e37ac": "<p>Order in <strong>timer</strong> & Get Delivery By <strong>date</strong></p>",
+  "text_264e37ac": "Order by timer for fast delivery",
   "text_504c9e09": "<p>Review text</p><h6>Policy</h6>",
   "text_74e17b96": "Vendor text",
   "text_promo_slide_YiPa48_1": "<p>Promo text</p>",
@@ -530,8 +532,8 @@ Return ONLY valid JSON with ALL specified keys:
 }}
 
 Requirements:
+- Use raw text (no HTML) for head_text_lumin_hero_8jr4ii, text_1_hero_Wjwazn to text_6_hero_Wjwazn, text_264e37ac, text_74e17b96, text_popup_DVDmRD, stock-related texts
 - Maintain exact HTML structure where specified
-- Raw text for text_1_hero_Wjwazn to text_6_hero_Wjwazn, text_74e17b96, text_popup_DVDmRD, stock-related texts
 - Texts should be concise, product-relevant (e.g., benefits, testimonials, stock alerts)
 - For columns (7zMkCE, 9PFUYj, htTYfJ, xLTnh7), include customer name in <strong>
 - For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and benefit
@@ -542,11 +544,9 @@ IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
 
 
-# ===== MAIN PROCESSING FUNCTION =====
 def process_product_generated_content(
     brand_name: str, product_title: str, product_description: str, language: str
 ):
-    """Process generated content for product JSON"""
     # Announcements
     prompt = generate_announcements_prompt(
         brand_name, product_title, product_description, language
@@ -1381,21 +1381,15 @@ def process_product_generated_content(
 def change_product_content(
     brand_name: str, product_title: str, product_description: str, language: str
 ):
-    """Main function to process product content"""
     print(
         f"Processing product content for {brand_name}™ - {product_title} in {language}"
     )
-
-    # Process translations
     print("Processing product translations...")
     process_product_translations(brand_name, product_title, language)
-
-    # Process generated content
     print("Processing product generated content...")
     process_product_generated_content(
         brand_name, product_title, product_description, language
     )
-
     print("Product content processing completed!")
 
 
@@ -1405,9 +1399,7 @@ if __name__ == "__main__":
     parser.add_argument("product_title")
     parser.add_argument("product_description")
     parser.add_argument("language")
-
     args = parser.parse_args()
-
     change_product_content(
         args.brand_name, args.product_title, args.product_description, args.language
     )
