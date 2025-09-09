@@ -1,0 +1,583 @@
+from openai import OpenAI
+import json
+import re
+from typing import Dict, Any
+import uuid
+import os 
+import argparse
+# Constants (define these as needed)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+PRODUCT_JSON_PATH = os.getenv("PRODUCT_JSON_PATH")
+
+def clean_json_response(response_text: str) -> str:
+    response_text = re.sub(r'```json\s*', '', response_text)
+    response_text = re.sub(r'```\s*$', '', response_text)
+    response_text = response_text.replace('"', '"').replace('"', '"')
+    response_text = response_text.replace(''', "'").replace(''', "'")
+    return response_text.strip()
+
+def fix_json_with_gpt(broken_json: str, context: str) -> str:
+    fix_prompt = f"""Fix this broken JSON and return ONLY valid JSON (no explanations, no markdown):
+
+Context: {context}
+Broken JSON: {broken_json}
+
+Rules:
+- All keys must have double quotes
+- All string values must have double quotes  
+- No trailing commas
+- Escape quotes inside strings with backslashes
+- Return only the fixed JSON"""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": fix_prompt}],
+            temperature=0.1,
+            max_tokens=500
+        )
+        return clean_json_response(response.choices[0].message.content.strip())
+    except:
+        return broken_json
+
+def prompt_gpt(prompt: str, max_retries: int = 3) -> str:
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=300
+            )
+            result = response.choices[0].message.content.strip()
+            return result
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise e
+            continue
+
+def translate_text(text, target_language):
+    prompt = f"Translate to {target_language}. Return only the translation, no explanations: {text}"
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+        )
+        return response.choices[0].message.content.strip().replace('"','')
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return text
+
+def replace_in_file(file_path: str, placeholder: str, content: str):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = f.read()
+    data = data.replace(placeholder, content)
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(data)
+
+def validate_html_format(text: str, expected_format: str = None) -> bool:
+    """Validate if generated text maintains HTML format"""
+    if expected_format and "<" in expected_format:
+        original_tags = re.findall(r'<[^>]+>', expected_format)
+        result_tags = re.findall(r'<[^>]+>', text)
+        return len(original_tags) <= len(result_tags)
+    return True
+
+def generate_with_format_validation(prompt: str, expected_format: str = None) -> str:
+    """Generate content and validate HTML format"""
+    if expected_format and "<" in expected_format:
+        prompt += f"\n\nIMPORTANT: Maintain the exact HTML structure from this example: {expected_format}"
+
+    for attempt in range(3):
+        result = prompt_gpt(prompt)
+        if validate_html_format(result, expected_format):
+            return result
+        prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example."
+
+    return result
+
+# ===== TRANSLATION FUNCTION =====
+
+def process_product_translations(brand_name: str, product_title: str, language: str):
+    """Process translations for product JSON placeholders"""
+    translations = [
+        ("Pairs well with", "NEW_BLOCK_HEADING_006E6C29_717A_4F58_8FEA_CABC7DA6316F_TRANSLATED"),
+        ("Shop Collection", "NEW_BUTTON_LABEL_BUTTON_MHN8PC_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED"),
+        ("Jan 2024", "NEW_DATE_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED"),
+        ("Dec 2023", "NEW_DATE_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED"),
+        ("Jan 2023", "NEW_DATE_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_REVIEW_ARWHQK_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_REVIEW_FWXHPQ_TRANSLATED"),
+        ("July 2023", "NEW_DATE_TEXT_REVIEW_KAGTR4_TRANSLATED"),
+        ("(x) People are looking at this", "NEW_FOMO_TEXT_BEFORE_4EC31670_952B_4ED4_8799_249844A8F39B_TRANSLATED"),
+        ("Rated the #1 clean beauty skincare brand in 2023.", "NEW_HEADER_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED"),
+        ("100% Money <strong>Back</strong>!!", "NEW_HEADING_504C9E09_AAA7_49C4_8271_C6CA319D23F2_TRANSLATED"),
+        ("Shipping Information", "NEW_HEADING_9CCFFC8D_E4C7_404F_8007_8C5162F22285_TRANSLATED"),
+        ("FAQs", "NEW_HEADING_C0EF23CF_5481_4B47_9B78_3C28134C079A_TRANSLATED"),
+        ("Is everything recyclable?", "NEW_HEADING_COLLAPSIBLE_ROW_BMHKAN_TRANSLATED"),
+        ("How often should you use?", "NEW_HEADING_COLLAPSIBLE_ROW_GIDN9Z_TRANSLATED"),
+        ("Does this really work?", "NEW_HEADING_COLLAPSIBLE_ROW_T3YHUA_TRANSLATED"),
+        ("Ingredient list", "NEW_HEADING_COLLAPSIBLE_TAB_HK7DGX_TRANSLATED"),
+        ("Returns & Refunds", "NEW_HEADING_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_TRANSLATED"),
+        ("<strong>Reveal Your Radiance with the Status Gua Sha & Roller Set</strong> ✨💖", "NEW_HEADING_HEADING_8E7QYA_TRANSLATED"),
+        ("<strong>Because Your Skin Deserves the Best</strong>", "NEW_HEADING_HEADING_AJMG6N_TRANSLATED"),
+        ("<strong>Glow Beyond Skin Deep.</strong> ✨", "NEW_HEADING_HEADING_JHTCQY_TRANSLATED"),
+        ("You may also like", "NEW_HEADING_RELATED-PRODUCTS_TRANSLATED"),
+        ("What if it doesn’t work for me?", "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_1_TRANSLATED"),
+        ("Guarentee?", "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_2_TRANSLATED"),
+        ("Okay, but why have I never heard of this before?", "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_3_TRANSLATED"),
+        ("Do you provide tracking information?", "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_4_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED"),
+        ("Sofia R.", "NEW_NAME_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED"),
+        ("Amy Grady, B.", "NEW_NAME_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED"),
+        ("Anabella C.", "NEW_NAME_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED"),
+        ("Vera R.", "NEW_NAME_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_REVIEW_ARWHQK_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_REVIEW_FWXHPQ_TRANSLATED"),
+        ("Johan D.", "NEW_NAME_TEXT_REVIEW_KAGTR4_TRANSLATED"),
+        ("Most Popular", "NEW_OPTION_1_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("1 Pack", "NEW_OPTION_1_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("SPECIAL OFFER - Limited Time", "NEW_OPTION_2_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Buy 2, Get 1 FREE", "NEW_OPTION_2_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("FLASH SALE — Grab It Before It's Gone", "NEW_OPTION_3_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Buy 3, Get 2 FREE", "NEW_OPTION_3_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Most Popular", "NEW_OPTION_4_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("4 Pack", "NEW_OPTION_4_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Most Popular", "NEW_OPTION_5_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("5 Pack", "NEW_OPTION_5_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Most Popular", "NEW_OPTION_6_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("6 Pack", "NEW_OPTION_6_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED"),
+        ("Works well for sensitive skin!", "NEW_REVIEW_HEAD_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED"),
+        ("The Only Product That Has Worked For Me", "NEW_REVIEW_HEAD_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED"),
+        ("Holy Unexpected!!", "NEW_REVIEW_HEAD_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED"),
+        ("BEST PURCHASE BEST FIND", "NEW_REVIEW_HEAD_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_REVIEW_ARWHQK_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_REVIEW_FWXHPQ_TRANSLATED"),
+        ("Nice Product", "NEW_REVIEW_HEAD_REVIEW_KAGTR4_TRANSLATED"),
+        ("✨ <strong>Obsessed with the Results</strong>", "NEW_TITLE_COLUMN_7ZMKCE_TRANSLATED"),
+        ("⚡ <strong>Visible Results, Fast</strong>", "NEW_TITLE_COLUMN_9PFUYJ_TRANSLATED"),
+        ("💖 <strong>Worth Every Penny</strong>", "NEW_TITLE_COLUMN_HTTYFJ_TRANSLATED"),
+        ("🌿 <strong>Luxury Skincare That Works</strong>", "NEW_TITLE_COLUMN_XLTNH7_TRANSLATED"),
+        ("What makes Staus right for you?", "NEW_TITLE_COMPARISON_TABLE_9J8NNQ_TRANSLATED"),
+        ("Why Status are <strong>Better</strong>", "NEW_TITLE_LUMIN_HERO_8JR4II_TRANSLATED"),
+        ("Beauty Tech for the Best Skin Yet", "NEW_TITLE_MULTICOLUMN_XDHHWC_TRANSLATED"),
+        ("Was this helpful?", "NEW_LIKE_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED"),
+        ("Load More", "NEW_LOAD_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED"),
+        ("Verified Buyer", "NEW_VERIFY_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED"),
+    ]
+
+    for original, placeholder in translations:
+        translated = translate_text(original, language)
+        replace_in_file(PRODUCT_JSON_PATH, placeholder, translated)
+
+# ===== CONTENT GENERATION PROMPTS =====
+
+def generate_announcements_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create announcement contents in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "announcement_91817b81": "<h1>Announcement text</h1>",
+  "announcement_gAyVVz": "<p>Announcement text</p>",
+  "announcement_XGt7RJ": "<p>Announcement text</p>",
+  "announcement_dd77f8e0": "<h1>Announcement text</h1>",
+  "announcement_template_1": "<p>Announcement text</p>",
+  "announcement_template_2": "<p>Announcement text</p>"
+}}
+
+Requirements:
+- Maintain exact HTML tags: <h1> for announcement_91817b81 and announcement_dd77f8e0, <p> for others
+- Keep texts short (3-8 words), impactful, and product-relevant
+- Focus on promotions, eco-friendly aspects, or product benefits
+- Match brand tone and product context
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+def generate_button_texts_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create button text contents in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "image_4GCwJt": "Button text",
+  "image_6kyG4n": "Button text",
+  "image_8WUeHF": "Button text",
+  "image_g6WCgH": "Button text",
+  "image_mczRTQ": "Button text",
+  "image_mWKfnL": "Button text",
+  "image_XDdFEp": "Button text",
+  "image_YQMGF7": "Button text",
+  "image_template_1": "Button text",
+  "text_j7Dft4": "Button text"
+}}
+
+Requirements:
+- All values must be raw text, no HTML tags
+- Keep texts short (2-5 words), action-oriented (e.g., "Shop Now", "Discover More")
+- Match brand tone and product context
+- For text_j7Dft4, include a hashtag (e.g., "#BrandName")
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+def generate_content_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create content sections in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "content_9ccffc8d": "<p>Shipping details</p><p><a href=\"/collections/all\" title=\"All products\">Link text</a></p><p>Sale policy</p>",
+  "content_f34ad5c4": "<p>Shipping details</p><p><a href=\"/collections/all\" title=\"All products\">Link text</a></p><p>Sale policy</p>",
+  "content_promo_krqbTU": "<p>Promo text</p>",
+  "content_promo_QC7Vbj": "<p>Promo text</p>",
+  "content_collapsible_tab_HK7dGX": "<ul><li>Ingredient</li><li>Ingredient</li><li>Ingredient</li></ul>",
+  "row_content_BMHKaN": "<p>FAQ response</p>",
+  "row_content_GiDN9z": "<p>FAQ response</p>",
+  "row_content_t3yhUa": "<p>FAQ response</p>",
+  "row_content_template_1": "<p>FAQ response</p>",
+  "row_content_template_2": "<p>FAQ response</p>",
+  "row_content_template_3": "<p>FAQ response</p>",
+  "row_content_template_4": "<p>FAQ response</p>",
+  "tab_content_DgkJ3j": "<p>Tab description</p>",
+  "tab_content_2_DgkJ3j": "<p>Tab description</p>",
+  "tab_content_3_DgkJ3j": "<p>Tab description</p>"
+}}
+
+Requirements:
+- Maintain exact HTML structure as shown (e.g., <p>, <a>, <ul><li>)
+- Keep texts concise, relevant to product (e.g., shipping, returns, ingredients, FAQs)
+- For content_9ccffc8d and content_f34ad5c4, include 3 paragraphs with a link in the second
+- For content_collapsible_tab_HK7dGX, list 3-5 ingredients in <ul><li> format
+- Match brand tone and product context
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+def generate_review_content_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create review content in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "review_text_13a5819e": "<p>Review text</p>",
+  "review_text_30900101": "<p>Review text</p>",
+  "review_text_3c322c1a": "<p>Review text</p>",
+  "review_text_53a5b896": "<p>Review text</p>",
+  "review_text_d032a47c": "<p>Review text</p>",
+  "review_text_e3288062": "<p>Review text</p>",
+  "review_text_f57735f1": "<p>Review text</p>",
+  "review_text_ArWHqK": "<p>Review text</p>",
+  "review_text_fwxHPq": "<p>Review text</p>",
+  "review_text_kAgTR4": "<p>Review text</p>",
+  "rating_count_3475a8f9": "<strong>Number</strong> Real reviews, real results from<strong> people just like you.</strong>",
+  "lrw_text_7f391028": "Rating | Reviews"
+}}
+
+Requirements:
+- Review texts must use <p> tags, 1-3 sentences, positive and product-specific
+- rating_count_3475a8f9 must use <strong> tags for number and phrase
+- lrw_text_7f391028 must be raw text, format: "X.Y | Z Reviews"
+- Match brand tone and product context
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+def generate_quantity_selector_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create quantity selector content in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "option_1_save_text": "Save text",
+  "option_1_unit_label": "Unit label",
+  "option_2_save_text": "Save text",
+  "option_2_unit_label": "Unit label",
+  "option_3_promo": "<strong>Duration</strong> Months Supply | <strong>FREE Shipping</strong>",
+  "option_3_save_text": "Save text",
+  "option_3_unit_label": "Unit label",
+  "option_4_save_text": "Save text",
+  "option_4_unit_label": "Unit label",
+  "option_5_save_text": "Save text",
+  "option_5_unit_label": "Unit label",
+  "option_6_save_text": "Save text",
+  "option_6_unit_label": "Unit label",
+  "quantity_title_text": "<h3>Bundle text</h3>"
+}}
+
+Requirements:
+- Save texts and unit labels are raw text, concise (e.g., "Save 10%", "2 Months Supply")
+- option_3_promo uses <strong> tags as shown
+- quantity_title_text uses <h3> tags
+- Match product context (e.g., skincare bundles)
+- Reflect escalating bundle benefits (e.g., more savings for larger packs)
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+def generate_text_sections_prompt(brand_name: str, product_title: str, product_description: str, language: str) -> str:
+    return f"""Create text section content in {language} for {brand_name}™'s {product_title}.
+
+PRODUCT: {product_description}
+
+Return ONLY valid JSON:
+
+{{
+  "head_text_lumin_hero_8jr4ii": "<p>Text with <strong>highlight</strong></p>",
+  "subtitle_text_j7Dft4": "<p><strong>Number FOLLOWERS</strong></p>",
+  "text_1_hero_Wjwazn": "Descriptive text",
+  "text_2_hero_Wjwazn": "Descriptive text",
+  "text_3_hero_Wjwazn": "Descriptive text",
+  "text_4_hero_Wjwazn": "Descriptive text",
+  "text_5_hero_Wjwazn": "Descriptive text",
+  "text_6_hero_Wjwazn": "Descriptive text",
+  "text_264e37ac": "<p>Order in <strong>timer</strong> & Get Delivery By <strong>date</strong></p>",
+  "text_504c9e09": "<p>Review text</p><h6>Policy</h6>",
+  "text_74e17b96": "Vendor text",
+  "text_promo_slide_YiPa48_1": "<p>Promo text</p>",
+  "text_promo_slide_YiPa48_2": "<p>Promo text</p>",
+  "text_promo_slide_YiPa48_3": "<p>Promo text</p>",
+  "text_column_7zMkCE": "<p>Testimonial text – <strong>Name</strong></p>",
+  "text_column_9PFUYj": "<p><em>Testimonial text</em> – <strong>Name</strong></p>",
+  "text_column_htTYfJ": "<p><em>Testimonial text</em> – <strong>Name</strong></p>",
+  "text_column_xLTnh7": "<p><em>Testimonial text</em> – <strong>Name</strong></p>",
+  "text_column_afLRa6": "<h1><strong>Percentage</strong></h1><p>Benefit description</p>",
+  "text_column_FpEWjD": "<h1><strong>Percentage</strong></h1><p>Benefit description</p>",
+  "text_column_kcUK3B": "<h1><strong>Percentage</strong></h1><p>Benefit description</p>",
+  "text_column_nMFyQP": "<h1><strong>Percentage</strong></h1><p>Benefit description</p>",
+  "text_comparison_table_9j8NnQ": "<p>Comparison text</p>",
+  "text_feature_6cxT6B": "<p>Feature with <strong>highlight</strong></p>",
+  "text_feature_aYFzam": "<p>Feature with <strong>highlight</strong></p>",
+  "text_feature_HCBWrx": "<p>Feature with <strong>highlight</strong></p>",
+  "text_feature_Kgr9Aj": "<p>Feature with <strong>highlight</strong></p>",
+  "text_feature_teRTgW": "<p>Feature with <strong>highlight</strong></p>",
+  "text_text_T999BU": "<p>✔️ <strong>Benefit</strong> – Description<br/><br/>✔️ <strong>Benefit</strong> – Description</p>",
+  "text_text_VYmMN6": "<p>Tagline</p>",
+  "text_text_wFDAYF": "<p>Descriptive text</p>",
+  "text_popup_DVDmRD": "Link text",
+  "text_low_many_xPXzfP": "Stock alert",
+  "text_low_one_xPXzfP": "Stock alert",
+  "text_normal_xPXzfP": "Stock status",
+  "text_soldout_xPXzfP": "Sold out notice",
+  "text_untracked_xPXzfP": "Stock status"
+}}
+
+Requirements:
+- Maintain exact HTML structure where specified
+- Raw text for text_1_hero_Wjwazn to text_6_hero_Wjwazn, text_74e17b96, text_popup_DVDmRD, stock-related texts
+- Texts should be concise, product-relevant (e.g., benefits, testimonials, stock alerts)
+- For columns (7zMkCE, 9PFUYj, htTYfJ, xLTnh7), include customer name in <strong>
+- For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and benefit
+- Match brand tone and product context
+
+IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
+"""
+
+# ===== MAIN PROCESSING FUNCTION =====
+
+def process_product_generated_content(brand_name: str, product_title: str, product_description: str, language: str):
+    """Process generated content for product JSON"""
+    # Announcements
+    prompt = generate_announcements_prompt(brand_name, product_title, product_description, language)
+    result = generate_with_format_validation(prompt, "<h1>Text</h1>")
+    try:
+        announcements = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "announcements")
+        announcements = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_91817B81_C148_4C6C_8A35_09D6BA380CA5_GENERATED", announcements["announcement_91817b81"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_ANNOUNCEMENT_GAYVVZ_GENERATED", announcements["announcement_gAyVVz"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_ANNOUNCEMENT_XGT7RJ_GENERATED", announcements["announcement_XGt7RJ"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_DD77F8E0_9A10_41D6_A2A8_69B2326223A3_GENERATED", announcements["announcement_dd77f8e0"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_TEMPLATE__15124688076883__05F459A6_0335_4BAB_8D23_AC347077EFCC_ANNOUNCEMENT_1_GENERATED", announcements["announcement_template_1"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_TEMPLATE__15124688076883__05F459A6_0335_4BAB_8D23_AC347077EFCC_ANNOUNCEMENT_2_GENERATED", announcements["announcement_template_2"])
+
+    # Button Texts
+    prompt = generate_button_texts_prompt(brand_name, product_title, product_description, language)
+    result = prompt_gpt(prompt)
+    try:
+        button_texts = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "button_texts")
+        button_texts = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_4GCWJT_GENERATED", button_texts["image_4GCwJt"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_6KYG4N_GENERATED", button_texts["image_6kyG4n"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_8WUEHF_GENERATED", button_texts["image_8WUeHF"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_G6WCGH_GENERATED", button_texts["image_g6WCgH"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_MCZRTQ_GENERATED", button_texts["image_mczRTQ"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_MWKFNL_GENERATED", button_texts["image_mWKfnL"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_XDDFEP_GENERATED", button_texts["image_XDdFEp"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_YQMGF7_GENERATED", button_texts["image_YQMGF7"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_TEMPLATE__17146523746516__530954A1_091E_46FD_B6F9_AAAACA76CEB6_IMAGE_1_GENERATED", button_texts["image_template_1"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_TEXT_J7DFT4_GENERATED", button_texts["text_j7Dft4"])
+
+    # Content Sections
+    prompt = generate_content_prompt(brand_name, product_title, product_description, language)
+    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    try:
+        content = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "content_sections")
+        content = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_9CCFFC8D_E4C7_404F_8007_8C5162F22285_GENERATED", content["content_9ccffc8d"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_GENERATED", content["content_f34ad5c4"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_PROMO_KRQBTU_GENERATED", content["content_promo_krqbTU"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_PROMO_QC7VBJ_GENERATED", content["content_promo_QC7Vbj"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_COLLAPSIBLE_TAB_HK7DGX_GENERATED", content["content_collapsible_tab_HK7dGX"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_BMHKAN_GENERATED", content["row_content_BMHKaN"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_GIDN9Z_GENERATED", content["row_content_GiDN9z"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_T3YHUA_GENERATED", content["row_content_t3yhUa"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_1_GENERATED", content["row_content_template_1"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_2_GENERATED", content["row_content_template_2"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_3_GENERATED", content["row_content_template_3"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_4_GENERATED", content["row_content_template_4"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TAB_CONTENT_TABS_DGKJ3J_GENERATED", content["tab_content_DgkJ3j"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TAB_CONTENT_2_TABS_DGKJ3J_GENERATED", content["tab_content_2_DgkJ3j"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TAB_CONTENT_3_TABS_DGKJ3J_GENERATED", content["tab_content_3_DgkJ3j"])
+
+    # Review Content
+    prompt = generate_review_content_prompt(brand_name, product_title, product_description, language)
+    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    try:
+        reviews = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "review_content")
+        reviews = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_GENERATED", reviews["review_text_13a5819e"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_GENERATED", reviews["review_text_30900101"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_GENERATED", reviews["review_text_3c322c1a"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_GENERATED", reviews["review_text_53a5b896"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_GENERATED", reviews["review_text_d032a47c"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_GENERATED", reviews["review_text_e3288062"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_GENERATED", reviews["review_text_f57735f1"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_REVIEW_ARWHQK_GENERATED", reviews["review_text_ArWHqK"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_REVIEW_FWXHPQ_GENERATED", reviews["review_text_fwxHPq"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_REVIEW_KAGTR4_GENERATED", reviews["review_text_kAgTR4"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_RATING_COUNT_3475A8F9_021F_4ACD_8E57_163EF2A26740_GENERATED", reviews["rating_count_3475a8f9"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_LRW_TEXT_7F391028_A103_4E66_BB50_BD71D4672AF4_GENERATED", reviews["lrw_text_7f391028"])
+
+    # Quantity Selector
+    prompt = generate_quantity_selector_prompt(brand_name, product_title, product_description, language)
+    result = generate_with_format_validation(prompt, "<h3>Text</h3>")
+    try:
+        quantity = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "quantity_selector")
+        quantity = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_1_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_1_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_1_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_1_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_2_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_2_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_2_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_2_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_3_PROMO_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_3_promo"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_3_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_3_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_3_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_3_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_4_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_4_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_4_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_4_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_5_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_5_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_5_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_5_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_6_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_6_save_text"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_6_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_6_unit_label"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_QUANTITY_TITLE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["quantity_title_text"])
+
+    # Text Sections
+    prompt = generate_text_sections_prompt(brand_name, product_title, product_description, language)
+    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    try:
+        texts = json.loads(clean_json_response(result))
+    except:
+        fixed_result = fix_json_with_gpt(result, "text_sections")
+        texts = json.loads(fixed_result)
+    
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_HEAD_TEXT_LUMIN_HERO_8JR4II_GENERATED", texts["head_text_lumin_hero_8jr4ii"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_SUBTITLE_TEXT_J7DFT4_GENERATED", texts["subtitle_text_j7Dft4"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_1_HERO_WJWAZN_GENERATED", texts["text_1_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_2_HERO_WJWAZN_GENERATED", texts["text_2_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_3_HERO_WJWAZN_GENERATED", texts["text_3_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_4_HERO_WJWAZN_GENERATED", texts["text_4_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_5_HERO_WJWAZN_GENERATED", texts["text_5_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_6_HERO_WJWAZN_GENERATED", texts["text_6_hero_Wjwazn"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_264E37AC_8AC8_475C_9F10_973D46BB217D_GENERATED", texts["text_264e37ac"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_504C9E09_AAA7_49C4_8271_C6CA319D23F2_GENERATED", texts["text_504c9e09"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_74E17B96_75E8_4EC7_AE08_2DF77F4249CB_GENERATED", texts["text_74e17b96"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_1_PROMO_SLIDE_YIPA48_GENERATED", texts["text_promo_slide_YiPa48_1"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_2_PROMO_SLIDE_YIPA48_GENERATED", texts["text_promo_slide_YiPa48_2"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_3_PROMO_SLIDE_YIPA48_GENERATED", texts["text_promo_slide_YiPa48_3"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_7ZMKCE_GENERATED", texts["text_column_7zMkCE"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_9PFUYJ_GENERATED", texts["text_column_9PFUYj"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_HTTYFJ_GENERATED", texts["text_column_htTYfJ"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_XLTNH7_GENERATED", texts["text_column_xLTnh7"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_AFLRA6_GENERATED", texts["text_column_afLRa6"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_FPEWJD_GENERATED", texts["text_column_FpEWjD"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_KCUK3B_GENERATED", texts["text_column_kcUK3B"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COLUMN_NMFYQP_GENERATED", texts["text_column_nMFyQP"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_COMPARISON_TABLE_9J8NNQ_GENERATED", texts["text_comparison_table_9j8NnQ"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_FEATURE_6CXT6B_GENERATED", texts["text_feature_6cxT6B"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_FEATURE_AYFZAM_GENERATED", texts["text_feature_aYFzam"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_FEATURE_HCBWRX_GENERATED", texts["text_feature_HCBWrx"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_FEATURE_KGR9AJ_GENERATED", texts["text_feature_Kgr9Aj"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_FEATURE_TERTGW_GENERATED", texts["text_feature_teRTgW"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_TEXT_T999BU_GENERATED", texts["text_text_T999BU"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_TEXT_VYMMN6_GENERATED", texts["text_text_VYmMN6"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_TEXT_WFDAYF_GENERATED", texts["text_text_wFDAYF"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_POPUP_DVDMRD_GENERATED", texts["text_popup_DVDmRD"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_LOW_MANY_INVENTORY_XPXZFP_GENERATED", texts["text_low_many_xPXzfP"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_LOW_ONE_INVENTORY_XPXZFP_GENERATED", texts["text_low_one_xPXzfP"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_NORMAL_INVENTORY_XPXZFP_GENERATED", texts["text_normal_xPXzfP"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_SOLDOUT_INVENTORY_XPXZFP_GENERATED", texts["text_soldout_xPXzfP"])
+    replace_in_file(PRODUCT_JSON_PATH, "NEW_TEXT_UNTRACKED_INVENTORY_XPXZFP_GENERATED", texts["text_untracked_xPXzfP"])
+
+def change_product_content(brand_name: str, product_title: str, product_description: str, language: str):
+    """Main function to process product content"""
+    print(f"Processing product content for {brand_name}™ - {product_title} in {language}")
+
+    # Process translations
+    print("Processing product translations...")
+    process_product_translations(brand_name, product_title, language)
+
+    # Process generated content
+    print("Processing product generated content...")
+    process_product_generated_content(brand_name, product_title, product_description, language)
+
+    print("Product content processing completed!")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("brand_name")
+    parser.add_argument("product_title")
+    parser.add_argument("product_description")
+    parser.add_argument("language")
+
+    args = parser.parse_args()
+
+    change_product_content(
+        args.brand_name,
+        args.product_title,
+        args.product_description,
+        args.language
+    )
