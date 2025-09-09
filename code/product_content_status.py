@@ -12,13 +12,16 @@ PRODUCT_JSON_PATH = os.getenv("PRODUCT_JSON_PATH")
 
 
 def clean_json_response(response_text: str) -> str:
+    """Clean and escape JSON response to ensure valid JSON format."""
+    # Remove markdown code blocks
     response_text = re.sub(r"```json\s*", "", response_text)
     response_text = re.sub(r"```\s*$", "", response_text)
-    response_text = response_text.replace('"', '"').replace('"', '"')
-    response_text = re.sub(
-        r"(?<!\\)'(?=([^']*'[^']*')*[^']*$)", "\\'", response_text
-    )  # Escape single quotes
-    response_text = response_text.replace(""", "'").replace(""", "'")
+    # Escape single quotes within string values, but not in HTML attributes
+    response_text = re.sub(r"(?<!\\)'(?![\w\s]*[\>\/])", "\\'", response_text)
+    # Replace curly quotes with straight quotes
+    response_text = response_text.replace("'", "'").replace('"', '"')
+    # Remove trailing commas
+    response_text = re.sub(r",(\s*[}\]])", r"\1", response_text)
     return response_text.strip()
 
 
@@ -34,7 +37,7 @@ Rules:
 - All keys must have double quotes
 - All string values must have double quotes
 - For HTML attributes (e.g., href, title), use single quotes (e.g., href='/path')
-- Escape quotes inside strings with backslashes
+- Escape single quotes within string content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Ensure proper string termination to avoid unterminated string errors
 - No trailing commas
 - Ensure ALL the following keys are included: {', '.join(expected_keys) if expected_keys else 'None specified'}
@@ -54,11 +57,21 @@ Rules:
             max_tokens=2000,
         )
         fixed_json = clean_json_response(response.choices[0].message.content.strip())
+        # Verify JSON validity before returning
+        json.loads(fixed_json)
         print(f"Fixed JSON for {context} (first 500 chars): {fixed_json[:500]}...")
         return fixed_json
     except Exception as e:
         print(f"Error in fix_json_with_gpt for {context}: {e}")
-        return broken_json
+        # Fallback: manually escape single quotes and retry parsing
+        fixed_json = re.sub(r"(?<!\\)'(?![\w\s]*[\>\/])", "\\'", broken_json)
+        try:
+            json.loads(fixed_json)
+            print(f"Fallback fix succeeded for {context}.")
+            return fixed_json
+        except Exception as e:
+            print(f"Fallback fix failed for {context}: {e}")
+            return broken_json
 
 
 def prompt_gpt(prompt: str, max_retries: int = 3, max_tokens: int = 300) -> str:
@@ -72,20 +85,21 @@ def prompt_gpt(prompt: str, max_retries: int = 3, max_tokens: int = 300) -> str:
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
             if attempt == max_retries - 1:
                 raise e
             continue
 
 
 def translate_text(text, target_language):
-    prompt = f"Translate to {target_language}. Return only the translation, no explanations: {text}"
+    prompt = f"Translate to {target_language}. Return only the translation, no explanations, no quotes: {text}"
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
         )
-        return response.choices[0].message.content.strip().replace('"', "")
+        return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"Translation error: {e}")
         return text
@@ -120,12 +134,12 @@ def generate_with_format_validation(
     prompt: str, expected_format: str = None, max_tokens: int = 300
 ) -> str:
     if expected_format and "<" in expected_format:
-        prompt += f"\n\nIMPORTANT: Maintain the exact HTML structure from this example: {expected_format}"
+        prompt += f"\n\nIMPORTANT: Maintain the exact HTML structure from this example: {expected_format}\nEscape single quotes in content (e.g., 'd'obstacles' becomes 'd'obstacles')."
     for attempt in range(3):
         result = prompt_gpt(prompt, max_tokens=max_tokens)
         if validate_html_format(result, expected_format):
             return result
-        prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example."
+        prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example and escape single quotes in content."
     return result
 
 
@@ -330,6 +344,7 @@ Requirements:
 - Keep texts short (3-8 words), impactful, and product-relevant
 - Focus on promotions, eco-friendly aspects, or product benefits
 - Match brand tone and product context
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
@@ -363,6 +378,7 @@ Requirements:
 - Keep texts short (2-5 words), action-oriented (e.g., "Shop Now", "Discover More")
 - Match brand tone and product context
 - For text_j7Dft4, include a hashtag (e.g., "#BrandName")
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
@@ -399,6 +415,7 @@ Return ONLY valid JSON with ALL specified keys:
 Requirements:
 - Maintain exact HTML structure as shown (e.g., <p>, <a>, <ul><li>)
 - Use single quotes for HTML attributes (e.g., href='/collections/all')
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Keep texts concise, relevant to product (e.g., shipping, returns, ingredients, FAQs)
 - For content_9ccffc8d and content_f34ad5c4, include 3 paragraphs with a link in the second
 - For content_collapsible_tab_HK7dGX, list 3-5 ingredients in <ul><li> format
@@ -437,6 +454,7 @@ Requirements:
 - Review texts must use <p> tags, 1-3 sentences, positive and product-specific
 - rating_count_3475a8f9 must use <strong> tags for number and phrase
 - lrw_text_7f391028 must be raw text, format: "X.Y | Z Reviews"
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Match brand tone and product context
 - Ensure ALL keys above are included with valid values
 
@@ -474,6 +492,7 @@ Requirements:
 - Save texts and unit labels are raw text, concise (e.g., "Save 10%", "2 Months Supply")
 - option_3_promo uses <strong> tags as shown
 - quantity_title_text uses <h3> tags
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Match product context (e.g., drone accessories or bundles)
 - Reflect escalating bundle benefits (e.g., more savings for larger packs)
 - Ensure ALL keys above are included with valid values
@@ -534,6 +553,7 @@ Return ONLY valid JSON with ALL specified keys:
 Requirements:
 - Use raw text (no HTML) for head_text_lumin_hero_8jr4ii, text_1_hero_Wjwazn to text_6_hero_Wjwazn, text_264e37ac, text_74e17b96, text_popup_DVDmRD, stock-related texts
 - Maintain exact HTML structure where specified
+- Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
 - Texts should be concise, product-relevant (e.g., benefits, testimonials, stock alerts)
 - For columns (7zMkCE, 9PFUYj, htTYfJ, xLTnh7), include customer name in <strong>
 - For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and benefit
@@ -559,7 +579,7 @@ def process_product_generated_content(
         )
     except Exception as e:
         print(
-            f"Failed to parse announcements JSON (first 500 chars): {result[:500]}..."
+            f"Failed to parse announcements JSON (first 500 chars): {result[:500]}... Error: {e}"
         )
         try:
             fixed_result = fix_json_with_gpt(
@@ -641,7 +661,9 @@ def process_product_generated_content(
             f"Button texts JSON parsed successfully (first 500 chars): {json.dumps(button_texts)[:500]}..."
         )
     except Exception as e:
-        print(f"Failed to parse button texts JSON (first 500 chars): {result[:500]}...")
+        print(
+            f"Failed to parse button texts JSON (first 500 chars): {result[:500]}... Error: {e}"
+        )
         try:
             fixed_result = fix_json_with_gpt(
                 result,
@@ -768,7 +790,7 @@ def process_product_generated_content(
         )
     except Exception as e:
         print(
-            f"Failed to parse content sections JSON (first 500 chars): {result[:500]}..."
+            f"Failed to parse content sections JSON (first 500 chars): {result[:500]}... Error: {e}"
         )
         try:
             fixed_result = fix_json_with_gpt(result, "content_sections", content_keys)
@@ -876,7 +898,7 @@ def process_product_generated_content(
         )
     except Exception as e:
         print(
-            f"Failed to parse review content JSON (first 500 chars): {result[:500]}..."
+            f"Failed to parse review content JSON (first 500 chars): {result[:500]}... Error: {e}"
         )
         try:
             fixed_result = fix_json_with_gpt(
@@ -1001,7 +1023,7 @@ def process_product_generated_content(
         )
     except Exception as e:
         print(
-            f"Failed to parse quantity selector JSON (first 500 chars): {result[:500]}..."
+            f"Failed to parse quantity selector JSON (first 500 chars): {result[:500]}... Error: {e}"
         )
         try:
             fixed_result = fix_json_with_gpt(
@@ -1179,7 +1201,7 @@ def process_product_generated_content(
         )
     except Exception as e:
         print(
-            f"Failed to parse text sections JSON (first 500 chars): {result[:500]}..."
+            f"Failed to parse text sections JSON (first 500 chars): {result[:500]}... Error: {e}"
         )
         try:
             fixed_result = fix_json_with_gpt(result, "text_sections", text_keys)
