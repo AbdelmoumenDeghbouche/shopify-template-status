@@ -25,7 +25,7 @@
         "7f391028-a103-4e66-bb50-bd71d4672af4": {
           "type": "review",
           "settings": {
-            "lrw_text": "4.8 | 136 Reviews",
+            "lrw_text": "NEW_LRW_TEXT_7F391028_A103_4E66_BB50_BD71D4672AF4_GENERATED",
             "text_size": 13,
             "star_style": "star",
             "star_size": 0.7,
@@ -75,11 +75,11 @@
             "inventory_threshold": 10,
             "show_inventory_bar": true,
             "show_inventory_pill": false,
-            "text_soldout": "Unfortunately this item is sold-out!",
-            "text_untracked": "Currently this item has stock!",
-            "text_low_one": "Hurry up! Only 1 item is in stock",
-            "text_low_many": "Hurry up! Only [qty] items are in stock.",
-            "text_normal": "Currently [qty] items are in stock!",
+            "text_soldout": "NEW_TEXT_SOLDOUT_INVENTORY_XPXZFP_GENERATED",
+            "text_untracked": "NEW_TEXT_UNTRACKED_INVENTORY_XPXZFP_GENERATED",
+            "text_low_one": "NEW_TEXT_LOW_ONE_INVENTORY_XPXZFP_GENERATED",
+            "text_low_many": "NEW_TEXT_LOW_MANY_INVENTORY_XPXZFP_GENERATED",
+            "text_normal": "NEW_TEXT_NORMAL_INVENTORY_XPXZFP_GENERATED",
             "inv_bar_height": 5,
             "inv_bar_radius": 7,
             "inv_bar_width_normal": 70,
@@ -104,7 +104,7 @@
             "icon_size": 20,
             "heading": "",
             "heading_size": 20,
-            "text": "<p><strong>FDA-cleared<\/strong> device that treats acne, fine lines, wrinkles and dark spots.<\/p>",
+            "text": "NEW_TEXT_FEATURE_6CXT6B_GENERATED",
             "text_size": 12,
             "padding_top": 12,
             "padding_bottom": 0
@@ -116,7 +116,7 @@
             "icon_size": 20,
             "heading": "",
             "heading_size": 20,
-            "text": "<p>Quick 5<strong> minute,<\/strong> daily treatments with convenient hands-free operation.<\/p>",
+            "text": "NEW_TEXT_FEATURE_TERTGW_GENERATED",
             "text_size": 12,
             "padding_top": 0,
             "padding_bottom": 0
@@ -128,7 +128,7 @@
             "icon_size": 20,
             "heading": "",
             "heading_size": 20,
-            "text": "<p><strong>Customizable<\/strong> treatment on 5 facial areas for <strong>your specific<\/strong> skin concerns.<\/p>",
+            "text": "NEW_TEXT_FEATURE_HCBWRX_GENERATED",
             "text_size": 12,
             "padding_top": 0,
             "padding_bottom": 14
@@ -172,70 +172,70 @@
             "show_per_unit": true,
             "badge_style": "ribbon top-short",
             "option_1_show_image": false,
-            "option_1_label": "1 Pack",
+            "option_1_label": "NEW_OPTION_1_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_1_quantity": 1,
             "option_1_fixed_discount": "0",
             "option_1_discount_percentage": 0,
             "option_1_badge_enable": false,
-            "option_1_badge_text": "Most Popular",
-            "option_1_unit_label": "2 month Supply",
-            "option_1_save_text": "Free Shipping",
+            "option_1_badge_text": "NEW_OPTION_1_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_1_unit_label": "NEW_OPTION_1_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_1_save_text": "NEW_OPTION_1_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_1_promo": "",
             "option_2_show_image": false,
-            "option_2_label": "Buy 2, Get 1 FREE",
+            "option_2_label": "NEW_OPTION_2_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_2_quantity": 3,
             "option_2_fixed_discount": "44",
             "option_2_discount_percentage": 20,
             "option_2_badge_enable": true,
-            "option_2_badge_text": "SPECIAL OFFER - Limited Time",
-            "option_2_unit_label": "6 Months Supply | FREE Shipping",
-            "option_2_save_text": "Save (%) - GET ONE FREE",
+            "option_2_badge_text": "NEW_OPTION_2_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_2_unit_label": "NEW_OPTION_2_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_2_save_text": "NEW_OPTION_2_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_2_promo": "",
             "option_3_show_image": false,
-            "option_3_label": "Buy 3, Get 2 FREE",
+            "option_3_label": "NEW_OPTION_3_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_3_quantity": 5,
             "option_3_fixed_discount": "88",
             "option_3_discount_percentage": 30,
             "option_3_badge_enable": true,
-            "option_3_badge_text": "FLASH SALE — Grab It Before It's Gone",
-            "option_3_unit_label": "12 Months Supply | FREE Shipping",
-            "option_3_save_text": "Save (%) - GET TWO FREE",
-            "option_3_promo": "<strong>12<\/strong> Months Supply | <strong>FREE Shipping<\/strong>",
+            "option_3_badge_text": "NEW_OPTION_3_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_3_unit_label": "NEW_OPTION_3_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_3_save_text": "NEW_OPTION_3_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_3_promo": "NEW_OPTION_3_PROMO_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_4_show_image": false,
-            "option_4_label": "4 Pack",
+            "option_4_label": "NEW_OPTION_4_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_4_quantity": 0,
             "option_4_fixed_discount": "0",
             "option_4_discount_percentage": 0,
             "option_4_badge_enable": false,
-            "option_4_badge_text": "Most Popular",
-            "option_4_unit_label": "($)\/Pcs",
-            "option_4_save_text": "Save (%)",
+            "option_4_badge_text": "NEW_OPTION_4_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_4_unit_label": "NEW_OPTION_4_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_4_save_text": "NEW_OPTION_4_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_4_promo": "",
             "option_5_show_image": false,
-            "option_5_label": "5 Pack",
+            "option_5_label": "NEW_OPTION_5_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_5_quantity": 0,
             "option_5_fixed_discount": "0",
             "option_5_discount_percentage": 0,
             "option_5_badge_enable": false,
-            "option_5_badge_text": "Most Popular",
-            "option_5_unit_label": "($)\/Pcs",
-            "option_5_save_text": "Save (%)",
+            "option_5_badge_text": "NEW_OPTION_5_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_5_unit_label": "NEW_OPTION_5_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_5_save_text": "NEW_OPTION_5_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_5_promo": "",
             "option_6_show_image": false,
-            "option_6_label": "6 Pack",
+            "option_6_label": "NEW_OPTION_6_LABEL_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
             "option_6_quantity": 0,
             "option_6_fixed_discount": "0",
             "option_6_discount_percentage": 0,
             "option_6_badge_enable": false,
-            "option_6_badge_text": "Most Popular",
-            "option_6_unit_label": "($)\/Pcs",
-            "option_6_save_text": "Save (%)",
+            "option_6_badge_text": "NEW_OPTION_6_BADGE_TEXT_QUANTITY_SELECTOR_Q9D74M_TRANSLATED",
+            "option_6_unit_label": "NEW_OPTION_6_UNIT_LABEL_QUANTITY_SELECTOR_Q9D74M_GENERATED",
+            "option_6_save_text": "NEW_OPTION_6_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "option_6_promo": "",
             "show_quantity_label": true,
             "hide_lines": false,
             "show_head_border": false,
             "title_text_align": "center",
-            "quantity_title_text": "<h3>Bundle & Save<\/h3>",
+            "quantity_title_text": "NEW_QUANTITY_TITLE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED",
             "quantity_subtitle_text": "",
             "title_font_size": 1.8,
             "subtitle_font_size": 1.3,
@@ -310,7 +310,7 @@
             "hide_img_3": false,
             "hide_img_4": true,
             "hide_img_5": true,
-            "text_block": "<p><strong>50+ Board Certified Dermatologists  <\/strong>recommended Status to their patients. <em>See More<\/em><\/p>",
+            "text_block": "<p><strong>50+ Board Certified Dermatologists  </strong>recommended Status to their patients. <em>See More</em></p>",
             "text_size": 10,
             "text_style": "body"
           }
@@ -324,7 +324,7 @@
             "image_ani": "none",
             "text_size": 10,
             "text_style": "uppercase",
-            "text": "Order in <strong>(timer)<\/strong> & Get Delivery By <strong>(date).<\/strong>",
+            "text": "NEW_TEXT_264E37AC_8AC8_475C_9F10_973D46BB217D_GENERATED",
             "date_locale": "en-US",
             "ship_bg": "#f6f6f6",
             "show_border": true,
@@ -341,7 +341,7 @@
           "settings": {
             "icon": "serving_dish",
             "icon_width": 24,
-            "content": "<p>Dermatologist Reviewed<\/p>",
+            "content": "NEW_CONTENT_PROMO_KRQBTU_GENERATED",
             "font_size": 80
           }
         },
@@ -350,7 +350,7 @@
           "settings": {
             "icon": "truck",
             "icon_width": 24,
-            "content": "<p>Free Shipping Over €100<\/p>",
+            "content": "NEW_CONTENT_PROMO_QC7VBJ_GENERATED",
             "font_size": 80
           }
         },
@@ -366,7 +366,7 @@
           "type": "popup",
           "disabled": true,
           "settings": {
-            "text": "Pop-up link text",
+            "text": "NEW_TEXT_POPUP_DVDMRD_GENERATED",
             "page": ""
           }
         },
@@ -374,9 +374,9 @@
           "type": "feature",
           "settings": {
             "icon_size": 90,
-            "heading": "100% Money <strong>Back<\/strong>!!",
+            "heading": "NEW_HEADING_504C9E09_AAA7_49C4_8271_C6CA319D23F2_TRANSLATED",
             "heading_size": 16,
-            "text": "<p>Some review text. For better alignment, it is <strong>better to use text<\/strong> in several lines.<\/p><h6>*NO QUESTION ASK<\/h6>",
+            "text": "NEW_TEXT_504C9E09_AAA7_49C4_8271_C6CA319D23F2_GENERATED",
             "text_size": 12,
             "padding_top": 0,
             "padding_bottom": 0
@@ -393,7 +393,7 @@
         "4ec31670-952b-4ed4-8799-249844a8f39b": {
           "type": "fomo",
           "settings": {
-            "fomo_text_before": "(x) People are looking at this",
+            "fomo_text_before": "NEW_FOMO_TEXT_BEFORE_4EC31670_952B_4ED4_8799_249844A8F39B_TRANSLATED",
             "text_style": "uppercase",
             "text_size": 10,
             "color_scheme": "background-1",
@@ -414,13 +414,13 @@
           "type": "promo-slide",
           "settings": {
             "block_heading": "",
-            "text_1": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store. ★★★★★<\/p>",
+            "text_1": "NEW_TEXT_1_PROMO_SLIDE_YIPA48_GENERATED",
             "show_slide_2": false,
             "block_heading_2": "Nice Product",
-            "text_2": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store. ★★★★★<\/p>",
+            "text_2": "NEW_TEXT_2_PROMO_SLIDE_YIPA48_GENERATED",
             "show_slide_3": false,
             "block_heading_3": "Recomended",
-            "text_3": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store. ★★★★★<\/p>",
+            "text_3": "NEW_TEXT_3_PROMO_SLIDE_YIPA48_GENERATED",
             "color_scheme": "accent-1",
             "slide_padding": 20,
             "show_border": false,
@@ -437,7 +437,7 @@
         "006e6c29-717a-4f58-8fea-cabc7da6316f": {
           "type": "complementary",
           "settings": {
-            "block_heading": "Pairs well with",
+            "block_heading": "NEW_BLOCK_HEADING_006E6C29_717A_4F58_8FEA_CABC7DA6316F_TRANSLATED",
             "make_collapsible_row": false,
             "icon": "plant",
             "product_list_limit": 10,
@@ -452,9 +452,9 @@
           "disabled": true,
           "settings": {
             "open_first_collapsible_row": false,
-            "heading": "Shipping Information",
+            "heading": "NEW_HEADING_9CCFFC8D_E4C7_404F_8007_8C5162F22285_TRANSLATED",
             "icon": "none",
-            "content": "<p>Free 2 Day Shipping on Orders $50+. Returns must be postmarked: within 15 days of delivery for a refund and within 30 days for a Store Credit or Exchange. <\/p><p><a href=\"\/collections\/all\" title=\"All products\">Read our full returns policy in our FAQ page.<\/a><\/p><p>All Sale items are final sale.<\/p>",
+            "content": "NEW_CONTENT_9CCFFC8D_E4C7_404F_8007_8C5162F22285_GENERATED",
             "page": ""
           }
         },
@@ -463,9 +463,9 @@
           "disabled": true,
           "settings": {
             "open_first_collapsible_row": false,
-            "heading": "Returns & Refunds",
+            "heading": "NEW_HEADING_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_TRANSLATED",
             "icon": "none",
-            "content": "<p>Free 2 Day Shipping on Orders $50+. Returns must be postmarked: within 15 days of delivery for a refund and within 30 days for a Store Credit or Exchange. <\/p><p><a href=\"\/collections\/all\" title=\"All products\">Read our full returns policy in our FAQ page.<\/a><\/p><p>All Sale items are final sale.<\/p>",
+            "content": "NEW_CONTENT_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_GENERATED",
             "page": ""
           }
         },
@@ -484,18 +484,18 @@
             "small-hide": false,
             "heading_1": "Details",
             "description": true,
-            "tab_content": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "tab_content": "NEW_TAB_CONTENT_TABS_DGKJ3J_GENERATED",
             "tab_2": true,
             "large-hide-2": false,
             "small-hide-2": false,
             "heading_2": "Retuns",
             "description_2": false,
-            "tab_content_2": "<p>Free 2 Day Shipping on Orders $50+. Returns must be postmarked: within 15 days of delivery for a refund and within 30 days for a Store Credit or Exchange. <\/p><p><a href=\"https:\/\/statement-lumin.myshopify.com\/collections\/all\" title=\"All products\">Read our full returns policy in our FAQ page.<\/a><\/p><p>All Sale items are final sale.<\/p>",
+            "tab_content_2": "NEW_TAB_CONTENT_2_TABS_DGKJ3J_GENERATED",
             "tab_3": true,
             "large-hide-3": false,
             "small-hide-3": false,
             "heading_3": "Shipping",
-            "tab_content_3": "<p>Free 2 Day Shipping on Orders $50+. <\/p>"
+            "tab_content_3": "NEW_TAB_CONTENT_3_TABS_DGKJ3J_GENERATED"
           }
         },
         "collapsible_tab_HK7dGX": {
@@ -503,9 +503,9 @@
           "disabled": true,
           "settings": {
             "open_first_collapsible_row": false,
-            "heading": "Ingredient list",
+            "heading": "NEW_HEADING_COLLAPSIBLE_TAB_HK7DGX_TRANSLATED",
             "icon": "none",
-            "content": "<ul><li>Water, Sodium Cocoyl <\/li><li>Glutamate, Propanediol, <\/li><li>Glycerin, Acrylates Copolymer, Coco-Betaine, <\/li><li>Saccharomyces\/<strong>Camellia<\/strong> Sinensis <\/li><li>Leaf\/Cladosiphonokamuranus\/Rice Ferment Filtrate*, <\/li><li>Luffa <strong>Cylindrica<\/strong> <\/li><li>Fruit\/Leaf\/Stem<\/li><\/ul>",
+            "content": "NEW_CONTENT_COLLAPSIBLE_TAB_HK7DGX_GENERATED",
             "page": ""
           }
         }
@@ -634,14 +634,14 @@
         "heading_8e7QyA": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>Reveal Your Radiance with the Status Gua Sha & Roller Set<\/strong> ✨💖",
+            "heading": "NEW_HEADING_HEADING_8E7QYA_TRANSLATED",
             "heading_size": "h2"
           }
         },
         "text_T999BU": {
           "type": "text",
           "settings": {
-            "text": "<p>✔️ <strong>De-puff & Define<\/strong> – Instantly refresh tired skin and sculpt your jawline & cheekbones<br\/><br\/>✔️ <strong>Boost Circulation<\/strong> – Stimulate blood flow for a natural, radiant glow<br\/><br\/>✔️ <strong>Relieve Tension<\/strong> – Melt away stress and relax facial muscles<br\/><br\/>✔️ <strong>Enhance Product Absorption<\/strong> – Help serums & moisturizers penetrate deeper for better results<\/p>",
+            "text": "NEW_TEXT_TEXT_T999BU_GENERATED",
             "text_style": "body"
           }
         },
@@ -714,14 +714,14 @@
         "heading_ajMG6N": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>Because Your Skin Deserves the Best<\/strong>",
+            "heading": "NEW_HEADING_HEADING_AJMG6N_TRANSLATED",
             "heading_size": "h2"
           }
         },
         "text_wFDAYF": {
           "type": "text",
           "settings": {
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "text": "NEW_TEXT_TEXT_WFDAYF_GENERATED",
             "text_style": "body"
           }
         },
@@ -731,7 +731,7 @@
             "icon_size": 26,
             "heading": "",
             "heading_size_alt": 20,
-            "text": "<p>Rolling into <strong>radiant skin<\/strong> with our Jade Elegance!<\/p>"
+            "text": "NEW_TEXT_FEATURE_KGR9AJ_GENERATED"
           }
         },
         "feature_aYFzam": {
@@ -740,14 +740,14 @@
             "icon_size": 26,
             "heading": "",
             "heading_size_alt": 20,
-            "text": "<p>Rolling into <strong>radiant skin<\/strong> with our Jade Elegance!<\/p>"
+            "text": "NEW_TEXT_FEATURE_AYFZAM_GENERATED"
           }
         },
         "button_MHn8pC": {
           "type": "button",
           "settings": {
-            "button_label": "Shop Collection",
-            "button_link": "shopify:\/\/collections\/all",
+            "button_label": "NEW_BUTTON_LABEL_BUTTON_MHN8PC_TRANSLATED",
+            "button_link": "shopify://collections/all",
             "button_style_secondary": true
           }
         }
@@ -782,14 +782,14 @@
         "heading_JhTcqy": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>Glow Beyond Skin Deep.<\/strong> ✨",
+            "heading": "NEW_HEADING_HEADING_JHTCQY_TRANSLATED",
             "heading_size": "h2"
           }
         },
         "text_VYmMN6": {
           "type": "text",
           "settings": {
-            "text": "<p>Self-Care Starts with Skin.<\/p>",
+            "text": "NEW_TEXT_TEXT_VYMMN6_GENERATED",
             "text_style": "body"
           }
         },
@@ -799,9 +799,9 @@
             "gap": 15,
             "text_alignment": "left",
             "heading_1": "Proven",
-            "column_1": "<p><strong>Clinically proven<\/strong> safely penetrate deep into the skin, activating natural cellular responses that <strong>address skin concerns from within<\/strong>—<em>delivering both immediate results.<\/em><\/p>",
+            "column_1": "<p><strong>Clinically proven</strong> safely penetrate deep into the skin, activating natural cellular responses that <strong>address skin concerns from within</strong>—<em>delivering both immediate results.</em></p>",
             "heading_2": "Portable",
-            "column_2": "<p>A portable, <strong>FDA-cleared <\/strong>LED light therapy device, scientifically proven to transform your skin—and uplift your confidence—all from the comfort of home.<\/p>"
+            "column_2": "<p>A portable, <strong>FDA-cleared </strong>LED light therapy device, scientifically proven to transform your skin—and uplift your confidence—all from the comfort of home.</p>"
           }
         }
       },
@@ -834,8 +834,8 @@
         "column_7zMkCE": {
           "type": "column",
           "settings": {
-            "title": "✨ <strong>Obsessed with the Results<\/strong>",
-            "text": "<p>🌟 <strong>“Game changer!<\/strong> My skin has never looked this radiant. Status products truly deliver on their promise!” – <strong>Emma L.<\/strong><\/p>",
+            "title": "NEW_TITLE_COLUMN_7ZMKCE_TRANSLATED",
+            "text": "NEW_TEXT_COLUMN_7ZMKCE_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -843,8 +843,8 @@
         "column_9PFUYj": {
           "type": "column",
           "settings": {
-            "title": "⚡ <strong>Visible Results, Fast<\/strong>",
-            "text": "<p><em>\"I noticed a difference in my skin within days—Status is my new holy grail!\"<\/em> – <strong>Olivia T.<\/strong><\/p>",
+            "title": "NEW_TITLE_COLUMN_9PFUYJ_TRANSLATED",
+            "text": "NEW_TEXT_COLUMN_9PFUYJ_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -852,8 +852,8 @@
         "column_xLTnh7": {
           "type": "column",
           "settings": {
-            "title": "🌿 <strong>Luxury Skincare That Works<\/strong>",
-            "text": "<p><em>\"My skin feels firmer, smoother, and more hydrated than ever. The quality is unmatched!\"<\/em> – <strong>Ava K.<\/strong><\/p>",
+            "title": "NEW_TITLE_COLUMN_XLTNH7_TRANSLATED",
+            "text": "NEW_TEXT_COLUMN_XLTNH7_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -861,8 +861,8 @@
         "column_htTYfJ": {
           "type": "column",
           "settings": {
-            "title": "💖 <strong>Worth Every Penny<\/strong>",
-            "text": "<p><em>\"I’ve tried so many skincare brands, but Status is the only one that gives me real, lasting results.\"<\/em> – <strong>Jasmine M.<\/strong><\/p>",
+            "title": "NEW_TITLE_COLUMN_HTTYFJ_TRANSLATED",
+            "text": "NEW_TEXT_COLUMN_HTTYFJ_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -936,9 +936,9 @@
         "row_rbDgfT"
       ],
       "settings": {
-        "title": "What makes Staus right for you?",
+        "title": "NEW_TITLE_COMPARISON_TABLE_9J8NNQ_TRANSLATED",
         "heading_size": "h1",
-        "text": "<p>(Here’s a comparison, but there is really no comparison)<\/p>",
+        "text": "NEW_TEXT_COMPARISON_TABLE_9J8NNQ_GENERATED",
         "button_label": "",
         "link": "",
         "button_style_secondary": false,
@@ -978,22 +978,22 @@
             "main_image_width": 400,
             "show_1": true,
             "head_1": "",
-            "text_1": "Some descriptive text for your collection.",
+            "text_1": "NEW_TEXT_1_HERO_WJWAZN_GENERATED",
             "show_2": true,
             "head_2": "",
-            "text_2": "Some descriptive text for your collection.",
+            "text_2": "NEW_TEXT_2_HERO_WJWAZN_GENERATED",
             "show_3": true,
             "head_3": "",
-            "text_3": "Some descriptive text for your collection.",
+            "text_3": "NEW_TEXT_3_HERO_WJWAZN_GENERATED",
             "show_4": true,
             "head_4": "",
-            "text_4": "Some descriptive text for your collection.",
+            "text_4": "NEW_TEXT_4_HERO_WJWAZN_GENERATED",
             "show_5": false,
             "head_5": "Heading",
-            "text_5": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines.",
+            "text_5": "NEW_TEXT_5_HERO_WJWAZN_GENERATED",
             "show_6": false,
             "head_6": "Heading",
-            "text_6": "Some descriptive text for your collection. For better alignment, it is better to use text in several lines."
+            "text_6": "NEW_TEXT_6_HERO_WJWAZN_GENERATED"
           }
         }
       },
@@ -1003,12 +1003,12 @@
       "settings": {
         "color_scheme": "background-1",
         "color_scheme_2": "scheme-58ff9a05-7092-43ee-84e7-6f05d1cc9431",
-        "title": "Why Status are <strong>Better<\/strong>",
+        "title": "NEW_TITLE_LUMIN_HERO_8JR4II_TRANSLATED",
         "heading_size": "h0",
         "column_alignment": "center",
         "column_alignment_dt": "alt",
         "column_alignment_mb": "center",
-        "head_text": "Pair text with an image to focus on your chosen product, collection, or blog post. <strong>Add details on availability,<\/strong> style, or even provide a review.",
+        "head_text": "NEW_HEAD_TEXT_LUMIN_HERO_8JR4II_GENERATED",
         "feature_image": 64,
         "feature_image_mb": 36,
         "gap_section_top": 0,
@@ -1024,7 +1024,7 @@
           "type": "column",
           "settings": {
             "title": "",
-            "text": "<h1><strong>94%<\/strong><\/h1><p>Felt their face <strong>deeply<\/strong> <strong>absorbed<\/strong> more product<\/p>",
+            "text": "NEW_TEXT_COLUMN_NMFYQP_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -1033,7 +1033,7 @@
           "type": "column",
           "settings": {
             "title": "",
-            "text": "<h1><strong>84%<\/strong><\/h1><p>Felt their face <strong>deeply<\/strong> <strong>absorbed<\/strong> more product<\/p>",
+            "text": "NEW_TEXT_COLUMN_KCUK3B_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -1042,7 +1042,7 @@
           "type": "column",
           "settings": {
             "title": "",
-            "text": "<h1><strong>77%<\/strong><\/h1><p>Felt their face <strong>deeply<\/strong> <strong>absorbed<\/strong> more product<\/p>",
+            "text": "NEW_TEXT_COLUMN_AFLRA6_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -1051,7 +1051,7 @@
           "type": "column",
           "settings": {
             "title": "",
-            "text": "<h1><strong>89%<\/strong><\/h1><p>Felt their face <strong>deeply<\/strong> <strong>absorbed<\/strong> more product<\/p>",
+            "text": "NEW_TEXT_COLUMN_FPEWJD_GENERATED",
             "link_label": "",
             "link": ""
           }
@@ -1064,7 +1064,7 @@
         "column_FpEWjD"
       ],
       "settings": {
-        "title": "Beauty Tech for the Best Skin Yet",
+        "title": "NEW_TITLE_MULTICOLUMN_XDHHWC_TRANSLATED",
         "heading_size": "h1",
         "heading_center": "left",
         "image_width": "full",
@@ -1086,7 +1086,7 @@
       "type": "featured-collection",
       "disabled": true,
       "settings": {
-        "title": "You may also like",
+        "title": "NEW_TITLE_66CE973A-C6CD-47AA-B2ED-27752C8CC295_TRANSLATED",
         "description": "",
         "collection_text_alignment": "left",
         "show_description": true,
@@ -1125,7 +1125,7 @@
         "template--15124688076883__05f459a6-0335-4bab-8d23-ac347077efcc-announcement-1": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<p>We Love The Planet<\/p>",
+            "Announcement": "NEW_ANNOUNCEMENT_TEMPLATE__15124688076883__05F459A6_0335_4BAB_8D23_AC347077EFCC_ANNOUNCEMENT_1_GENERATED",
             "announcement_size": 32,
             "announcement_size_m": 24,
             "text_spacing": 0,
@@ -1138,7 +1138,7 @@
         "template--15124688076883__05f459a6-0335-4bab-8d23-ac347077efcc-announcement-2": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<p>Recyclable Packaging<\/p>",
+            "Announcement": "NEW_ANNOUNCEMENT_TEMPLATE__15124688076883__05F459A6_0335_4BAB_8D23_AC347077EFCC_ANNOUNCEMENT_2_GENERATED",
             "announcement_size": 32,
             "announcement_size_m": 24,
             "text_spacing": 0,
@@ -1172,7 +1172,7 @@
         "91817b81-c148-4c6c-8a35-09d6ba380ca5": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<h1>Shop Fabulous Candles<\/h1>",
+            "Announcement": "NEW_ANNOUNCEMENT_91817B81_C148_4C6C_8A35_09D6BA380CA5_GENERATED",
             "announcement_size": 49,
             "announcement_size_m": 44,
             "text_spacing": 3,
@@ -1185,7 +1185,7 @@
         "dd77f8e0-9a10-41d6-a2a8-69b2326223a3": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<h1>RECYCLABLE PACKAGING<\/h1>",
+            "Announcement": "NEW_ANNOUNCEMENT_DD77F8E0_9A10_41D6_A2A8_69B2326223A3_GENERATED",
             "announcement_size": 50,
             "announcement_size_m": 44,
             "text_spacing": 3,
@@ -1220,63 +1220,63 @@
         "template--15124688076883__c0ef23cf-5481-4b47-9b78-3c28134c079a-collapsible_row-1": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "What if it doesn’t work for me?",
+            "heading": "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_1_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>This shows an example of a response you might give. Giving detailed answers improves overall trust, so it's good to be as thorough as possible.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_1_GENERATED",
             "page": ""
           }
         },
         "template--15124688076883__c0ef23cf-5481-4b47-9b78-3c28134c079a-collapsible_row-2": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Guarentee?",
+            "heading": "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_2_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>Shop with <strong>Confidence<\/strong> Knowing that Our Products are Guaranteed to Meet Your Expectations.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_2_GENERATED",
             "page": ""
           }
         },
         "template--15124688076883__c0ef23cf-5481-4b47-9b78-3c28134c079a-collapsible_row-3": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Okay, but why have I never heard of this before?",
+            "heading": "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_3_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>This shows an example of a response you might give. Giving detailed answers improves overall trust, so it's good to be as thorough as possible.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_3_GENERATED",
             "page": ""
           }
         },
         "template--15124688076883__c0ef23cf-5481-4b47-9b78-3c28134c079a-collapsible_row-4": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Do you provide tracking information?",
+            "heading": "NEW_HEADING_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_4_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>Yes, Every order includes a tracking number which will be provided via email or text once your order is fulfilled.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_TEMPLATE__15124688076883__C0EF23CF_5481_4B47_9B78_3C28134C079A_COLLAPSIBLE_ROW_4_GENERATED",
             "page": ""
           }
         },
         "collapsible_row_t3yhUa": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Does this really work?",
+            "heading": "NEW_HEADING_COLLAPSIBLE_ROW_T3YHUA_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>This shows an example of a response you might give. Giving detailed answers improves overall trust, so it's good to be as thorough as possible.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_T3YHUA_GENERATED",
             "page": ""
           }
         },
         "collapsible_row_BMHKaN": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Is everything recyclable?",
+            "heading": "NEW_HEADING_COLLAPSIBLE_ROW_BMHKAN_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>This shows an example of a response you might give. Giving detailed answers improves overall trust, so it's good to be as thorough as possible.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_BMHKAN_GENERATED",
             "page": ""
           }
         },
         "collapsible_row_GiDN9z": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "How often should you use?",
+            "heading": "NEW_HEADING_COLLAPSIBLE_ROW_GIDN9Z_TRANSLATED",
             "icon": "none",
-            "row_content": "<p>This shows an example of a response you might give. Giving detailed answers improves overall trust, so it's good to be as thorough as possible.<\/p>",
+            "row_content": "NEW_ROW_CONTENT_COLLAPSIBLE_ROW_GIDN9Z_GENERATED",
             "page": ""
           }
         }
@@ -1292,7 +1292,7 @@
       ],
       "settings": {
         "caption": "Frequently Ask Questions",
-        "heading": "FAQs",
+        "heading": "NEW_HEADING_C0EF23CF-5481-4B47-9B78-3C28134C079A_TRANSLATED",
         "heading_size": "h0",
         "heading_alignment": "center",
         "layout": "row",
@@ -1312,10 +1312,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Sofia R.",
-            "date_text": "Jan 2024",
-            "review_head": "Works well for sensitive skin!",
-            "review_text": "I love the way it feels on my face! It's super light and soft, which is nice. This was my first time trying this brand and I was pleasantly surprised by the gentleness. Works well for sensitive skin!",
+            "name_text": "NEW_NAME_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_30900101_E5C8_4C0E_B5BD_0FCF8EEA85CF_GENERATED",
             "like_size": 21,
             "dislike_size": 1,
             "feature_font_size": 16
@@ -1325,10 +1325,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Amy Grady, B.",
-            "date_text": "July 2023",
-            "review_head": "The Only Product That Has Worked For Me",
-            "review_text": "I love the way it feels on my face! It's super light and soft, which is nice. This was my first time trying this brand and I was pleasantly surprised by the gentleness. Works well for sensitive skin!",
+            "name_text": "NEW_NAME_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_53A5B896_0517_4E05_80FE_B23DE703E79B_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_53A5B896_0517_4E05_80FE_B23DE703E79B_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1338,10 +1338,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "I love the way it feels on my face! It's super light and soft, which is nice. This was my first time trying this brand and I was pleasantly surprised by the gentleness. Works well for sensitive skin!",
+            "name_text": "NEW_NAME_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_3C322C1A_1E3A_47E6_8D7B_720D506EB595_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_3C322C1A_1E3A_47E6_8D7B_720D506EB595_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1351,10 +1351,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Vera R.",
-            "date_text": "Jan 2023",
-            "review_head": "BEST PURCHASE BEST FIND",
-            "review_text": "This shows an example of a review your customer might give. Receiving detailed feedback improves overall trust, so it's good to be as thorough as possible.",
+            "name_text": "NEW_NAME_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_F57735F1_30A6_4538_8C95_BFE08674506B_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_F57735F1_30A6_4538_8C95_BFE08674506B_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1364,10 +1364,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Anabella C.",
-            "date_text": "Dec 2023",
-            "review_head": "Holy Unexpected!!",
-            "review_text": "My cystic acne scars on my jawline\/neck were so textured I thought I’d need laser to clear it up. Turns out, just deeply clogged with things that normal exfoliating and peels didn’t budge. ",
+            "name_text": "NEW_NAME_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_D032A47C_6F6E_4A8E_94B9_D1260A5D6B0D_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1377,10 +1377,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "Nice Product. I'm happy with my purchase.",
+            "name_text": "NEW_NAME_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_E3288062_4139_4942_8A82_452BFEBBD63F_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_E3288062_4139_4942_8A82_452BFEBBD63F_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1390,10 +1390,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "Nice Product. I'm happy with my purchase.",
+            "name_text": "NEW_NAME_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_13A5819E_5698_472F_94EB_34D5A7AD9B21_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1403,10 +1403,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "Nice Product. I'm happy with my purchase.",
+            "name_text": "NEW_NAME_TEXT_REVIEW_ARWHQK_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_REVIEW_ARWHQK_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_REVIEW_ARWHQK_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_REVIEW_ARWHQK_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1416,10 +1416,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "Nice Product. I'm happy with my purchase.",
+            "name_text": "NEW_NAME_TEXT_REVIEW_KAGTR4_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_REVIEW_KAGTR4_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_REVIEW_KAGTR4_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_REVIEW_KAGTR4_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1429,10 +1429,10 @@
           "type": "review",
           "settings": {
             "star_rating": 5,
-            "name_text": "Johan D.",
-            "date_text": "July 2023",
-            "review_head": "Nice Product",
-            "review_text": "Nice Product. I'm happy with my purchase.",
+            "name_text": "NEW_NAME_TEXT_REVIEW_FWXHPQ_TRANSLATED",
+            "date_text": "NEW_DATE_TEXT_REVIEW_FWXHPQ_TRANSLATED",
+            "review_head": "NEW_REVIEW_HEAD_REVIEW_FWXHPQ_TRANSLATED",
+            "review_text": "NEW_REVIEW_TEXT_REVIEW_FWXHPQ_GENERATED",
             "like_size": 0,
             "dislike_size": 0,
             "feature_font_size": 16
@@ -1454,17 +1454,17 @@
       "settings": {
         "editing": true,
         "color_scheme": "inverse",
-        "header_text": "Rated the #1 clean beauty skincare brand in 2023.",
+        "header_text": "NEW_HEADER_TEXT_3475A8F9-021F-4ACD-8E57-163EF2A26740_TRANSLATED",
         "show_top": true,
         "rating_text": "4.8",
         "rating_range": 4.5,
         "star_size_top": 0.6,
-        "rating_count": "<strong>7867+<\/strong> Real reviews, real results from<strong> people just like you.<\/strong>",
+        "rating_count": "NEW_RATING_COUNT_3475A8F9-021F-4ACD-8E57-163EF2A26740_GENERATED",
         "review_column_mobile": "2",
         "review_column_tab": "1",
         "review_column_desk": "4",
         "review_load": "6",
-        "load_text": "Load More",
+        "load_text": "NEW_LOAD_TEXT_3475A8F9-021F-4ACD-8E57-163EF2A26740_TRANSLATED",
         "rw_img_size": 80,
         "rw_img_radius": 4,
         "block_name_size": 14,
@@ -1481,14 +1481,14 @@
         "border_radius": 6,
         "section_bg3": "#96cebb",
         "section_bg2": "#96cebb",
-        "verify_text": "Verified Buyer",
+        "verify_text": "NEW_VERIFY_TEXT_3475A8F9-021F-4ACD-8E57-163EF2A26740_TRANSLATED",
         "review_bg": "#ffffff",
         "feature_acc_color": "#008763",
         "review_pd": 16,
         "review_pd_m": 26,
         "show_footer": true,
         "show_product": true,
-        "like_text": "Was this helpful?",
+        "like_text": "NEW_LIKE_TEXT_3475A8F9-021F-4ACD-8E57-163EF2A26740_TRANSLATED",
         "rw_margin": 52,
         "padding_top": 32,
         "padding_bottom": 68
@@ -1497,7 +1497,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "You may also like",
+        "heading": "NEW_HEADING_RELATED-PRODUCTS_TRANSLATED",
         "heading_size": "h2",
         "collection_text_alignment": "left",
         "products_to_show": 4,
@@ -1534,17 +1534,17 @@
             "bg_color": "#ffffff",
             "icon_size": 33,
             "icon_corner": 0,
-            "head": "Follow Us On <strong>Instagram<\/strong>",
+            "head": "NEW_HEAD_TEXT_J7DFT4_GENERATED",
             "use_head_font": true,
             "head_color": "#212121",
             "head_size_d": 19,
             "head_size_m": 24,
             "margin_bottom": 15,
-            "subtitle": "<p><strong>11K FOLLOWERS<\/strong><\/p>",
+            "subtitle": "NEW_SUBTITLE_TEXT_J7DFT4_GENERATED",
             "text_color": "#6f6f6f",
             "text_size_d": 10,
             "text_size_m": 10,
-            "button-text": "#LUMINLAB",
+            "button-text": "NEW_BUTTON-TEXT_TEXT_J7DFT4_GENERATED",
             "button_link": "",
             "image_content_position": "middle-right",
             "desktop_content_alignment": "right",
@@ -1574,7 +1574,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_TEMPLATE__17146523746516__530954A1_091E_46FD_B6F9_AAAACA76CEB6_IMAGE_1_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1604,7 +1604,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_YQMGF7_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1634,7 +1634,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_6KYG4N_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1664,7 +1664,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_XDDFEP_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1694,7 +1694,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_4GCWJT_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1724,7 +1724,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_MCZRTQ_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1754,7 +1754,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_8WUEHF_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1784,7 +1784,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_MWKFNL_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1814,7 +1814,7 @@
             "text_color": "#212121",
             "text_size_d": 16,
             "text_size_m": 14,
-            "button-text": "button",
+            "button-text": "NEW_BUTTON-TEXT_IMAGE_G6WCGH_GENERATED",
             "button_link": "",
             "desktop_content_alignment": "center",
             "image_content_position": "bottom-center",
@@ -1850,7 +1850,7 @@
         "announcement_gAyVVz": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<p>Take 20% Off With Code SAVE20<\/p>",
+            "Announcement": "NEW_ANNOUNCEMENT_ANNOUNCEMENT_GAYVVZ_GENERATED",
             "announcement_size": 18,
             "announcement_size_m": 16,
             "text_spacing": 0,
@@ -1863,7 +1863,7 @@
         "announcement_XGt7RJ": {
           "type": "announcement",
           "settings": {
-            "Announcement": "<p>Take 20% Off With Code SAVE20<\/p>",
+            "Announcement": "NEW_ANNOUNCEMENT_ANNOUNCEMENT_XGT7RJ_GENERATED",
             "announcement_size": 18,
             "announcement_size_m": 16,
             "text_spacing": 0,
