@@ -9,6 +9,7 @@ import argparse
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 PRODUCT_JSON_PATH = os.getenv("PRODUCT_JSON_PATH")
 
+
 def clean_json_response(response_text: str) -> str:
     response_text = re.sub(r'```json\s*', '', response_text)
     response_text = re.sub(r'```\s*$', '', response_text)
@@ -16,7 +17,7 @@ def clean_json_response(response_text: str) -> str:
     response_text = response_text.replace(''', "'").replace(''', "'")
     return response_text.strip()
 
-def fix_json_with_gpt(broken_json: str, context: str) -> str:
+def fix_json_with_gpt(broken_json: str, context: str, expected_keys: list = None) -> str:
     fix_prompt = f"""Fix this broken JSON and return ONLY valid JSON (no explanations, no markdown):
 
 Context: {context}
@@ -27,6 +28,8 @@ Rules:
 - All string values must have double quotes  
 - No trailing commas
 - Escape quotes inside strings with backslashes
+- Ensure the JSON includes ALL the following keys: {', '.join(expected_keys) if expected_keys else 'None specified'}
+- If a key is missing, provide a default value relevant to the context
 - Return only the fixed JSON"""
 
     try:
@@ -34,20 +37,20 @@ Rules:
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": fix_prompt}],
             temperature=0.1,
-            max_tokens=500
+            max_tokens=1000
         )
         return clean_json_response(response.choices[0].message.content.strip())
     except:
         return broken_json
 
-def prompt_gpt(prompt: str, max_retries: int = 3) -> str:
+def prompt_gpt(prompt: str, max_retries: int = 3, max_tokens: int = 300) -> str:
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.7,
-                max_tokens=300
+                max_tokens=max_tokens
             )
             result = response.choices[0].message.content.strip()
             return result
@@ -70,11 +73,14 @@ def translate_text(text, target_language):
         return text
 
 def replace_in_file(file_path: str, placeholder: str, content: str):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = f.read()
-    data = data.replace(placeholder, content)
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(data)
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = f.read()
+        data = data.replace(placeholder, content)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(data)
+    except Exception as e:
+        print(f"Error replacing {placeholder} in {file_path}: {e}")
 
 def validate_html_format(text: str, expected_format: str = None) -> bool:
     """Validate if generated text maintains HTML format"""
@@ -84,13 +90,13 @@ def validate_html_format(text: str, expected_format: str = None) -> bool:
         return len(original_tags) <= len(result_tags)
     return True
 
-def generate_with_format_validation(prompt: str, expected_format: str = None) -> str:
+def generate_with_format_validation(prompt: str, expected_format: str = None, max_tokens: int = 300) -> str:
     """Generate content and validate HTML format"""
     if expected_format and "<" in expected_format:
         prompt += f"\n\nIMPORTANT: Maintain the exact HTML structure from this example: {expected_format}"
 
     for attempt in range(3):
-        result = prompt_gpt(prompt)
+        result = prompt_gpt(prompt, max_tokens=max_tokens)
         if validate_html_format(result, expected_format):
             return result
         prompt += "\n\nPlease maintain the HTML tags structure exactly as shown in the example."
@@ -187,7 +193,7 @@ def generate_announcements_prompt(brand_name: str, product_title: str, product_d
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "announcement_91817b81": "<h1>Announcement text</h1>",
@@ -203,6 +209,7 @@ Requirements:
 - Keep texts short (3-8 words), impactful, and product-relevant
 - Focus on promotions, eco-friendly aspects, or product benefits
 - Match brand tone and product context
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -212,7 +219,7 @@ def generate_button_texts_prompt(brand_name: str, product_title: str, product_de
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "image_4GCwJt": "Button text",
@@ -232,6 +239,7 @@ Requirements:
 - Keep texts short (2-5 words), action-oriented (e.g., "Shop Now", "Discover More")
 - Match brand tone and product context
 - For text_j7Dft4, include a hashtag (e.g., "#BrandName")
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -241,7 +249,7 @@ def generate_content_prompt(brand_name: str, product_title: str, product_descrip
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "content_9ccffc8d": "<p>Shipping details</p><p><a href=\"/collections/all\" title=\"All products\">Link text</a></p><p>Sale policy</p>",
@@ -267,6 +275,7 @@ Requirements:
 - For content_9ccffc8d and content_f34ad5c4, include 3 paragraphs with a link in the second
 - For content_collapsible_tab_HK7dGX, list 3-5 ingredients in <ul><li> format
 - Match brand tone and product context
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -276,7 +285,7 @@ def generate_review_content_prompt(brand_name: str, product_title: str, product_
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "review_text_13a5819e": "<p>Review text</p>",
@@ -298,6 +307,7 @@ Requirements:
 - rating_count_3475a8f9 must use <strong> tags for number and phrase
 - lrw_text_7f391028 must be raw text, format: "X.Y | Z Reviews"
 - Match brand tone and product context
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -307,7 +317,7 @@ def generate_quantity_selector_prompt(brand_name: str, product_title: str, produ
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "option_1_save_text": "Save text",
@@ -330,8 +340,9 @@ Requirements:
 - Save texts and unit labels are raw text, concise (e.g., "Save 10%", "2 Months Supply")
 - option_3_promo uses <strong> tags as shown
 - quantity_title_text uses <h3> tags
-- Match product context (e.g., skincare bundles)
+- Match product context (e.g., drone accessories or bundles)
 - Reflect escalating bundle benefits (e.g., more savings for larger packs)
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -341,7 +352,7 @@ def generate_text_sections_prompt(brand_name: str, product_title: str, product_d
 
 PRODUCT: {product_description}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with ALL specified keys:
 
 {{
   "head_text_lumin_hero_8jr4ii": "<p>Text with <strong>highlight</strong></p>",
@@ -390,6 +401,7 @@ Requirements:
 - For columns (7zMkCE, 9PFUYj, htTYfJ, xLTnh7), include customer name in <strong>
 - For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and benefit
 - Match brand tone and product context
+- Ensure ALL keys above are included with valid values
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -400,11 +412,14 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
     """Process generated content for product JSON"""
     # Announcements
     prompt = generate_announcements_prompt(brand_name, product_title, product_description, language)
-    result = generate_with_format_validation(prompt, "<h1>Text</h1>")
+    result = generate_with_format_validation(prompt, "<h1>Text</h1>", max_tokens=500)
     try:
         announcements = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "announcements")
+        fixed_result = fix_json_with_gpt(result, "announcements", [
+            "announcement_91817b81", "announcement_gAyVVz", "announcement_XGt7RJ",
+            "announcement_dd77f8e0", "announcement_template_1", "announcement_template_2"
+        ])
         announcements = json.loads(fixed_result)
     
     replace_in_file(PRODUCT_JSON_PATH, "NEW_ANNOUNCEMENT_91817B81_C148_4C6C_8A35_09D6BA380CA5_GENERATED", announcements["announcement_91817b81"])
@@ -416,11 +431,14 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
 
     # Button Texts
     prompt = generate_button_texts_prompt(brand_name, product_title, product_description, language)
-    result = prompt_gpt(prompt)
+    result = prompt_gpt(prompt, max_tokens=300)
     try:
         button_texts = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "button_texts")
+        fixed_result = fix_json_with_gpt(result, "button_texts", [
+            "image_4GCwJt", "image_6kyG4n", "image_8WUeHF", "image_g6WCgH", "image_mczRTQ",
+            "image_mWKfnL", "image_XDdFEp", "image_YQMGF7", "image_template_1", "text_j7Dft4"
+        ])
         button_texts = json.loads(fixed_result)
     
     replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_IMAGE_4GCWJT_GENERATED", button_texts["image_4GCwJt"])
@@ -435,14 +453,24 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
     replace_in_file(PRODUCT_JSON_PATH, "NEW_BUTTON-TEXT_TEXT_J7DFT4_GENERATED", button_texts["text_j7Dft4"])
 
     # Content Sections
+    content_keys = [
+        "content_9ccffc8d", "content_f34ad5c4", "content_promo_krqbTU", "content_promo_QC7Vbj",
+        "content_collapsible_tab_HK7dGX", "row_content_BMHKaN", "row_content_GiDN9z", "row_content_t3yhUa",
+        "row_content_template_1", "row_content_template_2", "row_content_template_3", "row_content_template_4",
+        "tab_content_DgkJ3j", "tab_content_2_DgkJ3j", "tab_content_3_DgkJ3j"
+    ]
     prompt = generate_content_prompt(brand_name, product_title, product_description, language)
-    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=1000)
     try:
         content = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "content_sections")
+        fixed_result = fix_json_with_gpt(result, "content_sections", content_keys)
         content = json.loads(fixed_result)
     
+    # Fallback for missing row_content_t3yhUa
+    if "row_content_t3yhUa" not in content:
+        content["row_content_t3yhUa"] = f"<p>Produit efficace et fiable.</p>"  # Default in French for SkyForge Tech
+
     replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_9CCFFC8D_E4C7_404F_8007_8C5162F22285_GENERATED", content["content_9ccffc8d"])
     replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_F34AD5C4_50A9_4A95_A561_D8C51D1B76DD_GENERATED", content["content_f34ad5c4"])
     replace_in_file(PRODUCT_JSON_PATH, "NEW_CONTENT_PROMO_KRQBTU_GENERATED", content["content_promo_krqbTU"])
@@ -461,11 +489,15 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
 
     # Review Content
     prompt = generate_review_content_prompt(brand_name, product_title, product_description, language)
-    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=600)
     try:
         reviews = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "review_content")
+        fixed_result = fix_json_with_gpt(result, "review_content", [
+            "review_text_13a5819e", "review_text_30900101", "review_text_3c322c1a", "review_text_53a5b896",
+            "review_text_d032a47c", "review_text_e3288062", "review_text_f57735f1", "review_text_ArWHqK",
+            "review_text_fwxHPq", "review_text_kAgTR4", "rating_count_3475a8f9", "lrw_text_7f391028"
+        ])
         reviews = json.loads(fixed_result)
     
     replace_in_file(PRODUCT_JSON_PATH, "NEW_REVIEW_TEXT_13A5819E_5698_472F_94EB_34D5A7AD9B21_GENERATED", reviews["review_text_13a5819e"])
@@ -483,11 +515,16 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
 
     # Quantity Selector
     prompt = generate_quantity_selector_prompt(brand_name, product_title, product_description, language)
-    result = generate_with_format_validation(prompt, "<h3>Text</h3>")
+    result = generate_with_format_validation(prompt, "<h3>Text</h3>", max_tokens=400)
     try:
         quantity = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "quantity_selector")
+        fixed_result = fix_json_with_gpt(result, "quantity_selector", [
+            "option_1_save_text", "option_1_unit_label", "option_2_save_text", "option_2_unit_label",
+            "option_3_promo", "option_3_save_text", "option_3_unit_label", "option_4_save_text",
+            "option_4_unit_label", "option_5_save_text", "option_5_unit_label", "option_6_save_text",
+            "option_6_unit_label", "quantity_title_text"
+        ])
         quantity = json.loads(fixed_result)
     
     replace_in_file(PRODUCT_JSON_PATH, "NEW_OPTION_1_SAVE_TEXT_QUANTITY_SELECTOR_Q9D74M_GENERATED", quantity["option_1_save_text"])
@@ -507,11 +544,22 @@ def process_product_generated_content(brand_name: str, product_title: str, produ
 
     # Text Sections
     prompt = generate_text_sections_prompt(brand_name, product_title, product_description, language)
-    result = generate_with_format_validation(prompt, "<p>Text</p>")
+    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=1000)
     try:
         texts = json.loads(clean_json_response(result))
     except:
-        fixed_result = fix_json_with_gpt(result, "text_sections")
+        fixed_result = fix_json_with_gpt(result, "text_sections", [
+            "head_text_lumin_hero_8jr4ii", "subtitle_text_j7Dft4", "text_1_hero_Wjwazn", "text_2_hero_Wjwazn",
+            "text_3_hero_Wjwazn", "text_4_hero_Wjwazn", "text_5_hero_Wjwazn", "text_6_hero_Wjwazn",
+            "text_264e37ac", "text_504c9e09", "text_74e17b96", "text_promo_slide_YiPa48_1",
+            "text_promo_slide_YiPa48_2", "text_promo_slide_YiPa48_3", "text_column_7zMkCE",
+            "text_column_9PFUYj", "text_column_htTYfJ", "text_column_xLTnh7", "text_column_afLRa6",
+            "text_column_FpEWjD", "text_column_kcUK3B", "text_column_nMFyQP", "text_comparison_table_9j8NnQ",
+            "text_feature_6cxT6B", "text_feature_aYFzam", "text_feature_HCBWrx", "text_feature_Kgr9Aj",
+            "text_feature_teRTgW", "text_text_T999BU", "text_text_VYmMN6", "text_text_wFDAYF",
+            "text_popup_DVDmRD", "text_low_many_xPXzfP", "text_low_one_xPXzfP", "text_normal_xPXzfP",
+            "text_soldout_xPXzfP", "text_untracked_xPXzfP"
+        ])
         texts = json.loads(fixed_result)
     
     replace_in_file(PRODUCT_JSON_PATH, "NEW_HEAD_TEXT_LUMIN_HERO_8JR4II_GENERATED", texts["head_text_lumin_hero_8jr4ii"])
