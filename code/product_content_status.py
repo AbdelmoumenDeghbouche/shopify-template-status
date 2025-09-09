@@ -39,6 +39,7 @@ Rules:
 - Ensure ALL the following keys are included: {', '.join(expected_keys) if expected_keys else 'None specified'}
 - If a key is missing, provide a default value relevant to the context:
   - For HTML fields, use '<p>Contenu par défaut</p>'
+  - For testimonial_images_Xdr6Dm, use '<p>Trusted by drone enthusiasts</p>'
   - For raw text fields (e.g., head_text_lumin_hero_8jr4ii, text_264e37ac, text_74e17b96, text_popup_DVDmRD, stock-related texts, button texts), use 'Texte par défaut'
 - Return only the fixed JSON"""
 
@@ -359,28 +360,22 @@ def process_product_translations(brand_name: str, product_title: str, language: 
             "Verified Buyer",
             "NEW_VERIFY_TEXT_3475A8F9_021F_4ACD_8E57_163EF2A26740_TRANSLATED",
         ),
-        (
-            "SkyForge Tech",
-            "NEW_HEAD_TEXT_J7DFT4_GENERATED",
-        ),  # Note: This was incorrectly marked as _GENERATED in original code; should be _TRANSLATED for consistency
+        ("SkyForge Tech", "NEW_HEAD_TEXT_J7DFT4_TRANSLATED"),
         ("Home", "NEW_TITLE_HOME_BREADCRUMBS_LCNBYA_TRANSLATED"),
         ("Nice Product", "NEW_BLOCK_HEADING_2_PROMO_SLIDE_YIPA48_TRANSLATED"),
-        (
-            "Recommended",
-            "NEW_BLOCK_HEADING_3_PROMO_SLIDE_YIPA48_TRANSLATED",
-        ),  # Corrected typo "Recomended"
+        ("Recommended", "NEW_BLOCK_HEADING_3_PROMO_SLIDE_YIPA48_TRANSLATED"),
         ("Featured Everywhere", "NEW_ANNOUNCEMENT_HEAD_LOGO_SCROLL_IJQTWW_TRANSLATED"),
         ("Proven", "NEW_HEADING_1_TEXT_COLUMNS_PFW3GW_TRANSLATED"),
         ("Portable", "NEW_HEADING_2_TEXT_COLUMNS_PFW3GW_TRANSLATED"),
         ("Ease of use", "NEW_BENEFIT_ROW_EIHE6Y_TRANSLATED"),
         ("Effective", "NEW_BENEFIT_ROW_RERJGF_TRANSLATED"),
         ("Speed", "NEW_BENEFIT_ROW_YK9AEF_TRANSLATED"),
-        ("Cost", "NEW_BENEFIT_ROW_RBDGFT_TRANSLATED"),  # Cleaned up "Cost$$$"
+        ("Cost", "NEW_BENEFIT_ROW_RBDGFT_TRANSLATED"),
         ("Others", "NEW_OTHERS_LABEL_COMPARISON_TABLE_9J8NNQ_TRANSLATED"),
         (
             "Frequently Asked Questions",
             "NEW_CAPTION_C0EF23CF_5481_4B47_9B78_3C28134C079A_TRANSLATED",
-        ),  # Corrected grammar
+        ),
         ("Heading", "NEW_HEAD_5_HERO_WJWAZN_TRANSLATED"),
         ("Heading", "NEW_HEAD_6_HERO_WJWAZN_TRANSLATED"),
     ]
@@ -573,7 +568,7 @@ IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 def generate_text_sections_prompt(
     brand_name: str, product_title: str, product_description: str, language: str
 ) -> str:
-    return f"""Create text section content in {language} for {brand_name}™'s {product_title}.
+    return f"""Create text section content in {language} for {brand_name}™'s {product_title}, a drone product.
 
 PRODUCT: {product_description}
 
@@ -624,11 +619,12 @@ Requirements:
 - Use raw text (no HTML) for head_text_lumin_hero_8jr4ii, text_1_hero_Wjwazn to text_6_hero_Wjwazn, text_264e37ac, text_74e17b96, text_popup_DVDmRD, stock-related texts
 - Maintain exact HTML structure where specified
 - Escape single quotes in content (e.g., "d'obstacles" becomes "d\'obstacles")
-- Texts should be concise, product-relevant (e.g., benefits, testimonials, stock alerts)
+- Texts should be concise, drone-relevant (e.g., navigation, battery life, testimonials, stock alerts)
+- For testimonial_images_Xdr6Dm, provide a testimonial relevant to drones (e.g., 'Trusted by drone enthusiasts')
 - For columns (7zMkCE, 9PFUYj, htTYfJ, xLTnh7), include customer name in <strong>
-- For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and benefit
+- For columns (afLRa6, FpEWjD, kcUK3B, nMFyQP), use percentage (60-95%) and drone-specific benefit
 - Match brand tone and product context
-- Ensure ALL keys above are included with valid values
+- Ensure ALL keys above are included with valid values, especially testimonial_images_Xdr6Dm
 
 IMPORTANT: Return ONLY the JSON, no markdown, no code blocks, no explanations.
 """
@@ -1388,7 +1384,8 @@ def process_product_generated_content(
     prompt = generate_text_sections_prompt(
         brand_name, product_title, product_description, language
     )
-    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=1500)
+    result = generate_with_format_validation(prompt, "<p>Text</p>", max_tokens=2000)
+    print(f"Text sections raw GPT response (first 500 chars): {result[:500]}...")
     try:
         texts = json.loads(clean_json_response(result))
         print(
