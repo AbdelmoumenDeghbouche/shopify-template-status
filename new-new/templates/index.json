@@ -6,6 +6,7 @@
                 "template--15221093367891__3a5233be-52a6-4aad-9337-d3037c87a1a7-slide-1": {
                     "type": "slide",
                     "settings": {
+                        "image": "NEW_THEME_HERO_BANNER",
                         "caption": "NEW_HERO_CAPTION_TRANSLATED",
                         "block_cap_size": 22,
                         "cap_color": "#000000",
@@ -51,12 +52,14 @@
                 "image_PWzLHg": {
                     "type": "image",
                     "settings": {
+                        "image": "NEW_THEME_COLLECTION_IMAGE",
                         "logo_image_width": 86
                     }
                 },
                 "image_CkpgWK": {
                     "type": "image",
                     "settings": {
+                        "image": "NEW_THEME_COLLECTION_IMAGE",
                         "logo_image_width": 86
                     }
                 },
@@ -107,25 +110,23 @@
             "blocks": {
                 "review_image_qxEzTH": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 },
                 "review_image_kCcWJp": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 },
                 "review_image_hm8Crz": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 },
                 "review_image_Lb7UGq": {
-                    "type": "review_image",
-                    "settings": {}
-                },
-                "review_image_LYyPWA": {
-                    "type": "review_image",
-                    "settings": {}
-                },
-                "review_image_RMydXP": {
                     "type": "review_image",
                     "settings": {}
                 }
@@ -134,9 +135,7 @@
                 "review_image_qxEzTH",
                 "review_image_kCcWJp",
                 "review_image_hm8Crz",
-                "review_image_Lb7UGq",
-                "review_image_LYyPWA",
-                "review_image_RMydXP"
+                "review_image_Lb7UGq"
             ],
             "settings": {
                 "content_alignment": "center",
@@ -241,36 +240,27 @@
             "blocks": {
                 "review_image_xixJTq": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 },
                 "review_image_TAYPpi": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 },
                 "review_image_6HEg9V": {
                     "type": "review_image",
-                    "settings": {}
-                },
-                "review_image_faCF8n": {
-                    "type": "review_image",
-                    "settings": {}
-                },
-                "review_image_PhnLEb": {
-                    "type": "review_image",
-                    "settings": {}
-                },
-                "review_image_X4yNjU": {
-                    "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                    }
                 }
             },
             "block_order": [
                 "review_image_xixJTq",
                 "review_image_TAYPpi",
-                "review_image_6HEg9V",
-                "review_image_faCF8n",
-                "review_image_PhnLEb",
-                "review_image_X4yNjU"
+                "review_image_6HEg9V"
             ],
             "settings": {
                 "color_scheme": "",
@@ -296,6 +286,7 @@
                 "point_TdJwWd": {
                     "type": "point",
                     "settings": {
+                        "image": "NEW_THEME_COLLECTION_IMAGE",
                         "title": "NEW_LOOKBOOK_POINT_1_TITLE_TRANSLATED",
                         "description": "NEW_LOOKBOOK_POINT_1_DESC_TRANSLATED",
                         "product": "",
@@ -420,6 +411,7 @@
                 "image_96Dzim": {
                     "type": "image",
                     "settings": {
+                        "image": "NEW_THEME_PRODUCT_SHOWCASE_IMAGE_1",
                         "large_up_hide": false,
                         "grid_width_desktop": "25",
                         "medium_hide": false,
@@ -486,6 +478,7 @@
                 "image_mMr6Vz": {
                     "type": "image",
                     "settings": {
+                        "image": "NEW_THEME_PRODUCT_SHOWCASE_IMAGE_2",
                         "large_up_hide": false,
                         "grid_width_desktop": "25",
                         "medium_hide": false,
