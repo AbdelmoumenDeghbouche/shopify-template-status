@@ -111,24 +111,26 @@
                 "review_image_qxEzTH": {
                     "type": "review_image",
                     "settings": {
-                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                        "review_image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
                     }
                 },
                 "review_image_kCcWJp": {
                     "type": "review_image",
                     "settings": {
-                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                        "review_image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
                     }
                 },
                 "review_image_hm8Crz": {
                     "type": "review_image",
                     "settings": {
-                        "image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
+                        "review_image": "NEW_THEME_IMAGE_LUMIN_GRID_1"
                     }
                 },
                 "review_image_Lb7UGq": {
                     "type": "review_image",
-                    "settings": {}
+                    "settings": {
+                        "review_image": "NEW_THEME_IMAGE_LUMIN_GRID_1"  
+                    }
                 }
             },
             "block_order": [
